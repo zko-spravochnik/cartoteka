@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "v5.3.0.6",
+  "updated": "2026-10-22",
+  "note": "Страховочный жилет. Старый ID -> новый ID; подмена выполняется только если старого ключа уже нет в базе. v5.3.0.5: записи жителей обнулены (перепись ID с 10001); сохранены только переносы бизнеса Дарьинского. Ушедшие ID бизнеса заново не выдаются. v5.3.0.6: добавлены переносы карточек автострахования 66xx→37xx.",
+  "aliases": {
+    "baza_zko_baiterek_daryinskoe.txt::6301": "baza_zko_baiterek_daryinskoe.txt::6615",
+    "baza_zko_baiterek_daryinskoe.txt::6602": "baza_zko_baiterek_daryinskoe.txt::1701",
+    "baza_zko_baiterek_daryinskoe.txt::6604": "baza_zko_baiterek_daryinskoe.txt::1315",
+    "baza_zko_baiterek_daryinskoe.txt::6608": "baza_zko_baiterek_daryinskoe.txt::6701",
+    "baza_zko_baiterek_daryinskoe.txt::6609": "baza_zko_baiterek_daryinskoe.txt::6702",
+    "baza_zko_baiterek_daryinskoe.txt::6610": "baza_zko_baiterek_daryinskoe.txt::1702",
+    "baza_zko_baiterek_daryinskoe.txt::6611": "baza_zko_baiterek_daryinskoe.txt::4304",
+    "baza_zko_baiterek_daryinskoe.txt::6612": "baza_zko_baiterek_daryinskoe.txt::4305",
+    "baza_zko_baiterek_daryinskoe.txt::1312": "baza_zko_baiterek_daryinskoe.txt::1703",
+    "baza_zko_baiterek_daryinskoe.txt::1313": "baza_zko_baiterek_daryinskoe.txt::1704",
+    "baza_zko_baiterek_daryinskoe.txt::6601": "baza_zko_baiterek_daryinskoe.txt::3701",
+    "baza_zko_baiterek_daryinskoe.txt::6603": "baza_zko_baiterek_daryinskoe.txt::3702",
+    "baza_zko_baiterek_daryinskoe.txt::6613": "baza_zko_baiterek_daryinskoe.txt::3703"
+  },
+  "residentsReset": "2026-10-21"
+}

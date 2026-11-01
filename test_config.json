@@ -1,0 +1,2617 @@
+{
+  "schemaVersion": "v1.0.0.3",
+  "appVersion": "v1.0.0.3",
+  "qrShareUrl": "https://zko-spravochnik.github.io/test-cartoteka/",
+  "shareAppText": "Сохраните этот контакт! А чтобы скачать весь Справочник округа Бәйтерек себе на телефон и бесплатно искать мастеров, такси и магазины без интернета, переходите по ссылке:",
+  "qrMode": "admin-configured",
+  "generatedAt": "2026-10-29",
+  "region": "Западно-Казахстанская область",
+  "district": "Район Байтерек",
+  "regions": [
+    {
+      "value": "zko",
+      "label": "Западно-Казахстанская область"
+    }
+  ],
+  "districts": [
+    {
+      "region": "zko",
+      "value": "akzhaiyk",
+      "label": "Акжаикский район",
+      "folder": "akzhaiksky"
+    },
+    {
+      "region": "zko",
+      "value": "beyterek",
+      "label": "Район Байтерек",
+      "folder": "baiterek"
+    },
+    {
+      "region": "zko",
+      "value": "bokeyorda",
+      "label": "Бокейординский район",
+      "folder": "bokeyordinsky"
+    },
+    {
+      "region": "zko",
+      "value": "burlin",
+      "label": "Бурлинский район",
+      "folder": "burlinsky"
+    },
+    {
+      "region": "zko",
+      "value": "zhangala",
+      "label": "Жангалинский район",
+      "folder": "zhangalinsky"
+    },
+    {
+      "region": "zko",
+      "value": "zhanibek",
+      "label": "Жанибекский район",
+      "folder": "zhanibeksky"
+    },
+    {
+      "region": "zko",
+      "value": "karatobe",
+      "label": "Каратобинский район",
+      "folder": "karatobinsky"
+    },
+    {
+      "region": "zko",
+      "value": "kaztalovka",
+      "label": "Казталовский район",
+      "folder": "kaztalovsky"
+    },
+    {
+      "region": "zko",
+      "value": "syrym",
+      "label": "Сырымский район",
+      "folder": "syrymsky"
+    },
+    {
+      "region": "zko",
+      "value": "taskala",
+      "label": "Таскалинский район",
+      "folder": "taskalinsky"
+    },
+    {
+      "region": "zko",
+      "value": "terekty",
+      "label": "Теректинский район",
+      "folder": "terektinsky"
+    },
+    {
+      "region": "zko",
+      "value": "shyngirlau",
+      "label": "Чингирлауский район",
+      "folder": "chingirlausky"
+    },
+    {
+      "region": "zko",
+      "value": "oral",
+      "label": "город Уральск",
+      "folder": "uralsk"
+    }
+  ],
+  "villages": [
+    {
+      "file": "baza_zko_baiterek_daryinskoe.txt",
+      "name": "Дарьинское",
+      "code": "darinsk",
+      "index": 1,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_daryinskoe.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_rubezhinskoe.txt",
+      "name": "Рубежинское",
+      "code": "rubezhinskoe",
+      "index": 2,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_rubezhinskoe.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_volodarskoe.txt",
+      "name": "Володарское",
+      "code": "volodarskoe",
+      "index": 3,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_volodarskoe.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_ozernoe.txt",
+      "name": "Озёрное",
+      "code": "ozernoe",
+      "index": 4,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_ozernoe.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_baikonys.txt",
+      "name": "Байконыс",
+      "code": "baikonys",
+      "index": 5,
+      "region": "zko",
+      "district": "beyterek",
+      "historicalName": "Трекино",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_baikonys.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_atameken.txt",
+      "name": "Атамекен",
+      "code": "atameken",
+      "index": 6,
+      "region": "zko",
+      "district": "beyterek",
+      "legacyName": "Железново",
+      "fullName": "Атамекен (Железново)",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_atameken.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_zelenoe.txt",
+      "name": "Зеленое",
+      "code": "zelenoe",
+      "index": 7,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_zelenoe.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_krasnoarmeyskoe.txt",
+      "name": "Красноармейское",
+      "code": "krasnoarmeyskoe",
+      "index": 8,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_krasnoarmeyskoe.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_kushum.txt",
+      "name": "Кушум",
+      "code": "kushum",
+      "index": 9,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_kushum.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_makarovo.txt",
+      "name": "Макарово",
+      "code": "makarovo",
+      "index": 10,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_makarovo.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_michurinskoe.txt",
+      "name": "Мичуринское",
+      "code": "michurinskoe",
+      "index": 11,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_michurinskoe.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_kaynar.txt",
+      "name": "Кайнар",
+      "code": "kaynar",
+      "index": 12,
+      "region": "zko",
+      "district": "beyterek",
+      "legacyName": "Новенькое-1",
+      "fullName": "Кайнар (Новенькое-1)",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_kaynar.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_novenkoe.txt",
+      "name": "Новенькое",
+      "code": "novenkoe",
+      "index": 13,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_novenkoe.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_pervosovetskoe.txt",
+      "name": "Первосоветское",
+      "code": "pervosovetskoe",
+      "index": 14,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_pervosovetskoe.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_peremetnoe.txt",
+      "name": "Переметное",
+      "code": "peremetnoe",
+      "index": 15,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_peremetnoe.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_beybitshilik.txt",
+      "name": "Бейбитшилик",
+      "code": "beybitshilik",
+      "index": 16,
+      "region": "zko",
+      "district": "beyterek",
+      "legacyName": "Погодаево",
+      "fullName": "Бейбитшилик (Погодаево)",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_beybitshilik.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_razdolnoe.txt",
+      "name": "Раздольное",
+      "code": "razdolnoe",
+      "index": 17,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_razdolnoe.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_beles.txt",
+      "name": "Белес",
+      "code": "beles",
+      "index": 18,
+      "region": "zko",
+      "district": "beyterek",
+      "legacyName": "Ростоши",
+      "fullName": "Белес (Ростоши)",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_beles.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_furmanovo.txt",
+      "name": "Фурманово",
+      "code": "furmanovo",
+      "index": 19,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_furmanovo.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_tsyganovo.txt",
+      "name": "Цыганово",
+      "code": "tsyganovo",
+      "index": 20,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_tsyganovo.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_chapovo.txt",
+      "name": "Чапово",
+      "code": "chapovo",
+      "index": 21,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_chapovo.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_kurmangazy.txt",
+      "name": "Курмангазы",
+      "code": "kurmangazy",
+      "index": 22,
+      "region": "zko",
+      "district": "beyterek",
+      "legacyName": "Чеботарево",
+      "fullName": "Курмангазы (Чеботарево)",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_kurmangazy.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_sulukol.txt",
+      "name": "Сулуколь",
+      "code": "sulukol",
+      "index": 23,
+      "region": "zko",
+      "district": "beyterek",
+      "legacyName": "Чесноково",
+      "fullName": "Сулуколь (Чесноково)",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_sulukol.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_chirovo.txt",
+      "name": "Чирово",
+      "code": "chirovo",
+      "index": 24,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_chirovo.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_chuvashinskoe.txt",
+      "name": "Чувашинское",
+      "code": "chuvashinskoe",
+      "index": 25,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_chuvashinskoe.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_shagan.txt",
+      "name": "Шаган",
+      "code": "shagan",
+      "index": 26,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_shagan.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_shchapovo.txt",
+      "name": "Щапово",
+      "code": "shchapovo",
+      "index": 27,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_shchapovo.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_yanaykino.txt",
+      "name": "Янайкино",
+      "code": "yanaykino",
+      "index": 28,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_yanaykino.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_baiterek_yanvartsevo.txt",
+      "name": "Январцево",
+      "code": "yanvartsevo",
+      "index": 29,
+      "region": "zko",
+      "district": "beyterek",
+      "path": "bazy_zko/baiterek/baza_zko_baiterek_yanvartsevo.txt",
+      "folder": "baiterek"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_aksuat.txt",
+      "name": "Аксуат",
+      "code": "akzhaiksky_aksuat",
+      "index": 30,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_aksuat.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_algabas.txt",
+      "name": "Алгабас (Акжаикский р-н)",
+      "code": "akzhaiksky_algabas",
+      "index": 31,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_algabas.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_almaly.txt",
+      "name": "Алмалы",
+      "code": "akzhaiksky_almaly",
+      "index": 32,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_almaly.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_atameken.txt",
+      "name": "Атамекен (Акжаикский р-н)",
+      "code": "akzhaiksky_atameken",
+      "index": 33,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_atameken.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_bazartobe.txt",
+      "name": "Базартобе",
+      "code": "akzhaiksky_bazartobe",
+      "index": 34,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_bazartobe.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_bazarsholan.txt",
+      "name": "Базаршолан",
+      "code": "akzhaiksky_bazarsholan",
+      "index": 35,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_bazarsholan.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_budarino.txt",
+      "name": "Бударино",
+      "code": "akzhaiksky_budarino",
+      "index": 36,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_budarino.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_esensay.txt",
+      "name": "Есенсай",
+      "code": "akzhaiksky_esensay",
+      "index": 37,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_esensay.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_zhayyk.txt",
+      "name": "Жайык",
+      "code": "akzhaiksky_zhayyk",
+      "index": 38,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_zhayyk.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_zhambyl.txt",
+      "name": "Жамбыл (Акжаикский р-н)",
+      "code": "akzhaiksky_zhambyl",
+      "index": 39,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_zhambyl.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_zhanabulak.txt",
+      "name": "Жанабулак",
+      "code": "akzhaiksky_zhanabulak",
+      "index": 40,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_zhanabulak.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_zhanama.txt",
+      "name": "Жанама",
+      "code": "akzhaiksky_zhanama",
+      "index": 41,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_zhanama.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_kabyrshakty.txt",
+      "name": "Кабыршакты",
+      "code": "akzhaiksky_kabyrshakty",
+      "index": 42,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_kabyrshakty.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_karaultobe.txt",
+      "name": "Караултобе",
+      "code": "akzhaiksky_karaultobe",
+      "index": 43,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_karaultobe.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_kuraylysay.txt",
+      "name": "Курайлысай",
+      "code": "akzhaiksky_kuraylysay",
+      "index": 44,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_kuraylysay.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_lbishchensk.txt",
+      "name": "Лбищенск",
+      "code": "akzhaiksky_lbishchensk",
+      "index": 45,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_lbishchensk.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_mergen.txt",
+      "name": "Мерген",
+      "code": "akzhaiksky_mergen",
+      "index": 46,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_mergen.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_saykuduk.txt",
+      "name": "Сайкудук",
+      "code": "akzhaiksky_saykuduk",
+      "index": 47,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_saykuduk.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_taypak.txt",
+      "name": "Тайпак",
+      "code": "akzhaiksky_taypak",
+      "index": 48,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_taypak.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_chapaev.txt",
+      "name": "Чапаев",
+      "code": "akzhaiksky_chapaev",
+      "index": 49,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_chapaev.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_akzhaiksky_shabdarzhap.txt",
+      "name": "Шабдаржап",
+      "code": "akzhaiksky_shabdarzhap",
+      "index": 50,
+      "region": "zko",
+      "district": "akzhaiyk",
+      "path": "bazy_zko/akzhaiksky/baza_zko_akzhaiksky_shabdarzhap.txt",
+      "folder": "akzhaiksky"
+    },
+    {
+      "file": "baza_zko_bokeyordinsky_bisen.txt",
+      "name": "Бисен",
+      "code": "bokeyordinsky_bisen",
+      "index": 51,
+      "region": "zko",
+      "district": "bokeyorda",
+      "path": "bazy_zko/bokeyordinsky/baza_zko_bokeyordinsky_bisen.txt",
+      "folder": "bokeyordinsky"
+    },
+    {
+      "file": "baza_zko_bokeyordinsky_borli.txt",
+      "name": "Борли",
+      "code": "bokeyordinsky_borli",
+      "index": 52,
+      "region": "zko",
+      "district": "bokeyorda",
+      "path": "bazy_zko/bokeyordinsky/baza_zko_bokeyordinsky_borli.txt",
+      "folder": "bokeyordinsky"
+    },
+    {
+      "file": "baza_zko_bokeyordinsky_zhambyl.txt",
+      "name": "Жамбыл (Бокейординский р-н)",
+      "code": "bokeyordinsky_zhambyl",
+      "index": 53,
+      "region": "zko",
+      "district": "bokeyorda",
+      "path": "bazy_zko/bokeyordinsky/baza_zko_bokeyordinsky_zhambyl.txt",
+      "folder": "bokeyordinsky"
+    },
+    {
+      "file": "baza_zko_bokeyordinsky_zhiekkum.txt",
+      "name": "Жиеккум",
+      "code": "bokeyordinsky_zhiekkum",
+      "index": 54,
+      "region": "zko",
+      "district": "bokeyorda",
+      "path": "bazy_zko/bokeyordinsky/baza_zko_bokeyordinsky_zhiekkum.txt",
+      "folder": "bokeyordinsky"
+    },
+    {
+      "file": "baza_zko_bokeyordinsky_kokterek.txt",
+      "name": "Коктерек (Бокейординский р-н)",
+      "code": "bokeyordinsky_kokterek",
+      "index": 55,
+      "region": "zko",
+      "district": "bokeyorda",
+      "path": "bazy_zko/bokeyordinsky/baza_zko_bokeyordinsky_kokterek.txt",
+      "folder": "bokeyordinsky"
+    },
+    {
+      "file": "baza_zko_bokeyordinsky_muratsay.txt",
+      "name": "Муратсай",
+      "code": "bokeyordinsky_muratsay",
+      "index": 56,
+      "region": "zko",
+      "district": "bokeyorda",
+      "path": "bazy_zko/bokeyordinsky/baza_zko_bokeyordinsky_muratsay.txt",
+      "folder": "bokeyordinsky"
+    },
+    {
+      "file": "baza_zko_bokeyordinsky_saralzhin.txt",
+      "name": "Саралжин",
+      "code": "bokeyordinsky_saralzhin",
+      "index": 57,
+      "region": "zko",
+      "district": "bokeyorda",
+      "path": "bazy_zko/bokeyordinsky/baza_zko_bokeyordinsky_saralzhin.txt",
+      "folder": "bokeyordinsky"
+    },
+    {
+      "file": "baza_zko_bokeyordinsky_saykhin.txt",
+      "name": "Сайхин",
+      "code": "bokeyordinsky_saykhin",
+      "index": 58,
+      "region": "zko",
+      "district": "bokeyorda",
+      "path": "bazy_zko/bokeyordinsky/baza_zko_bokeyordinsky_saykhin.txt",
+      "folder": "bokeyordinsky"
+    },
+    {
+      "file": "baza_zko_bokeyordinsky_khan-ordasy.txt",
+      "name": "Хан Ордасы",
+      "code": "bokeyordinsky_khan-ordasy",
+      "index": 59,
+      "region": "zko",
+      "district": "bokeyorda",
+      "path": "bazy_zko/bokeyordinsky/baza_zko_bokeyordinsky_khan-ordasy.txt",
+      "folder": "bokeyordinsky"
+    },
+    {
+      "file": "baza_zko_bokeyordinsky_uyaly.txt",
+      "name": "Уялы",
+      "code": "bokeyordinsky_uyaly",
+      "index": 60,
+      "region": "zko",
+      "district": "bokeyorda",
+      "path": "bazy_zko/bokeyordinsky/baza_zko_bokeyordinsky_uyaly.txt",
+      "folder": "bokeyordinsky"
+    },
+    {
+      "file": "baza_zko_bokeyordinsky_terenkuduk.txt",
+      "name": "Теренкудук",
+      "code": "bokeyordinsky_terenkuduk",
+      "index": 61,
+      "region": "zko",
+      "district": "bokeyorda",
+      "path": "bazy_zko/bokeyordinsky/baza_zko_bokeyordinsky_terenkuduk.txt",
+      "folder": "bokeyordinsky"
+    },
+    {
+      "file": "baza_zko_bokeyordinsky_seytkali.txt",
+      "name": "Сейткали",
+      "code": "bokeyordinsky_seytkali",
+      "index": 62,
+      "region": "zko",
+      "district": "bokeyorda",
+      "path": "bazy_zko/bokeyordinsky/baza_zko_bokeyordinsky_seytkali.txt",
+      "folder": "bokeyordinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_aksay.txt",
+      "name": "Аксай",
+      "code": "burlinsky_aksay",
+      "index": 63,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_aksay.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_akbulak.txt",
+      "name": "Акбулак",
+      "code": "burlinsky_akbulak",
+      "index": 64,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_akbulak.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_aksu.txt",
+      "name": "Аксу",
+      "code": "burlinsky_aksu",
+      "index": 65,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_aksu.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_aleksandrovka.txt",
+      "name": "Александровка",
+      "code": "burlinsky_aleksandrovka",
+      "index": 66,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_aleksandrovka.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_berezovka.txt",
+      "name": "Березовка",
+      "code": "burlinsky_berezovka",
+      "index": 67,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_berezovka.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_bumakol.txt",
+      "name": "Бумаколь",
+      "code": "burlinsky_bumakol",
+      "index": 68,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_bumakol.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_burlin.txt",
+      "name": "Бурлин",
+      "code": "burlinsky_burlin",
+      "index": 69,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_burlin.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_grigorevka.txt",
+      "name": "Григорьевка",
+      "code": "burlinsky_grigorevka",
+      "index": 70,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_grigorevka.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_zharsuat.txt",
+      "name": "Жарсуат",
+      "code": "burlinsky_zharsuat",
+      "index": 71,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_zharsuat.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_kanay.txt",
+      "name": "Канай",
+      "code": "burlinsky_kanay",
+      "index": 72,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_kanay.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_karachaganak.txt",
+      "name": "Карачаганак",
+      "code": "burlinsky_karachaganak",
+      "index": 73,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_karachaganak.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_kentubek.txt",
+      "name": "Кентубек",
+      "code": "burlinsky_kentubek",
+      "index": 74,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_kentubek.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_kyzyltal.txt",
+      "name": "Кызылтал",
+      "code": "burlinsky_kyzyltal",
+      "index": 75,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_kyzyltal.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_mirgorodka.txt",
+      "name": "Миргородка",
+      "code": "burlinsky_mirgorodka",
+      "index": 76,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_mirgorodka.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_oblavka.txt",
+      "name": "Облавка",
+      "code": "burlinsky_oblavka",
+      "index": 77,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_oblavka.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_priuralnoe.txt",
+      "name": "Приуральное",
+      "code": "burlinsky_priuralnoe",
+      "index": 78,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_priuralnoe.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_pugachevo.txt",
+      "name": "Пугачево",
+      "code": "burlinsky_pugachevo",
+      "index": 79,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_pugachevo.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_burlinsky_uspenovka.txt",
+      "name": "Успеновка",
+      "code": "burlinsky_uspenovka",
+      "index": 80,
+      "region": "zko",
+      "district": "burlin",
+      "path": "bazy_zko/burlinsky/baza_zko_burlinsky_uspenovka.txt",
+      "folder": "burlinsky"
+    },
+    {
+      "file": "baza_zko_zhangalinsky_birlik.txt",
+      "name": "Бирлик",
+      "code": "zhangalinsky_birlik",
+      "index": 81,
+      "region": "zko",
+      "district": "zhangala",
+      "path": "bazy_zko/zhangalinsky/baza_zko_zhangalinsky_birlik.txt",
+      "folder": "zhangalinsky"
+    },
+    {
+      "file": "baza_zko_zhangalinsky_zhanazhol.txt",
+      "name": "Жанажол (Жангалинский р-н)",
+      "code": "zhangalinsky_zhanazhol",
+      "index": 82,
+      "region": "zko",
+      "district": "zhangala",
+      "path": "bazy_zko/zhangalinsky/baza_zko_zhangalinsky_zhanazhol.txt",
+      "folder": "zhangalinsky"
+    },
+    {
+      "file": "baza_zko_zhangalinsky_zhanakazan.txt",
+      "name": "Жанаказан",
+      "code": "zhangalinsky_zhanakazan",
+      "index": 83,
+      "region": "zko",
+      "district": "zhangala",
+      "path": "bazy_zko/zhangalinsky/baza_zko_zhangalinsky_zhanakazan.txt",
+      "folder": "zhangalinsky"
+    },
+    {
+      "file": "baza_zko_zhangalinsky_zhangala.txt",
+      "name": "Жангала",
+      "code": "zhangalinsky_zhangala",
+      "index": 84,
+      "region": "zko",
+      "district": "zhangala",
+      "path": "bazy_zko/zhangalinsky/baza_zko_zhangalinsky_zhangala.txt",
+      "folder": "zhangalinsky"
+    },
+    {
+      "file": "baza_zko_zhangalinsky_kopzhasar.txt",
+      "name": "Копжасар",
+      "code": "zhangalinsky_kopzhasar",
+      "index": 85,
+      "region": "zko",
+      "district": "zhangala",
+      "path": "bazy_zko/zhangalinsky/baza_zko_zhangalinsky_kopzhasar.txt",
+      "folder": "zhangalinsky"
+    },
+    {
+      "file": "baza_zko_zhangalinsky_kyzyloba.txt",
+      "name": "Кызылоба",
+      "code": "zhangalinsky_kyzyloba",
+      "index": 86,
+      "region": "zko",
+      "district": "zhangala",
+      "path": "bazy_zko/zhangalinsky/baza_zko_zhangalinsky_kyzyloba.txt",
+      "folder": "zhangalinsky"
+    },
+    {
+      "file": "baza_zko_zhangalinsky_mashteksay.txt",
+      "name": "Маштексай",
+      "code": "zhangalinsky_mashteksay",
+      "index": 87,
+      "region": "zko",
+      "district": "zhangala",
+      "path": "bazy_zko/zhangalinsky/baza_zko_zhangalinsky_mashteksay.txt",
+      "folder": "zhangalinsky"
+    },
+    {
+      "file": "baza_zko_zhangalinsky_mukur.txt",
+      "name": "Мукур",
+      "code": "zhangalinsky_mukur",
+      "index": 88,
+      "region": "zko",
+      "district": "zhangala",
+      "path": "bazy_zko/zhangalinsky/baza_zko_zhangalinsky_mukur.txt",
+      "folder": "zhangalinsky"
+    },
+    {
+      "file": "baza_zko_zhangalinsky_pyatimar.txt",
+      "name": "Пятимар",
+      "code": "zhangalinsky_pyatimar",
+      "index": 89,
+      "region": "zko",
+      "district": "zhangala",
+      "path": "bazy_zko/zhangalinsky/baza_zko_zhangalinsky_pyatimar.txt",
+      "folder": "zhangalinsky"
+    },
+    {
+      "file": "baza_zko_zhangalinsky_sarykol.txt",
+      "name": "Сарыколь",
+      "code": "zhangalinsky_sarykol",
+      "index": 90,
+      "region": "zko",
+      "district": "zhangala",
+      "path": "bazy_zko/zhangalinsky/baza_zko_zhangalinsky_sarykol.txt",
+      "folder": "zhangalinsky"
+    },
+    {
+      "file": "baza_zko_zhangalinsky_tzhiksay.txt",
+      "name": "Тжиксай",
+      "code": "zhangalinsky_tzhiksay",
+      "index": 91,
+      "region": "zko",
+      "district": "zhangala",
+      "path": "bazy_zko/zhangalinsky/baza_zko_zhangalinsky_tzhiksay.txt",
+      "folder": "zhangalinsky"
+    },
+    {
+      "file": "baza_zko_zhanibeksky_akoba.txt",
+      "name": "Акоба",
+      "code": "zhanibeksky_akoba",
+      "index": 92,
+      "region": "zko",
+      "district": "zhanibek",
+      "path": "bazy_zko/zhanibeksky/baza_zko_zhanibeksky_akoba.txt",
+      "folder": "zhanibeksky"
+    },
+    {
+      "file": "baza_zko_zhanibeksky_borsy.txt",
+      "name": "Борсы",
+      "code": "zhanibeksky_borsy",
+      "index": 93,
+      "region": "zko",
+      "district": "zhanibek",
+      "path": "bazy_zko/zhanibeksky/baza_zko_zhanibeksky_borsy.txt",
+      "folder": "zhanibeksky"
+    },
+    {
+      "file": "baza_zko_zhanibeksky_zhanibek.txt",
+      "name": "Жанибек",
+      "code": "zhanibeksky_zhanibek",
+      "index": 94,
+      "region": "zko",
+      "district": "zhanibek",
+      "path": "bazy_zko/zhanibeksky/baza_zko_zhanibeksky_zhanibek.txt",
+      "folder": "zhanibeksky"
+    },
+    {
+      "file": "baza_zko_zhanibeksky_zhaksybay.txt",
+      "name": "Жаксыбай",
+      "code": "zhanibeksky_zhaksybay",
+      "index": 95,
+      "region": "zko",
+      "district": "zhanibek",
+      "path": "bazy_zko/zhanibeksky/baza_zko_zhanibeksky_zhaksybay.txt",
+      "folder": "zhanibeksky"
+    },
+    {
+      "file": "baza_zko_zhanibeksky_kamysty.txt",
+      "name": "Камысты",
+      "code": "zhanibeksky_kamysty",
+      "index": 96,
+      "region": "zko",
+      "district": "zhanibek",
+      "path": "bazy_zko/zhanibeksky/baza_zko_zhanibeksky_kamysty.txt",
+      "folder": "zhanibeksky"
+    },
+    {
+      "file": "baza_zko_zhanibeksky_kuybyshev.txt",
+      "name": "Куйбышев",
+      "code": "zhanibeksky_kuybyshev",
+      "index": 97,
+      "region": "zko",
+      "district": "zhanibek",
+      "path": "bazy_zko/zhanibeksky/baza_zko_zhanibeksky_kuybyshev.txt",
+      "folder": "zhanibeksky"
+    },
+    {
+      "file": "baza_zko_zhanibeksky_kumyskuduk.txt",
+      "name": "Кумыскудук",
+      "code": "zhanibeksky_kumyskuduk",
+      "index": 98,
+      "region": "zko",
+      "district": "zhanibek",
+      "path": "bazy_zko/zhanibeksky/baza_zko_zhanibeksky_kumyskuduk.txt",
+      "folder": "zhanibeksky"
+    },
+    {
+      "file": "baza_zko_zhanibeksky_talovka.txt",
+      "name": "Таловка",
+      "code": "zhanibeksky_talovka",
+      "index": 99,
+      "region": "zko",
+      "district": "zhanibek",
+      "path": "bazy_zko/zhanibeksky/baza_zko_zhanibeksky_talovka.txt",
+      "folder": "zhanibeksky"
+    },
+    {
+      "file": "baza_zko_zhanibeksky_uzunkol.txt",
+      "name": "Узунколь (Жанибекский р-н)",
+      "code": "zhanibeksky_uzunkol",
+      "index": 100,
+      "region": "zko",
+      "district": "zhanibek",
+      "path": "bazy_zko/zhanibeksky/baza_zko_zhanibeksky_uzunkol.txt",
+      "folder": "zhanibeksky"
+    },
+    {
+      "file": "baza_zko_zhanibeksky_cholakkamys.txt",
+      "name": "Чолаккамыс",
+      "code": "zhanibeksky_cholakkamys",
+      "index": 101,
+      "region": "zko",
+      "district": "zhanibek",
+      "path": "bazy_zko/zhanibeksky/baza_zko_zhanibeksky_cholakkamys.txt",
+      "folder": "zhanibeksky"
+    },
+    {
+      "file": "baza_zko_karatobinsky_akkozy.txt",
+      "name": "Аккозы",
+      "code": "karatobinsky_akkozy",
+      "index": 102,
+      "region": "zko",
+      "district": "karatobe",
+      "path": "bazy_zko/karatobinsky/baza_zko_karatobinsky_akkozy.txt",
+      "folder": "karatobinsky"
+    },
+    {
+      "file": "baza_zko_karatobinsky_zhusandoy.txt",
+      "name": "Жусандой",
+      "code": "karatobinsky_zhusandoy",
+      "index": 103,
+      "region": "zko",
+      "district": "karatobe",
+      "path": "bazy_zko/karatobinsky/baza_zko_karatobinsky_zhusandoy.txt",
+      "folder": "karatobinsky"
+    },
+    {
+      "file": "baza_zko_karatobinsky_kalmykkovo.txt",
+      "name": "Калмыкково",
+      "code": "karatobinsky_kalmykkovo",
+      "index": 104,
+      "region": "zko",
+      "district": "karatobe",
+      "path": "bazy_zko/karatobinsky/baza_zko_karatobinsky_kalmykkovo.txt",
+      "folder": "karatobinsky"
+    },
+    {
+      "file": "baza_zko_karatobinsky_karatobe.txt",
+      "name": "Каратобе",
+      "code": "karatobinsky_karatobe",
+      "index": 105,
+      "region": "zko",
+      "district": "karatobe",
+      "path": "bazy_zko/karatobinsky/baza_zko_karatobinsky_karatobe.txt",
+      "folder": "karatobinsky"
+    },
+    {
+      "file": "baza_zko_karatobinsky_koskol.txt",
+      "name": "Косколь",
+      "code": "karatobinsky_koskol",
+      "index": 106,
+      "region": "zko",
+      "district": "karatobe",
+      "path": "bazy_zko/karatobinsky/baza_zko_karatobinsky_koskol.txt",
+      "folder": "karatobinsky"
+    },
+    {
+      "file": "baza_zko_karatobinsky_salykkol.txt",
+      "name": "Салыкколь",
+      "code": "karatobinsky_salykkol",
+      "index": 107,
+      "region": "zko",
+      "district": "karatobe",
+      "path": "bazy_zko/karatobinsky/baza_zko_karatobinsky_salykkol.txt",
+      "folder": "karatobinsky"
+    },
+    {
+      "file": "baza_zko_karatobinsky_saule.txt",
+      "name": "Сауле",
+      "code": "karatobinsky_saule",
+      "index": 108,
+      "region": "zko",
+      "district": "karatobe",
+      "path": "bazy_zko/karatobinsky/baza_zko_karatobinsky_saule.txt",
+      "folder": "karatobinsky"
+    },
+    {
+      "file": "baza_zko_karatobinsky_sulykol.txt",
+      "name": "Сулыколь",
+      "code": "karatobinsky_sulykol",
+      "index": 109,
+      "region": "zko",
+      "district": "karatobe",
+      "path": "bazy_zko/karatobinsky/baza_zko_karatobinsky_sulykol.txt",
+      "folder": "karatobinsky"
+    },
+    {
+      "file": "baza_zko_karatobinsky_uzynkol.txt",
+      "name": "Узынколь",
+      "code": "karatobinsky_uzynkol",
+      "index": 110,
+      "region": "zko",
+      "district": "karatobe",
+      "path": "bazy_zko/karatobinsky/baza_zko_karatobinsky_uzynkol.txt",
+      "folder": "karatobinsky"
+    },
+    {
+      "file": "baza_zko_karatobinsky_shoptikol.txt",
+      "name": "Шөптiкөл",
+      "code": "karatobinsky_shoptikol",
+      "index": 111,
+      "region": "zko",
+      "district": "karatobe",
+      "path": "bazy_zko/karatobinsky/baza_zko_karatobinsky_shoptikol.txt",
+      "folder": "karatobinsky"
+    },
+    {
+      "file": "baza_zko_kaztalovsky_bostandyk.txt",
+      "name": "Бостандык",
+      "code": "kaztalovsky_bostandyk",
+      "index": 112,
+      "region": "zko",
+      "district": "kaztalovka",
+      "path": "bazy_zko/kaztalovsky/baza_zko_kaztalovsky_bostandyk.txt",
+      "folder": "kaztalovsky"
+    },
+    {
+      "file": "baza_zko_kaztalovsky_zhalpaktal.txt",
+      "name": "Жалпактал",
+      "code": "kaztalovsky_zhalpaktal",
+      "index": 113,
+      "region": "zko",
+      "district": "kaztalovka",
+      "path": "bazy_zko/kaztalovsky/baza_zko_kaztalovsky_zhalpaktal.txt",
+      "folder": "kaztalovsky"
+    },
+    {
+      "file": "baza_zko_kaztalovsky_zhanazhol.txt",
+      "name": "Жанажол (Казталовский р-н)",
+      "code": "kaztalovsky_zhanazhol",
+      "index": 114,
+      "region": "zko",
+      "district": "kaztalovka",
+      "path": "bazy_zko/kaztalovsky/baza_zko_kaztalovsky_zhanazhol.txt",
+      "folder": "kaztalovsky"
+    },
+    {
+      "file": "baza_zko_kaztalovsky_kaztalovka.txt",
+      "name": "Казталовка",
+      "code": "kaztalovsky_kaztalovka",
+      "index": 115,
+      "region": "zko",
+      "district": "kaztalovka",
+      "path": "bazy_zko/kaztalovsky/baza_zko_kaztalovsky_kaztalovka.txt",
+      "folder": "kaztalovsky"
+    },
+    {
+      "file": "baza_zko_kaztalovsky_karasu.txt",
+      "name": "Карасу",
+      "code": "kaztalovsky_karasu",
+      "index": 116,
+      "region": "zko",
+      "district": "kaztalovka",
+      "path": "bazy_zko/kaztalovsky/baza_zko_kaztalovsky_karasu.txt",
+      "folder": "kaztalovsky"
+    },
+    {
+      "file": "baza_zko_kaztalovsky_karauzen.txt",
+      "name": "Караузен",
+      "code": "kaztalovsky_karauzen",
+      "index": 117,
+      "region": "zko",
+      "district": "kaztalovka",
+      "path": "bazy_zko/kaztalovsky/baza_zko_kaztalovsky_karauzen.txt",
+      "folder": "kaztalovsky"
+    },
+    {
+      "file": "baza_zko_kaztalovsky_kokterek.txt",
+      "name": "Коктерек (Казталовский р-н)",
+      "code": "kaztalovsky_kokterek",
+      "index": 118,
+      "region": "zko",
+      "district": "kaztalovka",
+      "path": "bazy_zko/kaztalovsky/baza_zko_kaztalovsky_kokterek.txt",
+      "folder": "kaztalovsky"
+    },
+    {
+      "file": "baza_zko_kaztalovsky_konys.txt",
+      "name": "Коныс",
+      "code": "kaztalovsky_konys",
+      "index": 119,
+      "region": "zko",
+      "district": "kaztalovka",
+      "path": "bazy_zko/kaztalovsky/baza_zko_kaztalovsky_konys.txt",
+      "folder": "kaztalovsky"
+    },
+    {
+      "file": "baza_zko_kaztalovsky_kushankul.txt",
+      "name": "Кушанкуль",
+      "code": "kaztalovsky_kushankul",
+      "index": 120,
+      "region": "zko",
+      "district": "kaztalovka",
+      "path": "bazy_zko/kaztalovsky/baza_zko_kaztalovsky_kushankul.txt",
+      "folder": "kaztalovsky"
+    },
+    {
+      "file": "baza_zko_kaztalovsky_taldyapan.txt",
+      "name": "Талдыапан",
+      "code": "kaztalovsky_taldyapan",
+      "index": 121,
+      "region": "zko",
+      "district": "kaztalovka",
+      "path": "bazy_zko/kaztalovsky/baza_zko_kaztalovsky_taldyapan.txt",
+      "folder": "kaztalovsky"
+    },
+    {
+      "file": "baza_zko_kaztalovsky_taldykuduk.txt",
+      "name": "Талдыкудук",
+      "code": "kaztalovsky_taldykuduk",
+      "index": 122,
+      "region": "zko",
+      "district": "kaztalovka",
+      "path": "bazy_zko/kaztalovsky/baza_zko_kaztalovsky_taldykuduk.txt",
+      "folder": "kaztalovsky"
+    },
+    {
+      "file": "baza_zko_kaztalovsky_ushtobe.txt",
+      "name": "Уштобе",
+      "code": "kaztalovsky_ushtobe",
+      "index": 123,
+      "region": "zko",
+      "district": "kaztalovka",
+      "path": "bazy_zko/kaztalovsky/baza_zko_kaztalovsky_ushtobe.txt",
+      "folder": "kaztalovsky"
+    },
+    {
+      "file": "baza_zko_syrymsky_algabas.txt",
+      "name": "Алгабас (Сырымский р-н)",
+      "code": "syrymsky_algabas",
+      "index": 124,
+      "region": "zko",
+      "district": "syrym",
+      "path": "bazy_zko/syrymsky/baza_zko_syrymsky_algabas.txt",
+      "folder": "syrymsky"
+    },
+    {
+      "file": "baza_zko_syrymsky_araltobe.txt",
+      "name": "Аралтобе",
+      "code": "syrymsky_araltobe",
+      "index": 125,
+      "region": "zko",
+      "district": "syrym",
+      "path": "bazy_zko/syrymsky/baza_zko_syrymsky_araltobe.txt",
+      "folder": "syrymsky"
+    },
+    {
+      "file": "baza_zko_syrymsky_buldurta.txt",
+      "name": "Булдурта",
+      "code": "syrymsky_buldurta",
+      "index": 126,
+      "region": "zko",
+      "district": "syrym",
+      "path": "bazy_zko/syrymsky/baza_zko_syrymsky_buldurta.txt",
+      "folder": "syrymsky"
+    },
+    {
+      "file": "baza_zko_syrymsky_zhimpity.txt",
+      "name": "Жимпиты",
+      "code": "syrymsky_zhimpity",
+      "index": 127,
+      "region": "zko",
+      "district": "syrym",
+      "path": "bazy_zko/syrymsky/baza_zko_syrymsky_zhimpity.txt",
+      "folder": "syrymsky"
+    },
+    {
+      "file": "baza_zko_syrymsky_zhosaly.txt",
+      "name": "Жосалы",
+      "code": "syrymsky_zhosaly",
+      "index": 128,
+      "region": "zko",
+      "district": "syrym",
+      "path": "bazy_zko/syrymsky/baza_zko_syrymsky_zhosaly.txt",
+      "folder": "syrymsky"
+    },
+    {
+      "file": "baza_zko_syrymsky_kosoba.txt",
+      "name": "Кособа",
+      "code": "syrymsky_kosoba",
+      "index": 129,
+      "region": "zko",
+      "district": "syrym",
+      "path": "bazy_zko/syrymsky/baza_zko_syrymsky_kosoba.txt",
+      "folder": "syrymsky"
+    },
+    {
+      "file": "baza_zko_syrymsky_saroy.txt",
+      "name": "Сарой",
+      "code": "syrymsky_saroy",
+      "index": 130,
+      "region": "zko",
+      "district": "syrym",
+      "path": "bazy_zko/syrymsky/baza_zko_syrymsky_saroy.txt",
+      "folder": "syrymsky"
+    },
+    {
+      "file": "baza_zko_syrymsky_taldybulak.txt",
+      "name": "Талдыбулак",
+      "code": "syrymsky_taldybulak",
+      "index": 131,
+      "region": "zko",
+      "district": "syrym",
+      "path": "bazy_zko/syrymsky/baza_zko_syrymsky_taldybulak.txt",
+      "folder": "syrymsky"
+    },
+    {
+      "file": "baza_zko_syrymsky_toganas.txt",
+      "name": "Тоганас",
+      "code": "syrymsky_toganas",
+      "index": 132,
+      "region": "zko",
+      "district": "syrym",
+      "path": "bazy_zko/syrymsky/baza_zko_syrymsky_toganas.txt",
+      "folder": "syrymsky"
+    },
+    {
+      "file": "baza_zko_syrymsky_shagyrloy.txt",
+      "name": "Шагырлой",
+      "code": "syrymsky_shagyrloy",
+      "index": 133,
+      "region": "zko",
+      "district": "syrym",
+      "path": "bazy_zko/syrymsky/baza_zko_syrymsky_shagyrloy.txt",
+      "folder": "syrymsky"
+    },
+    {
+      "file": "baza_zko_syrymsky_sholakankaty.txt",
+      "name": "Шолаканкаты",
+      "code": "syrymsky_sholakankaty",
+      "index": 134,
+      "region": "zko",
+      "district": "syrym",
+      "path": "bazy_zko/syrymsky/baza_zko_syrymsky_sholakankaty.txt",
+      "folder": "syrymsky"
+    },
+    {
+      "file": "baza_zko_taskalinsky_aktyubinsk.txt",
+      "name": "Актюбинск",
+      "code": "taskalinsky_aktyubinsk",
+      "index": 135,
+      "region": "zko",
+      "district": "taskala",
+      "path": "bazy_zko/taskalinsky/baza_zko_taskalinsky_aktyubinsk.txt",
+      "folder": "taskalinsky"
+    },
+    {
+      "file": "baza_zko_taskalinsky_amangeldy.txt",
+      "name": "Амангельды",
+      "code": "taskalinsky_amangeldy",
+      "index": 136,
+      "region": "zko",
+      "district": "taskala",
+      "path": "bazy_zko/taskalinsky/baza_zko_taskalinsky_amangeldy.txt",
+      "folder": "taskalinsky"
+    },
+    {
+      "file": "baza_zko_taskalinsky_dostyk.txt",
+      "name": "Достык",
+      "code": "taskalinsky_dostyk",
+      "index": 137,
+      "region": "zko",
+      "district": "taskala",
+      "path": "bazy_zko/taskalinsky/baza_zko_taskalinsky_dostyk.txt",
+      "folder": "taskalinsky"
+    },
+    {
+      "file": "baza_zko_taskalinsky_kazakhstan.txt",
+      "name": "Казахстан",
+      "code": "taskalinsky_kazakhstan",
+      "index": 138,
+      "region": "zko",
+      "district": "taskala",
+      "path": "bazy_zko/taskalinsky/baza_zko_taskalinsky_kazakhstan.txt",
+      "folder": "taskalinsky"
+    },
+    {
+      "file": "baza_zko_taskalinsky_kosshy.txt",
+      "name": "Косшы",
+      "code": "taskalinsky_kosshy",
+      "index": 139,
+      "region": "zko",
+      "district": "taskala",
+      "path": "bazy_zko/taskalinsky/baza_zko_taskalinsky_kosshy.txt",
+      "folder": "taskalinsky"
+    },
+    {
+      "file": "baza_zko_taskalinsky_merey.txt",
+      "name": "Мерей",
+      "code": "taskalinsky_merey",
+      "index": 140,
+      "region": "zko",
+      "district": "taskala",
+      "path": "bazy_zko/taskalinsky/baza_zko_taskalinsky_merey.txt",
+      "folder": "taskalinsky"
+    },
+    {
+      "file": "baza_zko_taskalinsky_taskala.txt",
+      "name": "Таскала",
+      "code": "taskalinsky_taskala",
+      "index": 141,
+      "region": "zko",
+      "district": "taskala",
+      "path": "bazy_zko/taskalinsky/baza_zko_taskalinsky_taskala.txt",
+      "folder": "taskalinsky"
+    },
+    {
+      "file": "baza_zko_taskalinsky_chizha-1.txt",
+      "name": "Чижа-1",
+      "code": "taskalinsky_chizha-1",
+      "index": 142,
+      "region": "zko",
+      "district": "taskala",
+      "path": "bazy_zko/taskalinsky/baza_zko_taskalinsky_chizha-1.txt",
+      "folder": "taskalinsky"
+    },
+    {
+      "file": "baza_zko_taskalinsky_chizha-2.txt",
+      "name": "Чижа-2",
+      "code": "taskalinsky_chizha-2",
+      "index": 143,
+      "region": "zko",
+      "district": "taskala",
+      "path": "bazy_zko/taskalinsky/baza_zko_taskalinsky_chizha-2.txt",
+      "folder": "taskalinsky"
+    },
+    {
+      "file": "baza_zko_taskalinsky_shezhyn-2.txt",
+      "name": "Шежын-2",
+      "code": "taskalinsky_shezhyn-2",
+      "index": 144,
+      "region": "zko",
+      "district": "taskala",
+      "path": "bazy_zko/taskalinsky/baza_zko_taskalinsky_shezhyn-2.txt",
+      "folder": "taskalinsky"
+    },
+    {
+      "file": "baza_zko_terektinsky_akzhaik.txt",
+      "name": "Акжаик",
+      "code": "terektinsky_akzhaik",
+      "index": 145,
+      "region": "zko",
+      "district": "terekty",
+      "path": "bazy_zko/terektinsky/baza_zko_terektinsky_akzhaik.txt",
+      "folder": "terektinsky"
+    },
+    {
+      "file": "baza_zko_terektinsky_aksogym.txt",
+      "name": "Аксогым",
+      "code": "terektinsky_aksogym",
+      "index": 146,
+      "region": "zko",
+      "district": "terekty",
+      "path": "bazy_zko/terektinsky/baza_zko_terektinsky_aksogym.txt",
+      "folder": "terektinsky"
+    },
+    {
+      "file": "baza_zko_terektinsky_ankaty.txt",
+      "name": "Анкаты",
+      "code": "terektinsky_ankaty",
+      "index": 147,
+      "region": "zko",
+      "district": "terekty",
+      "path": "bazy_zko/terektinsky/baza_zko_terektinsky_ankaty.txt",
+      "folder": "terektinsky"
+    },
+    {
+      "file": "baza_zko_terektinsky_bogdanovka.txt",
+      "name": "Богдановка",
+      "code": "terektinsky_bogdanovka",
+      "index": 148,
+      "region": "zko",
+      "district": "terekty",
+      "path": "bazy_zko/terektinsky/baza_zko_terektinsky_bogdanovka.txt",
+      "folder": "terektinsky"
+    },
+    {
+      "file": "baza_zko_terektinsky_dolinnoe.txt",
+      "name": "Долинное",
+      "code": "terektinsky_dolinnoe",
+      "index": 149,
+      "region": "zko",
+      "district": "terekty",
+      "path": "bazy_zko/terektinsky/baza_zko_terektinsky_dolinnoe.txt",
+      "folder": "terektinsky"
+    },
+    {
+      "file": "baza_zko_terektinsky_pokatilovka.txt",
+      "name": "Покатиловка",
+      "code": "terektinsky_pokatilovka",
+      "index": 150,
+      "region": "zko",
+      "district": "terekty",
+      "path": "bazy_zko/terektinsky/baza_zko_terektinsky_pokatilovka.txt",
+      "folder": "terektinsky"
+    },
+    {
+      "file": "baza_zko_terektinsky_podstepnoe.txt",
+      "name": "Подстепное",
+      "code": "terektinsky_podstepnoe",
+      "index": 151,
+      "region": "zko",
+      "district": "terekty",
+      "path": "bazy_zko/terektinsky/baza_zko_terektinsky_podstepnoe.txt",
+      "folder": "terektinsky"
+    },
+    {
+      "file": "baza_zko_terektinsky_saryomir.txt",
+      "name": "Сарыомир",
+      "code": "terektinsky_saryomir",
+      "index": 152,
+      "region": "zko",
+      "district": "terekty",
+      "path": "bazy_zko/terektinsky/baza_zko_terektinsky_saryomir.txt",
+      "folder": "terektinsky"
+    },
+    {
+      "file": "baza_zko_terektinsky_tyurekty.txt",
+      "name": "Тюректы",
+      "code": "terektinsky_tyurekty",
+      "index": 153,
+      "region": "zko",
+      "district": "terekty",
+      "path": "bazy_zko/terektinsky/baza_zko_terektinsky_tyurekty.txt",
+      "folder": "terektinsky"
+    },
+    {
+      "file": "baza_zko_terektinsky_uzunkol.txt",
+      "name": "Узунколь (Теректинский р-н)",
+      "code": "terektinsky_uzunkol",
+      "index": 154,
+      "region": "zko",
+      "district": "terekty",
+      "path": "bazy_zko/terektinsky/baza_zko_terektinsky_uzunkol.txt",
+      "folder": "terektinsky"
+    },
+    {
+      "file": "baza_zko_terektinsky_shagatay.txt",
+      "name": "Шагатай",
+      "code": "terektinsky_shagatay",
+      "index": 155,
+      "region": "zko",
+      "district": "terekty",
+      "path": "bazy_zko/terektinsky/baza_zko_terektinsky_shagatay.txt",
+      "folder": "terektinsky"
+    },
+    {
+      "file": "baza_zko_terektinsky_yubileynoe.txt",
+      "name": "Юбилейное",
+      "code": "terektinsky_yubileynoe",
+      "index": 156,
+      "region": "zko",
+      "district": "terekty",
+      "path": "bazy_zko/terektinsky/baza_zko_terektinsky_yubileynoe.txt",
+      "folder": "terektinsky"
+    },
+    {
+      "file": "baza_zko_chingirlausky_akshat.txt",
+      "name": "Акшат",
+      "code": "chingirlausky_akshat",
+      "index": 157,
+      "region": "zko",
+      "district": "shyngirlau",
+      "path": "bazy_zko/chingirlausky/baza_zko_chingirlausky_akshat.txt",
+      "folder": "chingirlausky"
+    },
+    {
+      "file": "baza_zko_chingirlausky_almaz.txt",
+      "name": "Алмаз",
+      "code": "chingirlausky_almaz",
+      "index": 158,
+      "region": "zko",
+      "district": "shyngirlau",
+      "path": "bazy_zko/chingirlausky/baza_zko_chingirlausky_almaz.txt",
+      "folder": "chingirlausky"
+    },
+    {
+      "file": "baza_zko_chingirlausky_ashchysay.txt",
+      "name": "Ащысай",
+      "code": "chingirlausky_ashchysay",
+      "index": 159,
+      "region": "zko",
+      "district": "shyngirlau",
+      "path": "bazy_zko/chingirlausky/baza_zko_chingirlausky_ashchysay.txt",
+      "folder": "chingirlausky"
+    },
+    {
+      "file": "baza_zko_chingirlausky_karagash.txt",
+      "name": "Карагаш",
+      "code": "chingirlausky_karagash",
+      "index": 160,
+      "region": "zko",
+      "district": "shyngirlau",
+      "path": "bazy_zko/chingirlausky/baza_zko_chingirlausky_karagash.txt",
+      "folder": "chingirlausky"
+    },
+    {
+      "file": "baza_zko_chingirlausky_poltavka.txt",
+      "name": "Полтавка",
+      "code": "chingirlausky_poltavka",
+      "index": 161,
+      "region": "zko",
+      "district": "shyngirlau",
+      "path": "bazy_zko/chingirlausky/baza_zko_chingirlausky_poltavka.txt",
+      "folder": "chingirlausky"
+    },
+    {
+      "file": "baza_zko_chingirlausky_segizsay.txt",
+      "name": "Сегизсай",
+      "code": "chingirlausky_segizsay",
+      "index": 162,
+      "region": "zko",
+      "district": "shyngirlau",
+      "path": "bazy_zko/chingirlausky/baza_zko_chingirlausky_segizsay.txt",
+      "folder": "chingirlausky"
+    },
+    {
+      "file": "baza_zko_chingirlausky_chingirlau.txt",
+      "name": "Чингирлау",
+      "code": "chingirlausky_chingirlau",
+      "index": 163,
+      "region": "zko",
+      "district": "shyngirlau",
+      "path": "bazy_zko/chingirlausky/baza_zko_chingirlausky_chingirlau.txt",
+      "folder": "chingirlausky"
+    },
+    {
+      "file": "baza_zko_chingirlausky_shoktybay.txt",
+      "name": "Шоктыбай",
+      "code": "chingirlausky_shoktybay",
+      "index": 164,
+      "region": "zko",
+      "district": "shyngirlau",
+      "path": "bazy_zko/chingirlausky/baza_zko_chingirlausky_shoktybay.txt",
+      "folder": "chingirlausky"
+    },
+    {
+      "file": "baza_zko_uralsk_uralsk.txt",
+      "name": "Уральск",
+      "code": "uralsk_uralsk",
+      "index": 165,
+      "region": "zko",
+      "district": "oral",
+      "path": "bazy_zko/uralsk/baza_zko_uralsk_uralsk.txt",
+      "folder": "uralsk"
+    }
+  ],
+  "files": [
+    "baza_zko_baiterek_daryinskoe.txt",
+    "baza_zko_baiterek_rubezhinskoe.txt",
+    "baza_zko_baiterek_volodarskoe.txt",
+    "baza_zko_baiterek_ozernoe.txt",
+    "baza_zko_baiterek_baikonys.txt",
+    "baza_zko_baiterek_atameken.txt",
+    "baza_zko_baiterek_zelenoe.txt",
+    "baza_zko_baiterek_krasnoarmeyskoe.txt",
+    "baza_zko_baiterek_kushum.txt",
+    "baza_zko_baiterek_makarovo.txt",
+    "baza_zko_baiterek_michurinskoe.txt",
+    "baza_zko_baiterek_kaynar.txt",
+    "baza_zko_baiterek_novenkoe.txt",
+    "baza_zko_baiterek_pervosovetskoe.txt",
+    "baza_zko_baiterek_peremetnoe.txt",
+    "baza_zko_baiterek_beybitshilik.txt",
+    "baza_zko_baiterek_razdolnoe.txt",
+    "baza_zko_baiterek_beles.txt",
+    "baza_zko_baiterek_furmanovo.txt",
+    "baza_zko_baiterek_tsyganovo.txt",
+    "baza_zko_baiterek_chapovo.txt",
+    "baza_zko_baiterek_kurmangazy.txt",
+    "baza_zko_baiterek_sulukol.txt",
+    "baza_zko_baiterek_chirovo.txt",
+    "baza_zko_baiterek_chuvashinskoe.txt",
+    "baza_zko_baiterek_shagan.txt",
+    "baza_zko_baiterek_shchapovo.txt",
+    "baza_zko_baiterek_yanaykino.txt",
+    "baza_zko_baiterek_yanvartsevo.txt",
+    "baza_zko_akzhaiksky_aksuat.txt",
+    "baza_zko_akzhaiksky_algabas.txt",
+    "baza_zko_akzhaiksky_almaly.txt",
+    "baza_zko_akzhaiksky_atameken.txt",
+    "baza_zko_akzhaiksky_bazartobe.txt",
+    "baza_zko_akzhaiksky_bazarsholan.txt",
+    "baza_zko_akzhaiksky_budarino.txt",
+    "baza_zko_akzhaiksky_esensay.txt",
+    "baza_zko_akzhaiksky_zhayyk.txt",
+    "baza_zko_akzhaiksky_zhambyl.txt",
+    "baza_zko_akzhaiksky_zhanabulak.txt",
+    "baza_zko_akzhaiksky_zhanama.txt",
+    "baza_zko_akzhaiksky_kabyrshakty.txt",
+    "baza_zko_akzhaiksky_karaultobe.txt",
+    "baza_zko_akzhaiksky_kuraylysay.txt",
+    "baza_zko_akzhaiksky_lbishchensk.txt",
+    "baza_zko_akzhaiksky_mergen.txt",
+    "baza_zko_akzhaiksky_saykuduk.txt",
+    "baza_zko_akzhaiksky_taypak.txt",
+    "baza_zko_akzhaiksky_chapaev.txt",
+    "baza_zko_akzhaiksky_shabdarzhap.txt",
+    "baza_zko_bokeyordinsky_bisen.txt",
+    "baza_zko_bokeyordinsky_borli.txt",
+    "baza_zko_bokeyordinsky_zhambyl.txt",
+    "baza_zko_bokeyordinsky_zhiekkum.txt",
+    "baza_zko_bokeyordinsky_kokterek.txt",
+    "baza_zko_bokeyordinsky_muratsay.txt",
+    "baza_zko_bokeyordinsky_saralzhin.txt",
+    "baza_zko_bokeyordinsky_saykhin.txt",
+    "baza_zko_bokeyordinsky_khan-ordasy.txt",
+    "baza_zko_bokeyordinsky_uyaly.txt",
+    "baza_zko_bokeyordinsky_terenkuduk.txt",
+    "baza_zko_bokeyordinsky_seytkali.txt",
+    "baza_zko_burlinsky_aksay.txt",
+    "baza_zko_burlinsky_akbulak.txt",
+    "baza_zko_burlinsky_aksu.txt",
+    "baza_zko_burlinsky_aleksandrovka.txt",
+    "baza_zko_burlinsky_berezovka.txt",
+    "baza_zko_burlinsky_bumakol.txt",
+    "baza_zko_burlinsky_burlin.txt",
+    "baza_zko_burlinsky_grigorevka.txt",
+    "baza_zko_burlinsky_zharsuat.txt",
+    "baza_zko_burlinsky_kanay.txt",
+    "baza_zko_burlinsky_karachaganak.txt",
+    "baza_zko_burlinsky_kentubek.txt",
+    "baza_zko_burlinsky_kyzyltal.txt",
+    "baza_zko_burlinsky_mirgorodka.txt",
+    "baza_zko_burlinsky_oblavka.txt",
+    "baza_zko_burlinsky_priuralnoe.txt",
+    "baza_zko_burlinsky_pugachevo.txt",
+    "baza_zko_burlinsky_uspenovka.txt",
+    "baza_zko_zhangalinsky_birlik.txt",
+    "baza_zko_zhangalinsky_zhanazhol.txt",
+    "baza_zko_zhangalinsky_zhanakazan.txt",
+    "baza_zko_zhangalinsky_zhangala.txt",
+    "baza_zko_zhangalinsky_kopzhasar.txt",
+    "baza_zko_zhangalinsky_kyzyloba.txt",
+    "baza_zko_zhangalinsky_mashteksay.txt",
+    "baza_zko_zhangalinsky_mukur.txt",
+    "baza_zko_zhangalinsky_pyatimar.txt",
+    "baza_zko_zhangalinsky_sarykol.txt",
+    "baza_zko_zhangalinsky_tzhiksay.txt",
+    "baza_zko_zhanibeksky_akoba.txt",
+    "baza_zko_zhanibeksky_borsy.txt",
+    "baza_zko_zhanibeksky_zhanibek.txt",
+    "baza_zko_zhanibeksky_zhaksybay.txt",
+    "baza_zko_zhanibeksky_kamysty.txt",
+    "baza_zko_zhanibeksky_kuybyshev.txt",
+    "baza_zko_zhanibeksky_kumyskuduk.txt",
+    "baza_zko_zhanibeksky_talovka.txt",
+    "baza_zko_zhanibeksky_uzunkol.txt",
+    "baza_zko_zhanibeksky_cholakkamys.txt",
+    "baza_zko_karatobinsky_akkozy.txt",
+    "baza_zko_karatobinsky_zhusandoy.txt",
+    "baza_zko_karatobinsky_kalmykkovo.txt",
+    "baza_zko_karatobinsky_karatobe.txt",
+    "baza_zko_karatobinsky_koskol.txt",
+    "baza_zko_karatobinsky_salykkol.txt",
+    "baza_zko_karatobinsky_saule.txt",
+    "baza_zko_karatobinsky_sulykol.txt",
+    "baza_zko_karatobinsky_uzynkol.txt",
+    "baza_zko_karatobinsky_shoptikol.txt",
+    "baza_zko_kaztalovsky_bostandyk.txt",
+    "baza_zko_kaztalovsky_zhalpaktal.txt",
+    "baza_zko_kaztalovsky_zhanazhol.txt",
+    "baza_zko_kaztalovsky_kaztalovka.txt",
+    "baza_zko_kaztalovsky_karasu.txt",
+    "baza_zko_kaztalovsky_karauzen.txt",
+    "baza_zko_kaztalovsky_kokterek.txt",
+    "baza_zko_kaztalovsky_konys.txt",
+    "baza_zko_kaztalovsky_kushankul.txt",
+    "baza_zko_kaztalovsky_taldyapan.txt",
+    "baza_zko_kaztalovsky_taldykuduk.txt",
+    "baza_zko_kaztalovsky_ushtobe.txt",
+    "baza_zko_syrymsky_algabas.txt",
+    "baza_zko_syrymsky_araltobe.txt",
+    "baza_zko_syrymsky_buldurta.txt",
+    "baza_zko_syrymsky_zhimpity.txt",
+    "baza_zko_syrymsky_zhosaly.txt",
+    "baza_zko_syrymsky_kosoba.txt",
+    "baza_zko_syrymsky_saroy.txt",
+    "baza_zko_syrymsky_taldybulak.txt",
+    "baza_zko_syrymsky_toganas.txt",
+    "baza_zko_syrymsky_shagyrloy.txt",
+    "baza_zko_syrymsky_sholakankaty.txt",
+    "baza_zko_taskalinsky_aktyubinsk.txt",
+    "baza_zko_taskalinsky_amangeldy.txt",
+    "baza_zko_taskalinsky_dostyk.txt",
+    "baza_zko_taskalinsky_kazakhstan.txt",
+    "baza_zko_taskalinsky_kosshy.txt",
+    "baza_zko_taskalinsky_merey.txt",
+    "baza_zko_taskalinsky_taskala.txt",
+    "baza_zko_taskalinsky_chizha-1.txt",
+    "baza_zko_taskalinsky_chizha-2.txt",
+    "baza_zko_taskalinsky_shezhyn-2.txt",
+    "baza_zko_terektinsky_akzhaik.txt",
+    "baza_zko_terektinsky_aksogym.txt",
+    "baza_zko_terektinsky_ankaty.txt",
+    "baza_zko_terektinsky_bogdanovka.txt",
+    "baza_zko_terektinsky_dolinnoe.txt",
+    "baza_zko_terektinsky_pokatilovka.txt",
+    "baza_zko_terektinsky_podstepnoe.txt",
+    "baza_zko_terektinsky_saryomir.txt",
+    "baza_zko_terektinsky_tyurekty.txt",
+    "baza_zko_terektinsky_uzunkol.txt",
+    "baza_zko_terektinsky_shagatay.txt",
+    "baza_zko_terektinsky_yubileynoe.txt",
+    "baza_zko_chingirlausky_akshat.txt",
+    "baza_zko_chingirlausky_almaz.txt",
+    "baza_zko_chingirlausky_ashchysay.txt",
+    "baza_zko_chingirlausky_karagash.txt",
+    "baza_zko_chingirlausky_poltavka.txt",
+    "baza_zko_chingirlausky_segizsay.txt",
+    "baza_zko_chingirlausky_chingirlau.txt",
+    "baza_zko_chingirlausky_shoktybay.txt",
+    "baza_zko_uralsk_uralsk.txt"
+  ],
+  "routeRules": {
+    "bus59AllowedX": [
+      1,
+      3,
+      4
+    ]
+  },
+  "repository": "test-cartoteka",
+  "repositoryOwner": "zko-spravochnik",
+  "repositoryName": "test-cartoteka",
+  "backup": {
+    "oldPath": "backups/old backup",
+    "newPath": "backups/backup"
+  },
+  "intakeWebhookUrl": "https://script.google.com/macros/s/AKfycbzJwuyI_ixPJdlLOVf1Vth1SC8eLACf-mXr03JjupV45bCTvt43CfL0Wek_wiYqAvYoaA/exec",
+  "intakeSheetName": "Baiterek_Ochered_2026",
+  "branch": "main",
+  "ignored_pairs": [],
+  "updateCritical": true,
+  "updateNote": "true — критическое обновление (окно без отмены, только «Обновить сейчас»); false — обычное («Обновить» / «Позже»). Меняется перед каждым выпуском.",
+  "dbEpoch": "2026-11-03-v1003-cache-reset",
+  "nameNote": "name — чистое официальное имя (витрина и Г11 базы). fullName/legacyName — старое название в скобках только для преемственности СУБД. Для Байконыса на витрине показывается «Байконыс (Трекино)» (geo: displayRu).",
+  "dbRoot": "bazy_zko",
+  "repositoryUrl": "https://github.com/zko-spravochnik/test-cartoteka",
+  "env": "test",
+  "envNote": "ТЕСТОВАЯ ПЕСОЧНИЦА. Подхватывается автоматически, если сайт открыт на localhost / IP-адресе / порту или по пути test-cartoteka. Запись идёт строго в репозиторий zko-spravochnik/test-cartoteka.",
+  "counts": {
+    "baza_zko_baiterek_daryinskoe.txt": [
+      250,
+      163
+    ],
+    "baza_zko_baiterek_rubezhinskoe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_volodarskoe.txt": [
+      1,
+      0
+    ],
+    "baza_zko_baiterek_ozernoe.txt": [
+      1,
+      0
+    ],
+    "baza_zko_baiterek_baikonys.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_atameken.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_zelenoe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_krasnoarmeyskoe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_kushum.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_makarovo.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_michurinskoe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_kaynar.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_novenkoe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_pervosovetskoe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_peremetnoe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_beybitshilik.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_razdolnoe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_beles.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_furmanovo.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_tsyganovo.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_chapovo.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_kurmangazy.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_sulukol.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_chirovo.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_chuvashinskoe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_shagan.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_shchapovo.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_yanaykino.txt": [
+      0,
+      0
+    ],
+    "baza_zko_baiterek_yanvartsevo.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_aksuat.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_algabas.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_almaly.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_atameken.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_bazartobe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_bazarsholan.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_budarino.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_esensay.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_zhayyk.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_zhambyl.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_zhanabulak.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_zhanama.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_kabyrshakty.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_karaultobe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_kuraylysay.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_lbishchensk.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_mergen.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_saykuduk.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_taypak.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_chapaev.txt": [
+      0,
+      0
+    ],
+    "baza_zko_akzhaiksky_shabdarzhap.txt": [
+      0,
+      0
+    ],
+    "baza_zko_bokeyordinsky_bisen.txt": [
+      0,
+      0
+    ],
+    "baza_zko_bokeyordinsky_borli.txt": [
+      0,
+      0
+    ],
+    "baza_zko_bokeyordinsky_zhambyl.txt": [
+      0,
+      0
+    ],
+    "baza_zko_bokeyordinsky_zhiekkum.txt": [
+      0,
+      0
+    ],
+    "baza_zko_bokeyordinsky_kokterek.txt": [
+      0,
+      0
+    ],
+    "baza_zko_bokeyordinsky_muratsay.txt": [
+      0,
+      0
+    ],
+    "baza_zko_bokeyordinsky_saralzhin.txt": [
+      0,
+      0
+    ],
+    "baza_zko_bokeyordinsky_saykhin.txt": [
+      0,
+      0
+    ],
+    "baza_zko_bokeyordinsky_khan-ordasy.txt": [
+      0,
+      0
+    ],
+    "baza_zko_bokeyordinsky_uyaly.txt": [
+      0,
+      0
+    ],
+    "baza_zko_bokeyordinsky_terenkuduk.txt": [
+      0,
+      0
+    ],
+    "baza_zko_bokeyordinsky_seytkali.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_aksay.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_akbulak.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_aksu.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_aleksandrovka.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_berezovka.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_bumakol.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_burlin.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_grigorevka.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_zharsuat.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_kanay.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_karachaganak.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_kentubek.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_kyzyltal.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_mirgorodka.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_oblavka.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_priuralnoe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_pugachevo.txt": [
+      0,
+      0
+    ],
+    "baza_zko_burlinsky_uspenovka.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhangalinsky_birlik.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhangalinsky_zhanazhol.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhangalinsky_zhanakazan.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhangalinsky_zhangala.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhangalinsky_kopzhasar.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhangalinsky_kyzyloba.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhangalinsky_mashteksay.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhangalinsky_mukur.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhangalinsky_pyatimar.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhangalinsky_sarykol.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhangalinsky_tzhiksay.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhanibeksky_akoba.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhanibeksky_borsy.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhanibeksky_zhanibek.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhanibeksky_zhaksybay.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhanibeksky_kamysty.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhanibeksky_kuybyshev.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhanibeksky_kumyskuduk.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhanibeksky_talovka.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhanibeksky_uzunkol.txt": [
+      0,
+      0
+    ],
+    "baza_zko_zhanibeksky_cholakkamys.txt": [
+      0,
+      0
+    ],
+    "baza_zko_karatobinsky_akkozy.txt": [
+      0,
+      0
+    ],
+    "baza_zko_karatobinsky_zhusandoy.txt": [
+      0,
+      0
+    ],
+    "baza_zko_karatobinsky_kalmykkovo.txt": [
+      0,
+      0
+    ],
+    "baza_zko_karatobinsky_karatobe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_karatobinsky_koskol.txt": [
+      0,
+      0
+    ],
+    "baza_zko_karatobinsky_salykkol.txt": [
+      0,
+      0
+    ],
+    "baza_zko_karatobinsky_saule.txt": [
+      0,
+      0
+    ],
+    "baza_zko_karatobinsky_sulykol.txt": [
+      0,
+      0
+    ],
+    "baza_zko_karatobinsky_uzynkol.txt": [
+      0,
+      0
+    ],
+    "baza_zko_karatobinsky_shoptikol.txt": [
+      0,
+      0
+    ],
+    "baza_zko_kaztalovsky_bostandyk.txt": [
+      0,
+      0
+    ],
+    "baza_zko_kaztalovsky_zhalpaktal.txt": [
+      0,
+      0
+    ],
+    "baza_zko_kaztalovsky_zhanazhol.txt": [
+      0,
+      0
+    ],
+    "baza_zko_kaztalovsky_kaztalovka.txt": [
+      0,
+      0
+    ],
+    "baza_zko_kaztalovsky_karasu.txt": [
+      0,
+      0
+    ],
+    "baza_zko_kaztalovsky_karauzen.txt": [
+      0,
+      0
+    ],
+    "baza_zko_kaztalovsky_kokterek.txt": [
+      0,
+      0
+    ],
+    "baza_zko_kaztalovsky_konys.txt": [
+      0,
+      0
+    ],
+    "baza_zko_kaztalovsky_kushankul.txt": [
+      0,
+      0
+    ],
+    "baza_zko_kaztalovsky_taldyapan.txt": [
+      0,
+      0
+    ],
+    "baza_zko_kaztalovsky_taldykuduk.txt": [
+      0,
+      0
+    ],
+    "baza_zko_kaztalovsky_ushtobe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_syrymsky_algabas.txt": [
+      0,
+      0
+    ],
+    "baza_zko_syrymsky_araltobe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_syrymsky_buldurta.txt": [
+      0,
+      0
+    ],
+    "baza_zko_syrymsky_zhimpity.txt": [
+      0,
+      0
+    ],
+    "baza_zko_syrymsky_zhosaly.txt": [
+      0,
+      0
+    ],
+    "baza_zko_syrymsky_kosoba.txt": [
+      0,
+      0
+    ],
+    "baza_zko_syrymsky_saroy.txt": [
+      0,
+      0
+    ],
+    "baza_zko_syrymsky_taldybulak.txt": [
+      0,
+      0
+    ],
+    "baza_zko_syrymsky_toganas.txt": [
+      0,
+      0
+    ],
+    "baza_zko_syrymsky_shagyrloy.txt": [
+      0,
+      0
+    ],
+    "baza_zko_syrymsky_sholakankaty.txt": [
+      0,
+      0
+    ],
+    "baza_zko_taskalinsky_aktyubinsk.txt": [
+      0,
+      0
+    ],
+    "baza_zko_taskalinsky_amangeldy.txt": [
+      0,
+      0
+    ],
+    "baza_zko_taskalinsky_dostyk.txt": [
+      0,
+      0
+    ],
+    "baza_zko_taskalinsky_kazakhstan.txt": [
+      0,
+      0
+    ],
+    "baza_zko_taskalinsky_kosshy.txt": [
+      0,
+      0
+    ],
+    "baza_zko_taskalinsky_merey.txt": [
+      0,
+      0
+    ],
+    "baza_zko_taskalinsky_taskala.txt": [
+      0,
+      0
+    ],
+    "baza_zko_taskalinsky_chizha-1.txt": [
+      0,
+      0
+    ],
+    "baza_zko_taskalinsky_chizha-2.txt": [
+      0,
+      0
+    ],
+    "baza_zko_taskalinsky_shezhyn-2.txt": [
+      0,
+      0
+    ],
+    "baza_zko_terektinsky_akzhaik.txt": [
+      0,
+      0
+    ],
+    "baza_zko_terektinsky_aksogym.txt": [
+      0,
+      0
+    ],
+    "baza_zko_terektinsky_ankaty.txt": [
+      0,
+      0
+    ],
+    "baza_zko_terektinsky_bogdanovka.txt": [
+      0,
+      0
+    ],
+    "baza_zko_terektinsky_dolinnoe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_terektinsky_pokatilovka.txt": [
+      0,
+      0
+    ],
+    "baza_zko_terektinsky_podstepnoe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_terektinsky_saryomir.txt": [
+      0,
+      0
+    ],
+    "baza_zko_terektinsky_tyurekty.txt": [
+      0,
+      0
+    ],
+    "baza_zko_terektinsky_uzunkol.txt": [
+      0,
+      0
+    ],
+    "baza_zko_terektinsky_shagatay.txt": [
+      0,
+      0
+    ],
+    "baza_zko_terektinsky_yubileynoe.txt": [
+      0,
+      0
+    ],
+    "baza_zko_chingirlausky_akshat.txt": [
+      0,
+      0
+    ],
+    "baza_zko_chingirlausky_almaz.txt": [
+      0,
+      0
+    ],
+    "baza_zko_chingirlausky_ashchysay.txt": [
+      0,
+      0
+    ],
+    "baza_zko_chingirlausky_karagash.txt": [
+      0,
+      0
+    ],
+    "baza_zko_chingirlausky_poltavka.txt": [
+      0,
+      0
+    ],
+    "baza_zko_chingirlausky_segizsay.txt": [
+      0,
+      0
+    ],
+    "baza_zko_chingirlausky_chingirlau.txt": [
+      0,
+      0
+    ],
+    "baza_zko_chingirlausky_shoktybay.txt": [
+      0,
+      0
+    ],
+    "baza_zko_uralsk_uralsk.txt": [
+      0,
+      0
+    ]
+  },
+  "workMode": "test"
+}

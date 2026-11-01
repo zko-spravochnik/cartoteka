@@ -1,0 +1,58 @@
+КАРТОТЕКА — ОТЧЁТ ВЕХИ v5.4.0.5 (2026-10-29)
+
+1. ДВА ЗАМКА ПУЛЬТА
+Замок 1. «Код входа в админку» (строка 1 secrets.txt, ADMIN_CODE шлюза) открывает пульт в режиме «Только чтение».
+Замок 2. «Мастер-пароль изменений» (строка 2 secrets.txt, MASTER_CODE в Свойствах Google-скрипта) разрешает любые изменения.
+Сервер хранит только отпечаток мастер-пароля (.admin_master.json, PBKDF2-SHA256, 120000 итераций). Первый раз пароль сверяется
+со строкой файла secrets.txt, путь к которому вводится в окне пароля. После ввода выдаётся сессия на 10 минут (заголовок
+X-Cart-Session). Кнопка «Закрыть» или бейдж режима гасят сессию. Пять неверных попыток дают паузу 60 секунд.
+Под замком: запись в базу (/__append), чтение secrets.txt (/__secrets), кремовая кнопка (/__push_gas), отправка на GitHub
+(githubWrite), действия шлюза setStatus, reid, setTelegram, testTelegram (облако отвечает master_required без MASTER_CODE).
+Кнопки изменений в режиме чтения тусклые; нажатие открывает окно Мастер-пароля, после ввода действие выполняется.
+Пароль и сессия живут только в памяти страницы. В сайт, конфиги и документы они не вписываются.
+
+2. ТРЕВОГА ЧУЖОГО УСТРОЙСТВА
+Если «i» зажата 3 секунды на устройстве без вашего сервера, страница шлёт в облако action alarm: марка устройства, IP
+(api.ipify.org), город (ipapi.co), время (Asia/Oral). Шлюз пересылает это в Telegram. Лимит: раз в 5 минут (и на странице,
+и в шлюзе). Это сигнал, а не блокировка: пульт без сервера и так закрыт. Если облачная ссылка не задана, сигнал не уходит.
+
+3. КРЕМОВАЯ КНОПКА БЕЗ JSON-КЛЮЧЕЙ
+google_code_pusher.py больше не требует google_service_account.json и Sheets API. Он шлёт POST action pushCode с Мастер-паролем
+на «Вебхук Google Таблицы» (/exec); заглушка кладёт текст шлюза в ячейку Код!A1. Один раз нужно:
+  а) в Свойства скрипта добавить MASTER_CODE (тот же текст, что строка 2 secrets.txt);
+  б) заменить заглушку-приёмник в Apps Script на заглушку v5.4.0.5 (ниже), запустить функцию _scopes, дать разрешения;
+  в) выпустить НОВУЮ версию развёртывания (адрес /exec прежний);
+  г) нажать кремовую кнопку, затем снова выпустить новую версию, если Apps Script попросит.
+Заглушка v5.4.0.5 (вставляется целиком вместо старого кода в Code.gs):
+  function n_(s){return String(s||'').replace(/[\s ]/g,'').toLowerCase();}
+  function codeSheet_(){var ss=SpreadsheetApp.getActive(),sh=ss.getSheetByName('Код');return sh||ss.insertSheet('Код');}
+  function doPost(e){
+    var p={};try{p=JSON.parse(e.postData.contents);}catch(x){}
+    if(p.action==='pushCode'){
+      var m=PropertiesService.getScriptProperties().getProperty('MASTER_CODE');
+      if(!m||n_(p.master)!==n_(m))return ContentService.createTextOutput(JSON.stringify({ok:false,error:'master_required'})).setMimeType(ContentService.MimeType.JSON);
+      var t=String(p.code||'');codeSheet_().getRange('A1').setNumberFormat('@').setValue(t);
+      return ContentService.createTextOutput(JSON.stringify({ok:true,chars:t.length})).setMimeType(ContentService.MimeType.JSON);
+    }
+    return eval(codeSheet_().getRange('A1').getValue()+';doPost(e)');
+  }
+  function doGet(e){return eval(codeSheet_().getRange('A1').getValue()+';doGet(e)');}
+  function _scopes(){UrlFetchApp;LockService;PropertiesService;Utilities;ContentService;SpreadsheetApp;}
+Внимание: если в шлюзе уже есть собственные функции doPost и doGet, заглушка работает по принципу eval: код из ячейки определяет
+свои doPost и doGet, а заглушка их вызывает. Первый раз текст шлюза в A1 кладётся один раз вручную (вставкой файла
+google_apps_script_webhook.gs в ячейку Код!A1) либо старым способом; дальше работает кремовая кнопка.
+
+4. secrets.txt (14 строк, разделитель «|»)
+Шаблон shablony_сейф/secrets.txt: пустые строки между пунктами, перед каждой рабочей строкой пояснение обычными словами, откуда
+взять код. Знаков решётки нет. Любая строка без «|» пропускается молча; число строк не ограничено (до 24000 знаков).
+Состав: Код входа, Мастер-пароль, Токен GitHub, Имя репозитория, Ветка, Сайт песочницы, Сайт боевой, Вебхук Google Таблицы,
+Token telegram, ID telegram, Порт сервера, Путь к bazy_zko, Режим Тест/Бой, ID Google Таблицы.
+
+5. ПЛИТКИ
+Нижний ряд: плитки, ведущие в другие плитки (главные и подкатегории с разделами): 📂 · число · ↗.
+Плитки, ведущие в карточки: 🪪 · число · ↗.
+
+6. ПРОЧЕЕ
+github_uploader.py не загружает .admin_master.json. Кэш PWA v5.4.0.5, dbEpoch 2026-10-29-v5405-cache-reset.
+Не проверялось вживую: Telegram, облако Google, GitHub Pages (нет доступа из рабочей среды). Проверено: сервер (замок,
+сессия, выход), синтаксис всех файлов, JSON.

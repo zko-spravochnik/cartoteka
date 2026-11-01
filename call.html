@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Позвонить</title>
+<style>body{font:18px/1.5 system-ui,sans-serif;background:#f3f5f7;color:#1c2530;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0;padding:16px;box-sizing:border-box;text-align:center}a{display:inline-block;margin-top:14px;padding:16px 28px;border-radius:14px;background:#1f6b3a;color:#fff;font-weight:800;text-decoration:none}@media (prefers-color-scheme:dark){body{background:#0f161d;color:#e4ebf2}}</style></head>
+<body><main><div id="t">Набор номера…</div><a id="a" href="#">📞 Позвонить</a></main>
+<script>
+(function(){
+ var n=(new URLSearchParams(location.search).get('n')||'').replace(/\s/g,'');
+ var a=document.getElementById('a'),t=document.getElementById('t');
+ if(!/^\+?\d{6,15}$/.test(n)){t.textContent='Номер не указан';a.style.display='none';return}
+ t.textContent=n;a.href='tel:'+n;
+ setTimeout(function(){location.href='tel:'+n},300);
+})();
+</script></body></html>

@@ -1,0 +1,1003 @@
+{
+  "schemaVersion": "v5.2.0.1",
+  "methodology": "Реальное сканирование Г3 жителей (ID>=10001) по двум независимым сеткам (славянской и казахской) народных синонимов + честный паритетный добор: каждая пара помечена confirmed (реально встретилась в текущей базе) или backfilled (добавлена из сетки для сохранения парности/полноты словаря, пока не подтверждена данными). Парность 55/45 считается ПО ОБЪЁМУ СЛОВАРЯ (числу канонических пар на лагерь), а не по покрытию.",
+  "stats": {
+    "totalPairs": 119,
+    "slavicPairs": 65,
+    "kazakhPairs": 54,
+    "slavicShare": 54.6,
+    "kazakhShare": 45.4,
+    "confirmedPairs": 46,
+    "backfilledPairs": 73,
+    "residentsScanned": 170,
+    "residentsCovered": 101,
+    "coveragePct": 59.4
+  },
+  "pairs": [
+    {
+      "canon": "Александр",
+      "synonyms": [
+        "Саша",
+        "Шура",
+        "Санёк",
+        "Сашок"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Александра",
+      "synonyms": [
+        "Саша",
+        "Шура",
+        "Сашенька"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Алексей",
+      "synonyms": [
+        "Лёша",
+        "Алёша",
+        "Лёха"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Анатолий",
+      "synonyms": [
+        "Толя",
+        "Толик"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Андрей",
+      "synonyms": [
+        "Андрюша",
+        "Андрон"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Анна",
+      "synonyms": [
+        "Аня",
+        "Анюта",
+        "Нюра"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Антон",
+      "synonyms": [
+        "Антоша",
+        "Тоша"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Борис",
+      "synonyms": [
+        "Боря",
+        "Бориска"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Вадим",
+      "synonyms": [
+        "Вадик"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Валентин",
+      "synonyms": [
+        "Валя"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Валентина",
+      "synonyms": [
+        "Валя",
+        "Валюша"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Валерий",
+      "synonyms": [
+        "Валера"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Валерия",
+      "synonyms": [
+        "Лера"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Варвара",
+      "synonyms": [
+        "Варя"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Василий",
+      "synonyms": [
+        "Вася"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Вера",
+      "synonyms": [
+        "Верочка"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Виктор",
+      "synonyms": [
+        "Витя"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Виктория",
+      "synonyms": [
+        "Вика"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Владимир",
+      "synonyms": [
+        "Вова",
+        "Володя",
+        "Вовка"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Владислав",
+      "synonyms": [
+        "Влад",
+        "Владик"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Галина",
+      "synonyms": [
+        "Галя"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Геннадий",
+      "synonyms": [
+        "Гена"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Георгий",
+      "synonyms": [
+        "Жора",
+        "Гоша"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Григорий",
+      "synonyms": [
+        "Гриша"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Дарья",
+      "synonyms": [
+        "Даша",
+        "Дашенька"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Денис",
+      "synonyms": [
+        "Дениска"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Дмитрий",
+      "synonyms": [
+        "Дима",
+        "Митя"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Евгений",
+      "synonyms": [
+        "Женя"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Евгения",
+      "synonyms": [
+        "Женя"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Екатерина",
+      "synonyms": [
+        "Катя",
+        "Катюша"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Елена",
+      "synonyms": [
+        "Лена",
+        "Леночка"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Елизавета",
+      "synonyms": [
+        "Лиза"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Зинаида",
+      "synonyms": [
+        "Зина"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Иван",
+      "synonyms": [
+        "Ваня",
+        "Ванюша"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Игорь",
+      "synonyms": [
+        "Гоша"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Ирина",
+      "synonyms": [
+        "Ира",
+        "Ириша"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Константин",
+      "synonyms": [
+        "Костя"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Ксения",
+      "synonyms": [
+        "Ксюша",
+        "Ксюха"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Лариса",
+      "synonyms": [
+        "Лара"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Любовь",
+      "synonyms": [
+        "Люба"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Людмила",
+      "synonyms": [
+        "Люда",
+        "Мила"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Маргарита",
+      "synonyms": [
+        "Рита"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Марина",
+      "synonyms": [
+        "Мариша"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Мария",
+      "synonyms": [
+        "Маша",
+        "Машенька"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Михаил",
+      "synonyms": [
+        "Миша"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Надежда",
+      "synonyms": [
+        "Надя"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Наталья",
+      "synonyms": [
+        "Наташа",
+        "Натуся"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Николай",
+      "synonyms": [
+        "Коля"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Нина",
+      "synonyms": [
+        "Ниночка"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Оксана",
+      "synonyms": [
+        "Ксюша"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Ольга",
+      "synonyms": [
+        "Оля",
+        "Олюшка"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Павел",
+      "synonyms": [
+        "Паша",
+        "Пашка"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Пётр",
+      "synonyms": [
+        "Петя"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Раиса",
+      "synonyms": [
+        "Рая"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Роман",
+      "synonyms": [
+        "Рома"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Светлана",
+      "synonyms": [
+        "Света"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Сергей",
+      "synonyms": [
+        "Серёжа",
+        "Серый"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Станислав",
+      "synonyms": [
+        "Стас"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Степан",
+      "synonyms": [
+        "Стёпа"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Татьяна",
+      "synonyms": [
+        "Таня"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Тимофей",
+      "synonyms": [
+        "Тима"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Фёдор",
+      "synonyms": [
+        "Федя"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Юлия",
+      "synonyms": [
+        "Юля"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Юрий",
+      "synonyms": [
+        "Юра"
+      ],
+      "origin": "slavic",
+      "confirmed": true
+    },
+    {
+      "canon": "Яков",
+      "synonyms": [
+        "Яша"
+      ],
+      "origin": "slavic",
+      "confirmed": false
+    },
+    {
+      "canon": "Абай",
+      "synonyms": [
+        "Абеке"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Абдрахман",
+      "synonyms": [
+        "Абеке"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Айгуль",
+      "synonyms": [
+        "Айка"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Айгерим",
+      "synonyms": [
+        "Айка"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Айдос",
+      "synonyms": [
+        "Айдоске"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Айжан",
+      "synonyms": [
+        "Айжаш"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Айман",
+      "synonyms": [
+        "Айма"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Айнур",
+      "synonyms": [
+        "Айна"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Алма",
+      "synonyms": [
+        "Алмаш"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Алмагуль",
+      "synonyms": [
+        "Алма"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Алия",
+      "synonyms": [
+        "Аля"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Арайлым",
+      "synonyms": [
+        "Арай"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Ардак",
+      "synonyms": [
+        "Арда"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Арман",
+      "synonyms": [
+        "Арманжан"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Асель",
+      "synonyms": [
+        "Асе"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Асем",
+      "synonyms": [
+        "Асеш"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Ақбота",
+      "synonyms": [
+        "Бота"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Бакыт",
+      "synonyms": [
+        "Баке",
+        "Бакен"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Бекзат",
+      "synonyms": [
+        "Беке"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Болат",
+      "synonyms": [
+        "Боке"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Гаухар",
+      "synonyms": [
+        "Гауша"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Гульмира",
+      "synonyms": [
+        "Гуля"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Гульнара",
+      "synonyms": [
+        "Гуля"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Данагуль",
+      "synonyms": [
+        "Дана"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Данияр",
+      "synonyms": [
+        "Дан",
+        "Данке"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Досым",
+      "synonyms": [
+        "Дос"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Думан",
+      "synonyms": [
+        "Думаш"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Ерасыл",
+      "synonyms": [
+        "Ерке"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Ерлан",
+      "synonyms": [
+        "Ерке"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Ермек",
+      "synonyms": [
+        "Ереке"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Ерназар",
+      "synonyms": [
+        "Ерке"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Жандос",
+      "synonyms": [
+        "Жан"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Жанар",
+      "synonyms": [
+        "Жанка"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Жанна",
+      "synonyms": [
+        "Жанар"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Жибек",
+      "synonyms": [
+        "Жибеш"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Мадина",
+      "synonyms": [
+        "Мадиша"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Марат",
+      "synonyms": [
+        "Мараке"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Меруерт",
+      "synonyms": [
+        "Меруе"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Назгуль",
+      "synonyms": [
+        "Назик"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Нурлан",
+      "synonyms": [
+        "Нурик"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Нургуль",
+      "synonyms": [
+        "Нуре"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Нурсултан",
+      "synonyms": [
+        "Султан"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Нурбол",
+      "synonyms": [
+        "Нуреке"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Сания",
+      "synonyms": [
+        "Саня"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Сансызбай",
+      "synonyms": [
+        "Санс"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Сая",
+      "synonyms": [
+        "Саяш"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Серик",
+      "synonyms": [
+        "Сереке"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Шолпан",
+      "synonyms": [
+        "Шолпаш"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Ыкылас",
+      "synonyms": [
+        "Ыке"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Әсем",
+      "synonyms": [
+        "Асеш"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Әлия",
+      "synonyms": [
+        "Аля"
+      ],
+      "origin": "kazakh",
+      "confirmed": true
+    },
+    {
+      "canon": "Қайрат",
+      "synonyms": [
+        "Кеке"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Құралай",
+      "synonyms": [
+        "Куралай"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    },
+    {
+      "canon": "Рахат",
+      "synonyms": [
+        "Рахатжан"
+      ],
+      "origin": "kazakh",
+      "confirmed": false
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4eee2">
+<meta name="description" content="КАРТОТЕКА · Релиз v1.0.0.3 — автономный справочник округа">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.png">
+<link rel="stylesheet" href="style.css">
+<title>КАРТОТЕКА · Релиз v1.0.0.3</title>
+</head>
+<body>
+<div id="launchSplash" class="launch-splash" aria-hidden="false">
+  <img src="icon.png" alt="" class="launch-splash-icon">
+  <div id="launchSplashStatus" class="launch-splash-status">Идёт загрузка Справочника...</div>
+</div>
+<div id="app" class="app">
+<header id="mainHeader" class="header">
+ <div id="headerFolder" class="header-folder" role="img" aria-label="Архивная папка округа: Картотека, совершенно секретно">
+  <div id="rightConsole" class="right-console">
+   <div class="right-tools"><button id="themeBtn" class="round pastel-btn">🌒</button><button id="infoBtn" class="round pastel-btn">i</button><button id="langToggle" class="lang-toggle" data-lang-toggle="1" type="button">RU</button></div>
+   <button id="villagePicker" class="village-picker-btn" type="button">[ Выбор села 🔻 ]</button>
+   <div id="postalLine" class="console-postal">Индекс: —</div>
+   <div class="console-version"><span id="versionText">Релиз v1.0.0.3</span></div>
+  </div>
+ </div>
+ <div id="headerAddZone" class="header-add-zone"></div>
+ <div id="searchRow" class="search-row hidden"><span class="search-icon">🔎</span><input id="searchInput" type="search" autocomplete="off" placeholder="Поиск по всей базе..." enterkeyhint="search"></div>
+</header>
+<main id="mainContent">
+ <section id="homeView" class="home-view"><div id="pages" class="pages"></div><div id="homeQuick" class="home-quick"></div><div id="homeCards" class="home-cards"></div></section>
+ <section id="listView" class="list-view hidden"><div id="categoryFolder" class="category-folder hidden"></div><div id="listToolbar" class="list-toolbar"></div><div id="alphabetRadar" class="alphabet-radar hidden"></div><div id="cards"></div></section>
+</main>
+<button id="scrollTopBtn" class="scroll-top hidden">⬆️</button>
+<nav id="bottomNav" class="bottom-nav"><button data-view="home" class="nav-btn active" aria-label="Главная">🏠</button><button data-view="residents" class="nav-btn" aria-label="Жители">👥</button><button data-view="search" class="nav-btn" aria-label="Поиск">🔎</button><button data-view="favorites" class="nav-btn" aria-label="Избранное">⭐</button><button data-view="more" class="nav-btn more-btn" aria-label="Ещё">... Ещё</button></nav>
+<div id="modalRoot"></div><div id="toast" class="toast"></div><div id="installBanner" class="install-banner hidden"><span>📲 Установить КАРТОТЕКУ на телефон?</span><button id="installNow">Установить</button><button id="installClose" aria-label="Закрыть">×</button></div>
+<script src="qr.js"></script><script src="validator.js"></script><script src="script.js" defer></script>
+</div>
+</body>
+</html>

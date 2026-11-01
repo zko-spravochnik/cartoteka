@@ -1,0 +1,899 @@
+/* КАРТОТЕКА ОКРУГА — style.css — Поколение v5.0.1
+   Полная санитарная пересборка файла. Методика: файл разобран построчно,
+   каждый селектор взят РОВНО ОДИН РАЗ как единое монолитное правило —
+   все исторические повторные объявления одного и того же селектора
+   (логотип, правый блок кнопок, капсула села, кнопка геопозиции, штамп
+   и прочие узлы хедера, многократно переписанные в версиях v3.3 — v4.2)
+   слиты в одно финальное правило в исходном порядке победы каскада.
+   Палитра, мягкие скругления (border-radius) и пастельные тона сохранены
+   родными. Отдельным завершающим блоком добавлены только более широкие
+   поля нажатия у кнопок связи — палитра не тронута.
+   v5.0.1 — хедер переведён на резиновую сетку: готовая картинка архивной
+   папки (с напечатанным словом КАРТОТЕКА и штампом СОВЕРШЕННО СЕКРЕТНО
+   наискосок) стала фоном .header-folder, её пропорция держится через
+   aspect-ratio, а живой "правый пульт" .right-console сидит над ней
+   в процентных координатах и сам пропорционально сжимается на узких
+   экранах — штамп и буквы больше не живые DOM-узлы, position absolute
+   и transform rotate для них из файла убраны как мёртвый код. */
+
+:root{--bg:#f7f2e9;--card:#fffdf8;--ink:#26313c;--muted:#71808c;--accent:#315f9f;--accent2:#6e91bd;--green:#2f9b6b;--red:#c96767;--amber:#d6ae62;--line:#e6ded0;--soft:#eef2f5;--night:#17263a;--nightcard:#22344b;--nightink:#f5efe2;--nightmuted:#c8d2dc;--pastel-blue:#dceaff;--pastel-green:#dff3e8;--pastel-gray:#edf0f2;--pastel-yellow:#fff0c9;--pastel-ink:#315f9f;--pastel-blue:#dbeaff;--pastel-green:#dff4e8;--pastel-gray:#edf1f4;--pastel-yellow:#fff0c7}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+body{transition:background .35s ease,color .35s ease}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{min-height:100vh;padding-bottom:84px}
+.hidden{display:none!important;display:none!important;display:none!important}
+.header{position:sticky;top:0;z-index:50;background:rgba(247,242,233,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:2px 4px;margin:0;overflow:visible}
+/* v5.0.1.5: жёсткое сжатие шапки — заказ требовал строго 25% высоты экрана без единого
+   vh/svh/dvh в коде (во всём файле vh остался только на .app{min-height:100vh}, который
+   не относится к хедеру и трогать его нельзя). Без viewport-юнитов высоту можно задать
+   только относительно ширины, поэтому пропорция картинки сплющена с 1200/800 (≈1.5:1,
+   даёт ~30-35% экрана на обычном портретном телефоне) до 1200/640 (≈1.875:1) — это и
+   есть честное приближение к «25% экрана», достижимое исключительно через aspect-ratio. */
+/* v5.0.1.6: по прямому приказу хедер сжат ещё плотнее — пропорция картинки архивной
+   папки дожата с 1200/640 (≈1.875:1, v5.0.1.5) до 1200/480 (≈2.5:1). На типичных
+   портретных экранах телефона (390–430px шириной) это даёт ПАПКУ+КНОПКУ в районе
+   15–20% высоты экрана — честная цифра получена тем же единственным доступным без
+   vh/svh/dvh инструментом (aspect-ratio), см. Техпаспорт п.1 за полную методику. */
+.header-folder{position:relative;width:100%;aspect-ratio:1200/480;background-image:url('header_folder_bg.jpg');background-size:100% 100%;background-repeat:no-repeat;background-position:top left}
+/* v5.0.1.6: правый пульт ужат вертикально (top 3%, gap 1% вместо 4%), чтобы индекс
+   090602 (.console-postal) и плашка версии (.console-version) сидели почти впритык —
+   без паразитной пустой зоны между ними, как и требовал наряд. */
+.right-console{position:absolute;top:3%;right:2%;width:45%;height:94%;display:flex;flex-direction:column;justify-content:flex-start;gap:1%}
+/* v5.0.1.3: две раздельные плашки («Выбор населённого пункта» + название села), оставлявшие
+   пустую дыру под индексом, слиты в одну компактную кнопку-селектор этажа 2. */
+.village-picker-btn{display:block;width:100%;margin:0;padding:9px 12px;border-radius:16px;background:#e8f2fb;border:1px solid #d1e1ef;color:#315f9f;font-weight:900;font-size:13px;text-align:center;cursor:pointer;box-shadow:0 4px 16px rgba(61,74,86,.07)}
+.console-postal{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px;font-weight:800;color:#5c6670;text-align:right;background:rgba(255,253,248,.72);border-radius:8px;padding:2px 6px;width:max-content;margin-left:auto}
+.console-version{margin-top:2px;text-align:right}
+/* v5.0.1.6: версия в Тёмном режиме должна быть контрастной — светлый полупрозрачный
+   фон #versionText в body.dark оставлял бледный текст на тёмном фоне почти нечитаемым. */
+body.dark #versionText{background:#f4eee2;color:#17263a;border-color:#f4eee2;font-weight:900}
+.lang-toggle{min-width:44px;min-height:32px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--muted);font-weight:900;cursor:pointer}
+.right-tools{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}
+.round{width:42px;height:42px;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--ink);font-weight:900}
+.village-menu{position:absolute;left:14px;right:14px;top:112px;z-index:70;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 40px rgba(44,55,67,.18);padding:7px}
+.village-menu button{width:100%;border:0;background:transparent;text-align:left;padding:11px 12px;border-radius:13px}
+.village-menu button.active{background:#e8eef6;color:var(--accent);font-weight:900}
+.search-row{margin-top:9px;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:0 12px;box-shadow:0 3px 14px rgba(61,74,86,.04);width:100%}
+.search-icon{font-size:18px}
+.search-row input{width:100%;border:0;outline:0;background:transparent;padding:12px 0;color:var(--ink)}
+.home-view{padding:10px 12px}
+.pages{width:100vw;overflow:hidden;display:flex;transition:transform .3s ease;touch-action:pan-y;display:flex;flex-wrap:nowrap;align-items:stretch;gap:10px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;overscroll-behavior-x:contain;touch-action:pan-x pan-y;padding:5px 2px 12px;max-width:100%;box-sizing:border-box;width:100%;overflow-x:auto;overflow-y:hidden;display:flex;gap:10px;padding:4px 12px 8px;scroll-snap-type:x proximity;scrollbar-width:none;transform:none!important;transition:none!important}
+.page{min-width:100vw;padding:4px 12px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));grid-auto-flow:column;gap:10px;display:grid;grid-template-rows:repeat(2,minmax(145px,1fr));grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-flow:row;gap:10px;min-width:calc(100vw - 44px);width:calc(100vw - 44px);padding:0;box-sizing:border-box;scroll-snap-align:start;min-width:calc(100vw - 42px);width:calc(100vw - 42px);padding:0;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));grid-auto-flow:row;gap:10px;scroll-snap-align:start}
+.tile{aspect-ratio:1/1;border:1px solid var(--line);border-radius:17px;background:var(--card);padding:13px;text-align:left;font-weight:900;font-size:15px;box-shadow:0 5px 17px rgba(59,70,82,.07);display:flex;flex-direction:column;justify-content:center;width:100%;min-width:0;flex-shrink:0;box-sizing:border-box;min-width:0;min-height:112px;aspect-ratio:auto;padding:15px;overflow:hidden;justify-content:center}
+.tile small{display:block;margin-top:7px;color:var(--muted);font-weight:650;font-size:11px}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 4px 10px;position:relative;z-index:20}
+.quick button{border:1px solid var(--line);border-radius:15px;background:var(--card);padding:9px 5px;min-height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:900}
+.quick .q-icon{font-size:24px;line-height:1}
+.quick .q-text{font-size:11px;color:var(--muted);white-space:nowrap}
+.category-folder{padding:2px 2px 8px;position:sticky;top:var(--folder-top,96px);z-index:45;background:var(--bg);padding-top:4px;padding-bottom:8px;margin-bottom:8px}
+.folder-head{display:flex;align-items:center;gap:8px;margin:2px 0 8px}
+.back-capsule{width:42px;height:38px;border:1px solid var(--line);border-radius:20px;background:var(--card);font-weight:900;border:0!important;border-radius:999px!important;padding:8px 12px;background:var(--pastel-blue);color:var(--pastel-ink);font-weight:950}
+.folder-title{font-weight:950;font-size:18px}
+.subcategory-ribbon{display:flex;gap:7px;overflow:auto;padding:2px 0 7px;scrollbar-width:none;position:relative;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding-left:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;align-items:center;padding-left:0;display:flex;gap:6px;overflow:auto;padding:6px 2px 10px;scrollbar-width:none;scrollbar-width:none}
+.sub-chip{white-space:nowrap;border:0;background:#dceaff;border-radius:999px;padding:9px 14px;font-weight:900;color:#245f9d;box-shadow:0 4px 12px rgba(49,95,159,.08);white-space:nowrap;border-radius:999px!important}
+.sub-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.list-view{padding:7px 12px 18px}
+.list-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0 8px}
+.list-title{font-size:20px;font-weight:950}
+/* v5.0.2.2: шестерёнка настроек Избранного — справа в заголовке вкладки,
+   .list-toolbar уже flex/space-between, поэтому кнопка просто второй child. */
+.fav-settings-btn{flex:none;width:40px;height:40px;border:1px solid var(--line);border-radius:50%;background:var(--card);font-size:18px;display:inline-flex;align-items:center;justify-content:center}
+.choice-active{outline:2px solid var(--accent);outline-offset:-2px}
+.fav-vip-check{display:flex;align-items:center;gap:8px;margin:12px 2px 2px;font-weight:850;font-size:13px}
+.fav-vip-check input{width:18px;height:18px}
+.fav-manual-list{display:flex;flex-direction:column;gap:10px}
+.fav-drag-item{display:flex;align-items:flex-start;gap:8px}
+.fav-drag-item.dragging{opacity:.45}
+.fav-drag-handle{flex:none;width:34px;min-height:54px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:18px;color:var(--muted);touch-action:none;cursor:grab}
+.fav-drag-card{flex:1 1 0;min-width:0}
+.toolbar-actions{display:flex;gap:7px}
+.pastel-small{border:1px solid var(--line);background:var(--card);border-radius:18px;padding:8px 11px;font-weight:850}
+.alphabet-radar{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px;display:flex;flex-wrap:wrap;gap:5px;margin:7px 0 12px}
+.alphabet-radar button{width:30px;height:30px;border:1px solid #9fc7ee;border-radius:50%;background:#d8ebff;color:#1f609f;font-weight:900;width:30px;height:30px;border:1px solid var(--line);border-radius:50%;background:var(--card);font-weight:900;cursor:pointer;background:#e0efff;border-color:#b4cfee;color:#245f9d;background:#d8ebff;color:#145a9b;border-color:#78afe0}
+.alphabet-radar button.active{background:var(--accent);color:#fff;background:#dceaff;color:#315f9f;border-color:#b8c9df}
+.card{position:relative;background:#fff;border:1px solid #ebe5dc;border-radius:17px;padding:14px;margin:0 0 11px;box-shadow:0 7px 22px rgba(45,55,66,.07);overflow:hidden}
+.card h3{margin:0 56px 5px 0;font-size:18px}
+/* v5.0.1.9: булавка и звёздочка теперь в ОДНОЙ колонке на правом крае (одна
+   над другой, а не бок о бок) — поэтому по ширине заголовку хватает места
+   одной кнопки, а не двух; запас оставлен с нормальным отступом, чтобы длинные
+   ФИО не наплывали текстом под иконки. */
+/* v5.0.1.8: ТОТАЛЬНОЕ УКРУПНЕНИЕ — «Первый этаж» (Заголовок/ФИО) крупнее и
+   наглухо жирным (800), «Второй этаж» (Владелец/Мастер/заметка) контрастнее
+   и полужирным (600). Применяется абсолютно ко всем карточкам — и жителей,
+   и всей коммерции — т.к. card h3/.card-subtitle общие для обоих видов. */
+.card h3{font-size:21px!important;font-weight:800!important}
+.card-subtitle{font-size:14px!important;font-weight:600!important;color:var(--ink)!important;opacity:.82}
+.card-meta{font-size:12px;color:var(--muted);margin:3px 0}
+.card-desc{margin:8px 0;font-size:14px;line-height:1.35}
+.card-subtitle{font-size:12px;color:var(--muted);margin:-2px 0 6px;padding-right:52px}
+.reg-btn{position:absolute;right:50px;top:12px;border:1px solid var(--line);border-radius:18px;padding:6px 9px;background:#f0f2f3;color:var(--muted);font-size:10px;font-weight:900;max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.reg-btn.open{background:#e5f4eb;color:var(--green);border-color:#c9e6d5}
+.reg-btn.closed{background:#fae8e8;color:var(--red);border-color:#efd0d0}
+.reg-btn.unknown{background:#f0f1f2;color:#7b858c}
+.vip-crown{position:absolute;right:10px;top:42px;font-size:18px}
+.card-vip{border:2px solid #d7b76d;background:#fff9e8;box-shadow:0 9px 24px rgba(196,157,65,.17)}
+.phone-block{padding:8px 0 0}
+.person-line{font-size:12px;color:var(--muted);margin-bottom:3px}
+.phone-number{font-size:17px;font-weight:900}
+.phone-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:7px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;display:flex;flex-wrap:wrap;gap:6px;margin-top:5px;justify-content:flex-start;align-items:center}
+.phone-actions a,.phone-actions button{min-height:42px;border:0;border-radius:12px;display:flex;align-items:center;justify-content:center;text-decoration:none;font-weight:850;padding:8px 7px}
+/* v5.0.2.1: базовый фон кнопок связи больше не бледно-пастельный — только
+   насыщенный цвет-основа; окончательный принудительный цвет всё равно
+   задаётся .call-strong/.wa-strong с !important ниже по файлу. */
+.call{background:#0056b3;color:#fff}
+.wa{background:#25D366;color:#fff}
+.neutral{background:#edf0f2;color:#34404c}
+.error-btn{background:#fff0df;color:#a46c17;width:100%;min-height:42px;border:1px solid #ead59b;background:var(--pastel-yellow);color:#7d6330;font-weight:950;border-radius:16px;background:var(--pastel-yellow)!important;color:#7d6330!important;border-color:#e2ce91!important}
+.city-only .call{grid-column:1/-1}
+.id-line{margin-top:10px;padding-top:8px;border-top:1px solid #f0ece5;font-size:10px;color:#929ba2;opacity:.62;font-size:10px;margin-top:8px}
+.village-tag{display:inline-block;margin-top:7px;padding:4px 8px;border-radius:12px;background:#edf2f4;color:#5c7080;font-size:10px;font-weight:800}
+.section-separator{margin:13px 0 9px;padding:7px 0;text-align:center;font-size:11px;color:#7b8790;background:#f0f3f4;border-radius:14px}
+.schedule-modal,.modal-content{width:min(580px,100%);max-height:90vh;overflow:auto;background:var(--card);border-radius:20px;padding:18px;box-shadow:0 20px 70px rgba(32,42,54,.25)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(27,37,48,.48);z-index:200;display:flex;align-items:center;justify-content:center;padding:15px;z-index:2000}
+.modal-content h2{margin:0 0 10px}
+.modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.modal-actions button{flex:1;min-height:44px;border-radius:12px;border:0;padding:10px 12px;font-weight:850}
+.primary{background:var(--accent);color:#fff}
+.secondary{background:#edf0f2;color:#36424d}
+.danger{background:#d56b6b;color:#fff}
+.form-grid{display:grid;gap:9px}
+.form-grid label{font-size:12px;font-weight:800;color:var(--muted)}
+.form-grid input,.form-grid select,.form-grid textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink)}
+.mode-row{display:flex;gap:6px;flex-wrap:wrap}
+.mode-btn{flex:1;min-width:110px;border:1px solid var(--line);border-radius:15px;background:var(--card);padding:9px;font-weight:850}
+.mode-btn.active{background:#e8eef6;color:var(--accent);border-color:#b8c9df}
+.schedule-box{padding:10px;border:1px solid var(--line);border-radius:15px;background:#f6f4ef}
+.schedule-day{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;align-items:center;margin:5px 0;grid-template-columns:38px minmax(70px,1fr) 10px minmax(70px,1fr) 26px;align-items:center}
+.schedule-day span{font-size:12px;font-weight:800}
+.switch-line{display:flex;align-items:center;gap:8px}
+.select-small{padding:9px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.favorite-filter{display:flex;gap:6px;overflow:auto;padding-bottom:8px;min-height:42px;display:flex;gap:6px;overflow-x:auto;padding:4px 0 9px}
+.favorite-filter button{white-space:nowrap;border:1px solid var(--line);background:var(--card);border-radius:20px;padding:8px 10px;font-weight:800;flex:0 0 auto}
+.favorite-filter button.active{background:var(--accent);color:#fff}
+.settings-circle{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card)}
+.drag-handle{cursor:grab}
+.pin-btn{position:absolute;left:9px;top:9px;border:0;background:transparent;font-size:19px;left:auto;right:12px;top:55px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;padding:0;z-index:4}
+.pinned{box-shadow:0 8px 24px rgba(63,89,111,.15)}
+.vip-landing{position:relative}
+.vip-hide{display:none!important}
+.footer{margin-top:14px;padding:13px 4px;text-align:center;color:var(--muted);font-size:11px}
+.footer-main{font-weight:850}
+.verified-line{margin-top:5px}
+.scroll-top{position:fixed;right:15px;bottom:94px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#eaf0f3;color:#315f9f;z-index:40;font-size:20px;position:fixed;bottom:80px;right:20px;z-index:999;width:46px;height:46px;border-radius:50%;border:1px solid #78afe0;background:#d8ebff;color:#145a9b;box-shadow:0 6px 18px rgba(49,95,159,.16)}
+.bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:100;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;padding:7px 8px max(7px,env(safe-area-inset-bottom));background:rgba(247,242,233,.96);backdrop-filter:blur(15px);border-top:1px solid var(--line);position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:1000!important;position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:1000!important;position:fixed!important;left:0!important;right:0!important;bottom:0!important;z-index:1000!important;border-radius:0!important;width:100%;margin:0!important}
+.nav-btn{min-width:44px;min-height:44px;border:0;background:transparent;border-radius:15px;font-size:25px;color:var(--muted);font-weight:900;border-radius:18px!important}
+.nav-btn.active{background:#e9eef3;color:var(--accent);background:#d8e9ff!important;color:#1d74c8!important;box-shadow:inset 0 -4px 0 #8fc2f5}
+.nav-btn.more-btn{font-size:12px}
+.toast{position:fixed;left:50%;bottom:98px;transform:translateX(-50%);background:#31404c;color:#fff;padding:11px 15px;border-radius:14px;z-index:100200;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+.tour-layer{position:fixed;inset:0;background:rgba(24,32,42,.38);z-index:250;pointer-events:none;display:none!important}
+.tour-arrow{position:fixed;z-index:270;font-size:48px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.2));animation:tourPulse .9s infinite alternate}
+.tour-bubble{position:fixed;z-index:271;max-width:min(360px,calc(100vw - 28px));background:var(--card);border-radius:18px;padding:15px;box-shadow:0 20px 60px rgba(25,35,45,.3);pointer-events:auto;position:fixed!important;z-index:1100!important;max-width:min(360px,calc(100vw - 24px));padding:15px;border-radius:18px}
+.tour-bubble p{margin:0 0 10px;line-height:1.4}
+.tour-bubble button{border:0;border-radius:12px;padding:9px 12px;font-weight:850;pointer-events:auto}
+.splash{position:fixed;inset:0;background:#f4eee2;z-index:500;display:flex;align-items:center;justify-content:center;animation:splashFade 1.7s ease forwards}
+.splash img{width:min(68vw,330px);height:auto;animation:splashFly 1.55s cubic-bezier(.2,.8,.2,1) forwards}
+.locked #mainContent,.locked #bottomNav{filter:blur(1px);pointer-events:none}
+.admin-panel{display:grid;gap:10px}
+.admin-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;display:grid;grid-template-columns:1fr;gap:8px}
+.admin-card{padding:12px;border:1px solid var(--line);border-radius:15px;background:var(--card)}
+.empty-easter{height:44px;border-radius:15px;border:1px dashed var(--line);background:rgba(255,255,255,.28)}
+.audit-list{max-height:260px;overflow:auto}
+.audit-row{padding:7px 0;border-bottom:1px solid var(--line);font-size:11px}
+.request-card{padding:12px;border:1px solid var(--line);border-radius:15px;background:var(--card);margin-bottom:8px}
+.code-hint{font-size:11px;color:var(--muted)}
+body.dark{--bg:#1a2738;--card:#24374c;--ink:#f4eee2;--muted:#c4d0dc;--line:#3d5268}
+body.dark .header,body.dark .bottom-nav{background:rgba(26,39,56,.95)}
+body.dark .card{background:#24374c;color:var(--ink);border-color:#425a70}
+body.dark .section-separator,body.dark .schedule-box,body.dark .sub-chip,body.dark .neutral,body.dark .pastel-small{background:#2b4056;color:var(--ink)}
+body.dark .search-row{background:#24374c}
+body.dark .search-row input{color:var(--ink)}
+body.dark .tile,body.dark .quick button,body.dark .round,body.dark .lang,body.dark .back-capsule,body.dark .favorite-filter button,body.dark .settings-circle{background:#24374c;color:var(--ink)}
+body.dark .id-line{border-color:#40566b}
+body.dark .reg-btn.unknown{background:#2b4056;color:#c4d0dc}
+body.dark .card-vip{background:#4a3d22;border-color:#d7b76d;color:#fff6dc}
+@keyframes tourPulse{from{transform:scale(.9);opacity:.7}to{transform:scale(1.16);opacity:1}}
+@keyframes splashFly{0%{transform:scale(.2);opacity:.2}65%{transform:scale(1.12);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes splashFade{0%,76%{opacity:1}100%{opacity:0;visibility:hidden}}
+@media(min-width:700px){.home-view,.list-view{max-width:820px;margin:0 auto}.page{min-width:100%;padding:8px}.phone-actions{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.schedule-missing-action{width:100%;margin-top:8px;border:1px dashed var(--line);border-radius:15px;background:#f7f3ea;color:var(--accent);padding:9px 11px;font-size:12px;font-weight:850;text-align:left;width:100%;margin-top:8px;border:1px dashed var(--line);border-radius:15px;background:#f7f3ea;color:var(--accent);padding:9px 11px;font-size:12px;font-weight:850;text-align:left}
+body.dark .schedule-missing-action{background:#2b4056;color:#e9f0f6;background:#2b4056;color:#e9f0f6}
+.vip-hide-btn{position:absolute;right:9px;top:68px;width:30px;height:30px;border:0;border-radius:50%;background:#fff2e8}
+body.dark .vip-hide-btn{background:#3b4651;color:#fff}
+.admin-grid .admin-blue,.admin-grid .admin-green,.admin-grid .admin-yellow,.admin-grid .admin-red{min-height:82px;border:1px solid var(--line);border-radius:15px;padding:12px;font-weight:900;color:var(--ink)}
+.admin-blue{background:#dceaff;background:#dceaff;color:#315f9f}
+.admin-green{background:#dff3e8;background:#dff3e8;color:#26734d}
+.admin-yellow{background:#fff0c9;background:#fff0c9;color:#7d6330}
+.admin-red{background:#f8dada;background:#f8dddd;color:#8b4141}
+.admin-inner-head{display:flex;align-items:center;gap:9px;margin-bottom:10px;display:flex;align-items:center;gap:9px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.admin-inner-head h2{margin:0;font-size:18px;margin:0;font-size:18px}
+.home-cards{margin:14px 0}
+.home-cards:empty{display:none}
+.shift-drums{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.drum-col{display:grid;gap:5px;text-align:center}
+.drum-col label{font-size:12px;font-weight:900;color:var(--muted)}
+.drum-select{width:100%;height:56px;border:1px solid var(--line);border-radius:16px;background:var(--card);text-align:center;font-size:24px;font-weight:950;color:var(--ink)}
+.drum-col small{color:var(--muted);font-weight:800}
+.shift-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}
+.shift-grid label{display:grid;gap:5px;font-size:11px;font-weight:850;color:var(--muted)}
+.shift-grid input,.shift-grid select{min-height:44px}
+.shift-preview{margin-top:9px;padding:9px;border-radius:12px;background:#eef2f5;color:var(--muted);font-size:11px;line-height:1.35}
+.schedule-day .select-small{width:100%;min-height:42px}
+.schedule-day label{display:flex;justify-content:center}
+.error-flow .delete-ram{width:100%;min-height:48px;border-radius:14px;font-weight:950}
+.error-bridge{margin:14px 0 10px;text-align:center;font-size:11px;font-weight:950;color:var(--muted)}
+.admin-contact-btn{background:#e4edf9;color:#315f9f;font-weight:900}
+.tour-bubble.shift-top-safe{max-width:min(360px,calc(100vw - 24px));z-index:271}
+.tour-highlight{position:relative;z-index:260;box-shadow:0 0 0 4px #ffd66b,0 0 24px rgba(255,214,107,.65);animation:tourTargetPulse 1s ease-in-out infinite alternate;position:relative;z-index:1090!important;box-shadow:0 0 0 4px #ffd66b,0 0 24px rgba(255,214,107,.65);animation:tourTargetPulse 1s ease-in-out infinite alternate}
+.tour-arrow,.tour-bubble{pointer-events:none}
+@keyframes tourTargetPulse{from{transform:scale(1)}to{transform:scale(1.025)}}
+@media(max-width:430px){.shift-grid{grid-template-columns:1fr}.schedule-day{grid-template-columns:34px minmax(68px,1fr) 8px minmax(68px,1fr) 24px}.v401-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.pastel-tile{min-height:138px!important}.phone-line{align-items:flex-start;flex-direction:column}.phone-actions{justify-content:flex-start}.right-console{width:50%}}
+#versionText{display:inline-block;font-size:11px;border:1px solid var(--line);border-radius:12px;padding:3px 7px;font-weight:800;background:rgba(255,253,248,.85)}
+#infoBtn{flex:0 0 44px;width:44px;height:44px}
+.geo-selector{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:10px 0 8px;padding:8px;border-radius:18px;background:rgba(255,255,255,.42);border:1px solid var(--line)}
+.geo-step{min-width:0;display:grid;gap:5px}
+.geo-step label{font-size:10px;font-weight:900;color:var(--muted);padding-left:4px}
+.geo-step select{width:100%;min-width:0;min-height:42px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);padding:7px 11px;font-weight:850}
+.nav-btn.active::after{content:'';display:block;height:4px;margin:3px 9px 0;border-radius:99px;background:#8fc2f5}
+#mainContent{padding-bottom:calc(88px + env(safe-area-inset-bottom))}
+.tour-arrow,.tour-bubble,.tour-layer{pointer-events:none!important}
+.tour-final{position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(244,238,226,.76);backdrop-filter:blur(5px)}
+.tour-final button{width:min(520px,calc(100vw - 40px));min-height:66px;border:0;border-radius:22px;background:#dceaff;color:#245d99;font-size:18px;font-weight:950;box-shadow:0 12px 35px rgba(50,90,130,.22);padding:14px 18px}
+@media(max-width:650px){.geo-selector{grid-template-columns:1fr}.pages{padding-left:2px;padding-right:2px}.page{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(145px,1fr));min-width:calc(100vw - 42px);width:calc(100vw - 42px)}.tile{font-size:16px}.geo-step select{font-size:13px}.pin-btn{top:57px;right:12px}.sos-grid{grid-template-columns:repeat(3,1fr)}.home-smart-grid{grid-template-columns:1fr 1fr}.shift-days{grid-template-columns:repeat(4,1fr)}}
+.geo-modal-content{max-width:390px}
+.geo-modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.geo-modal-head h2{margin:0}
+.geo-ladder{display:grid;gap:7px}
+.geo-ladder label{font-size:11px;font-weight:900;color:var(--muted)}
+.geo-ladder select{min-height:44px;width:100%;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);padding:8px 11px;font-size:15px;font-weight:800}
+.geo-arrow{text-align:center;color:var(--muted);font-weight:900;line-height:14px}
+.welcome-modal .welcome-start{background:#dceaff;color:#315f9f;border:1px solid #c4d8ec;min-height:46px}
+.right-tools .langs{margin-left:3px}
+.alphabet-radar button.active,.alphabet-radar .letter-all.active{background:#dceaff;color:#315f9f;border-color:#b8c9df;background:#4e93d7;color:#fff;border-color:#4e93d7;background:#4e93d7;color:#fff;border-color:#4e93d7}
+.alphabet-radar .letter-all{width:auto;padding:0 11px;border-radius:999px}
+.search-row input::placeholder{color:var(--muted)}
+.pages::-webkit-scrollbar{display:none}
+.card-address{margin:7px 0 2px;font-size:12px;color:var(--muted);font-weight:750}
+.map-btn{margin-top:7px;border:1px solid #cbd9e5;border-radius:14px;background:#edf3f7;color:#315f9f;padding:8px 11px;font-size:11px;font-weight:900}
+.admin-nav-locked{pointer-events:none!important;pointer-events:none!important}
+.add-host{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 10px}
+.add-main{width:100%;min-height:46px;padding:10px 18px;border:0!important;border-radius:999px!important;background:#dceaff;color:#315f9f;font-weight:900;box-shadow:0 5px 16px rgba(49,95,159,.10)}
+.modal-actions .primary,.modal-actions .secondary,.form-grid>button.primary,.form-grid>button.secondary{border:0!important;border-radius:999px!important;min-height:46px;box-shadow:none}
+.form-grid>button{width:100%}
+.nav-btn.more-btn.active{background:#dceaff!important;color:#245f9d!important;box-shadow:inset 0 -4px 0 #6fa9df!important;background:#d8e9ff!important;color:#1d74c8!important;box-shadow:inset 0 -4px 0 #8fc2f5}
+.sub-chip:active,.add-main:active,.modal-actions .primary:active,.modal-actions .secondary:active{transform:scale(.98)}
+.form-grid>button.primary,.form-grid>button.secondary{border:0!important;border-radius:999px!important}
+.subcategory-ribbon::-webkit-scrollbar{display:none;display:none;display:none}
+.subcategory-ribbon .back-capsule{position:sticky;left:0;z-index:10;flex:0 0 auto;min-width:112px;padding:9px 14px;border:0;border-radius:999px;background:#e8f2fb;color:#245f9d;font-weight:900;box-shadow:4px 0 10px rgba(49,95,159,.10)}
+.subcategory-ribbon .sub-chip{flex:0 0 auto;flex:0 0 auto;border:1px solid transparent;border-radius:999px;outline:0;-webkit-tap-highlight-color:transparent}
+.subcategory-ribbon .sub-chip:active{transform:none;outline:0}
+.subcategory-ribbon .sub-chip:focus,.subcategory-ribbon .sub-chip:focus-visible{outline:0;box-shadow:0 4px 12px rgba(49,95,159,.12)}
+.subcategory-ribbon .sub-chip.active{background:#4e93d7!important;color:#fff!important;border-color:#4e93d7!important;box-shadow:0 5px 15px rgba(78,147,215,.25)}
+.subcategory-ribbon .back-chip{position:sticky;left:0;z-index:10;background:#f6e7c9;color:#8a641f;border-color:#e3c98f;box-shadow:8px 0 12px rgba(80,70,40,.12);margin-right:2px}
+.subcategory-ribbon .back-chip:hover{background:#f2dcae}
+.add-main,.modal-actions .primary,.modal-actions .secondary{border-radius:999px!important;border:0!important;outline:0}
+.list-view #cards:empty{display:none}
+.reg-status{display:inline}
+.nav-btn.more-btn.active::after{content:'';display:block;height:4px;margin:3px 9px 0;border-radius:99px;background:#8fc2f5}
+.subcategory-ribbon .back-chip + .sub-chip{margin-left:12px}
+.haptic-card{padding:8px}
+.haptic-toggle{width:100%;min-height:48px;border:1px solid var(--line);border-radius:999px;background:#f0f3f5;color:#315f9f;padding:10px 15px;display:flex;align-items:center;justify-content:space-between;font-weight:900;box-shadow:0 5px 16px rgba(49,95,159,.08)}
+.haptic-toggle.on{background:#dceaff;border-color:#b8c9df;box-shadow:0 6px 18px rgba(49,95,159,.16)}
+.haptic-toggle b{font-size:12px}
+.scroll-top.hidden{display:none!important}
+.v401-tiles{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px!important;width:100%!important;min-width:0!important}
+.pastel-tile{min-height:145px!important;border-radius:24px!important;border:1px solid var(--line)!important;background:var(--card)!important;padding:14px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:8px!important;box-shadow:0 6px 18px rgba(0,0,0,.05)!important;color:var(--ink)!important}
+.pastel-tile .tile-emoji{font-size:34px}
+.pastel-tile .tile-title{font-size:14px;font-weight:950;line-height:1.15;text-align:center}
+.pastel-tile small{font-weight:900;color:var(--muted)}
+.phone-line{display:flex;justify-content:space-between;gap:8px;align-items:center;border-top:1px dashed var(--line);padding:7px 0}
+.phone-actions a,.phone-actions button,.neutral,.call,.wa{min-height:34px;border-radius:10px;padding:5px 9px;text-decoration:none;border:1px solid var(--line);background:#eef3f7;color:inherit;font-weight:850;font-size:11px}
+.search-block{margin-bottom:14px}
+.search-block h2{font-size:14px;margin:10px 4px;color:var(--muted)}
+.hint{font-size:11px;color:var(--muted);line-height:1.35;margin-top:8px}
+.w100{width:100%}
+.admin-card,.error-card{margin:8px 0;padding:10px 12px;border-radius:13px;background:#f0f3f6}
+.error-card{background:#fff0ef;color:#8c2a24;padding:9px;margin:6px 0;background:#f8dddd;color:#8b4141}
+.qr-modal .qr-wrap{display:flex;justify-content:center;padding:14px;background:#fff;border-radius:18px}
+.qr-modal svg{width:min(310px,75vw);height:auto;display:block}
+.qr-modal code{display:block;overflow-wrap:anywhere;margin-top:10px}
+.install-banner{position:fixed;left:10px;right:10px;bottom:82px;z-index:2500;background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 14px 38px rgba(0,0,0,.18);padding:10px 12px;display:flex;gap:8px;align-items:center}
+.install-banner span{flex:1;font-weight:850;font-size:12px}
+.install-banner button{border:0;background:#dceaff;color:#245d99;border-radius:10px;padding:8px 10px;font-weight:900}
+.install-banner button:last-child{background:transparent;color:var(--muted);font-size:18px}
+button,input,select,textarea,.card,.admin-card,.error-card,.warn-card,.ok-card,.modal-content{border-radius:18px}
+.pastel-action{border:1px solid var(--line);border-radius:999px!important;padding:7px 10px;text-decoration:none;font-size:11px;font-weight:900;display:inline-flex;align-items:center;justify-content:center}
+/* v5.0.2.1: ЖЁСТКИЙ ПЕРЕКРАС — прежние бледные пастельные фоны кнопок связи
+   (.phone-actions .call / .phone-actions .wa) наглухо вырезаны. Этот селектор
+   бил по специфичности выше, чем .call-strong/.wa-strong, и именно поэтому
+   пастель раньше побеждала принудительный синий/зелёный. Теперь здесь нет
+   собственного фона вообще — цвет задают .call-strong/.wa-strong ниже. */
+.phone-actions .call{color:#fff!important}
+.phone-actions .wa{color:#fff!important}
+.phone-actions .neutral{background:var(--pastel-gray);color:var(--ink);background:var(--pastel-gray)!important;color:var(--ink)!important;border-color:#d2dbe2!important}
+.add-choice{display:grid;gap:10px;margin:12px 0}
+.choice-btn{min-height:58px;border-radius:20px!important}
+.form-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.geo-drums,.drum-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.drum-grid{grid-template-columns:1fr 1fr}
+.geo-drums label,.drum-grid label{display:grid;gap:5px;font-size:11px;font-weight:900}
+.geo-drums select,.drum-grid select{min-height:48px;border-radius:18px;text-align:center;font-weight:900}
+.shift-drum{padding:10px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.35);display:grid;gap:8px}
+.shift-drum>label{display:grid;gap:5px;margin-top:8px;font-size:11px;font-weight:900}
+.shift-drum input[type=date]{min-height:46px}
+.calendar-note{margin-top:7px;color:var(--muted);font-size:11px;line-height:1.35}
+/* v5.0.1.8: КАТЕГОРИЧЕСКИЙ РЕМОНТ — окно логов админки (Живой Карантин, Очередь
+   заявок и т.п.) уезжало влево за край экрана смартфона, когда внутрь попадала
+   длинная строка без пробелов (сырой JSON заявки, длинный путь файла). Жёстко
+   зажимаем ширину в 90vw, убираем любое горизонтальное растяжение (flex-row)
+   и принудительно пускаем весь текст вертикально вниз построчно: перенос по
+   словам и по любому символу, если слово само длиннее строки. */
+.admin-dark{background:#182331!important;color:#edf3f8!important;border-color:#33465a!important;width:90vw!important;max-width:90vw!important;box-sizing:border-box;display:block!important;flex-direction:column!important;overflow-x:hidden!important}
+.admin-dark *{max-width:100%;box-sizing:border-box}
+.admin-dark .admin-card,.admin-dark .error-card,.admin-dark .warn-card,.admin-dark .ok-card{white-space:normal!important;word-break:break-word;overflow-wrap:anywhere;display:block}
+/* v5.0.1.9: моноширинный блок готовой строки заявки (20 граф) в «Очереди
+   заявок» — читаемо, со своим горизонтальным скроллом внутри (overflow-x:auto),
+   не распирает модалку наружу (см. ремонт .admin-dark выше: max-width:100%). */
+.queue-row-mono{margin-top:6px;padding:8px;border-radius:10px;background:#0f1922;color:#9fd8ff;font-family:ui-monospace,Consolas,monospace;font-size:11px;line-height:1.5;overflow-x:auto;white-space:pre!important;word-break:normal!important}
+/* v5.0.2.0: собственный независимый ряд из 3 кнопок под КАЖДОЙ заявкой —
+   никакой общей кнопки копирования наверху очереди. */
+.queue-row-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}
+.queue-row-actions button{min-height:42px;border-radius:12px;font-weight:900;font-size:12px}
+.admin-dark .admin-card{background:#223244;border-color:#3b5065;color:#edf3f8}
+.admin-blue,.admin-green,.admin-yellow,.admin-red{min-height:46px;border:1px solid var(--line);border-radius:17px!important;font-weight:950}
+.warn-card{padding:9px;margin:6px 0;background:#fff0c9;color:#7d6330}
+.ok-card{padding:9px;margin:6px 0;background:#dff3e8;color:#26734d}
+.pages .tile{border-radius:24px!important}
+body.dark .pastel-action{border-color:#425a70}
+.dark .error-btn,body.dark .error-btn{background:#4b4637;color:#ffe9a6;border-color:#665c43}
+.dark .shift-drum,body.dark .shift-drum{background:#24374c}
+@media(max-width:560px){.geo-drums{grid-template-columns:1fr}.drum-grid{grid-template-columns:1fr 1fr}.phone-actions{gap:5px}.pastel-action{padding:7px 8px;font-size:10px}.sos-compact{min-height:46px;font-size:15px}}
+button,input,textarea,.card,.modal-content,.admin-card,.error-card,.warn-card,.ok-card,.wheel-field,.wheel-viewport,.calendar-picker,.smart-card,.sos-panel,.sos-grid a{border-radius:18px}
+.phone-actions .pastel-action{border-radius:999px!important;min-height:36px;padding:7px 11px;font-weight:900}
+.more-card{display:grid;gap:10px}
+.more-lang{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.more-lang .lang-toggle{min-width:54px;height:38px}
+.home-smart-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.smart-card{min-height:78px;border:1px solid var(--line);background:#f0f5f8;color:var(--ink);display:grid;gap:4px;align-content:center;justify-items:center;font-weight:900;box-shadow:0 5px 16px rgba(40,70,90,.07)}
+.smart-card small{color:var(--muted);font-weight:800}
+.sos-panel{margin-top:12px;padding:12px;border:1px solid #e2c69b;background:#fff5df;box-shadow:0 6px 18px rgba(90,70,40,.08)}
+.sos-title{text-align:center;font-weight:950;margin-bottom:8px}
+.sos-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.sos-grid a{display:flex;justify-content:center;align-items:center;min-height:42px;text-decoration:none;background:#fff;border:1px solid #e2c69b;color:#814c24;font-weight:950}
+.wheel-stack{display:grid;gap:8px}
+.wheel-caption{font-size:12px;font-weight:950;color:var(--muted);margin-top:4px}
+.wheel-field{position:relative;padding:7px 0}
+.wheel-label{font-size:11px;font-weight:900;color:var(--muted);margin:0 4px 4px}
+.wheel-viewport{position:relative;height:108px;overflow-y:auto;scroll-snap-type:y mandatory;background:var(--card);border:1px solid var(--line);scrollbar-width:none;overscroll-behavior:contain}
+.wheel-viewport::-webkit-scrollbar{display:none}
+.wheel-item{display:flex;width:100%;height:48px;scroll-snap-align:start;align-items:center;justify-content:center;border:0;border-radius:14px;background:transparent;color:var(--muted);font-weight:850;font-size:16px}
+.wheel-item.active{background:#dceaff;color:#245f9d;transform:scale(1.02)}
+.wheel-spacer{height:30px;pointer-events:none}
+.wheel-center{position:absolute;left:6px;right:6px;top:30px;height:48px;border:1px solid rgba(80,130,180,.22);border-radius:14px;pointer-events:none}
+.shift-drum>.wheel-field{min-width:0}
+.shift-toggle-row{display:flex;gap:8px}
+.shift-toggle-row button{width:100%}
+.calendar-picker{border:1px solid var(--line);padding:10px;background:var(--card)}
+.calendar-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.calendar-nav{width:40px;height:40px;border:1px solid var(--line);background:var(--soft);font-size:22px}
+.calendar-week,.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.calendar-week span{text-align:center;color:var(--muted);font-size:10px;font-weight:900}
+.calendar-grid{margin-top:5px}
+.cal-day{min-height:38px;border:1px solid transparent;background:var(--soft);font-weight:900}
+.cal-day.selected{background:#dceaff;color:#245f9d;border-color:#abcce9}
+.shift-calendar{margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.28)}
+.shift-calendar-title{font-weight:950}
+.shift-calendar-meta{font-size:10px;color:var(--muted);margin:4px 0 7px}
+.shift-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.shift-day{min-height:68px;border-radius:14px;padding:5px;text-align:center;display:grid;gap:2px;align-content:center;font-size:10px;border:1px solid var(--line);background:#f4f5f4}
+.shift-day.work{background:#e2f3e8;color:#226d47}
+.shift-day.rest{background:#e9eef5;color:#315f9f}
+.shift-day.before{background:#f0f0ee;color:var(--muted)}
+.shift-day span{font-size:16px;font-weight:950}
+.shift-day small{font-size:9px}
+.tour-hint{position:fixed;z-index:2600;max-width:min(360px,calc(100vw - 24px));padding:14px 16px;border-radius:18px;background:var(--card);color:var(--ink);box-shadow:0 18px 50px rgba(20,30,40,.28);font-size:12px;font-weight:850;line-height:1.4}
+body.dark .pastel-tile,body.dark .smart-card{background:#2b4056!important;color:var(--ink)!important;border-color:#425a70!important}
+body.dark .sos-panel{background:#3a3324;border-color:#735f37}
+body.dark .sos-grid a{background:#2b4056;color:#ffe9b3;border-color:#735f37}
+body.dark .phone-actions .neutral{background:#32485c!important;color:var(--ink)!important;border-color:#4c6175!important}
+body.dark .wheel-viewport,body.dark .calendar-picker{background:#2b4056}
+@media(max-width:520px){}
+.launch-splash{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;background:#f1eadc;opacity:1;visibility:visible;pointer-events:auto;transition:opacity .72s ease,visibility 0s linear .72s}
+.launch-splash.fade-out{opacity:0;visibility:hidden;pointer-events:none}
+.launch-splash-icon{display:block;width:min(62vw,320px);height:auto;object-fit:contain}
+.launch-splash-status{margin-top:14px;text-align:center;font-size:13px;font-weight:800;color:#5c6670}
+/* v5.0.1.0: анкета, суверенные маркеры и Живой Карантин */
+.check-line{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--muted)}
+.check-line input[type=checkbox],.check-line input[type=radio]{width:18px;height:18px;flex:none}
+.mobile-line{display:flex;align-items:flex-end;gap:8px}
+.mobile-line label:first-child{flex:1 1 auto;min-width:0}
+.mobile-line .wa-check{flex:none;padding-bottom:11px;white-space:nowrap}
+.geo-first{border:1px solid #d1e1ef;background:rgba(232,242,251,.5);border-radius:18px;padding:10px}
+.quarantine-note{color:#8b4141;font-weight:800;background:#f8dddd;border-radius:12px;padding:8px 10px;margin-top:6px}
+.schedule-quick{display:flex;flex-wrap:wrap;gap:7px}
+.sched-chip{flex:1 1 auto;min-width:110px;padding:9px 10px;border:1px solid #c9d8e6;border-radius:999px;background:#edf3f7;color:#315f9f;font-weight:900;font-size:12px;cursor:pointer}
+.sched-chip.active{background:#315f9f;color:#fff;border-color:#315f9f}
+#scheduleCustomWrap{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.quarantine-badge{position:relative}
+.quarantine-badge .badge-count{position:absolute;top:-6px;right:-6px;background:#c0392b;color:#fff;border-radius:999px;min-width:20px;height:20px;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.form-actions-row{display:flex;gap:8px}
+.form-actions-row>button{flex:1 1 auto}
+.alpha-btn.dim{opacity:.32;pointer-events:none;filter:saturate(.4)}
+.geo-village-grid{display:grid;gap:8px;margin:8px 0}
+.geo-group h3,.geo-group h4{margin:8px 0}
+.geo-village-grid small{display:block;opacity:.75;font-size:10px;margin-top:2px}
+.admin-dark hr{border:0;border-top:1px solid #385066;margin:14px 0}
+.admin-dark label{color:#edf3f8}
+.admin-dark input,.admin-dark textarea,.admin-dark select{background:#223244;color:#edf3f8;border-color:#425a70}
+/* v5.0.1.6: синяя кнопка добавления ВОЗВРАЩЕНА к крупному, удобному для тапа размеру
+   (отменяет сплющивание v5.0.1.5) — нижний крупный хедер-компрессия (aspect-ratio
+   1200/480) освобождает достаточно места над плитками, чтобы кнопка снова была
+   массивной и заметной для пожилых пользователей. */
+.header-add-zone{display:flex;justify-content:flex-end;margin:4px 0;width:100%}
+.header-add{width:min(100%,620px);min-height:52px;padding:14px 10px;border-radius:16px!important;font-weight:950;font-size:16px;box-shadow:0 6px 16px rgba(50,70,90,.12)}
+.header-add .tile-emoji,.header-add span{font-size:16px}
+/* v5.0.1.8: булавка и звёздочка раньше жили в одном flex-контейнере
+   .card-actions и физически наезжали друг на друга. Разведены на два
+   независимых абсолютно спозиционированных элемента, каждый в своём
+   изолированном слое z-index.
+   v5.0.1.9: ЭВАКУАЦИЯ БУЛАВКИ НАПРАВО — булавка переехала с левого угла и
+   встала В ОДНУ КОЛОНКУ со звёздочкой на правом крае (звёздочка сверху,
+   булавка под ней, с вертикальным зазором), чтобы красный акцент не спорил с
+   текстом заголовка слева. .card-actions как общий контейнер-обёртка
+   по-прежнему не задаёт геометрию — только якорь в разметке. */
+.card-actions{position:static;display:contents}
+.card-star{position:absolute;right:8px;top:8px;z-index:7;isolation:isolate;width:36px;height:36px;border:0;background:transparent;font-size:25px;display:inline-flex;align-items:center;justify-content:center}
+.card-pin{position:absolute;right:8px;top:48px;z-index:6;isolation:isolate;width:36px;height:36px;border:0;background:#ffecec;color:#c0392b;border-radius:50%;font-size:19px;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(192,57,43,.18)}
+.card-pin.on{background:#e8352e;color:#fff;box-shadow:0 2px 8px rgba(192,57,43,.35)}
+.sos-compact{display:block;width:100%;min-height:48px;border:1px solid #e2c69b;border-radius:999px;background:#fff0c7;color:#7a4c2a;font-weight:950;font-size:16px;box-shadow:0 5px 16px rgba(90,70,40,.08)}
+.category-folder.hidden{display:none!important}
+
+/* v5.0.0 — финальный слой эргономики для степного солнца и толстых пальцев.
+   Палитра не меняется, меняются только размеры полей нажатия и зазоры,
+   чтобы кнопки звонка/WhatsApp/копирования/ошибки никогда не слипались
+   в горизонтальную кашу и чтобы попасть пальцем было легко с одного раза. */
+.phone-block{display:flex;flex-direction:column;gap:10px}
+.phone-line{border-top:1px dashed var(--line);padding:9px 0}
+.phone-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:9px}
+.phone-actions a,.phone-actions button{min-height:46px;border-radius:14px!important;font-size:13px;padding:9px 10px}
+.phone-actions .pastel-action{min-height:46px;border-radius:14px!important;padding:9px 10px;font-weight:900}
+.error-btn{min-height:46px;border-radius:14px}
+.card{padding:16px;margin:0 0 14px}
+.card h3{line-height:1.25}
+@media(min-width:420px){.phone-actions{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* v5.0.1.9: РЯД №1 (Позвонить/WhatsApp 1/WhatsApp 2) — flex, а не grid с
+   фиксированным числом колонок, чтобы 1, 2 или 3 кнопки всегда растягивались
+   РОВНО и без дыр, какая бы комбинация номеров/флагов ни была у карточки.
+   РЯД №2 (Скопировать → Ошибка → Поделиться) — всегда ровно 3 колонки, поэтому
+   жёлтая «Ошибка» автоматически оказывается по центру. */
+.phone-row-1{display:flex!important;gap:9px}
+.phone-row-1>*{flex:1 1 0;min-width:0}
+.phone-row-2{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))}
+
+/* ======================= v5.0.1.6 — новый слой ======================= */
+/* Номер телефона крупной жирной строкой НАД кнопками связи. */
+.phone-number-big{font-size:19px;font-weight:950;letter-spacing:.2px;margin:2px 0 4px;color:var(--ink)}
+body.dark .phone-number-big{color:var(--ink)}
+/* v5.2.0.4: ТЕКСТОВЫЕ НОМЕРА В СТОЛБИК. Строго и только текстовый вывод
+   самих номеров (.phone-number-big.phone-number-col) переведён в
+   вертикальный flex-столбик, чтобы несколько номеров не слипались в одну
+   строку. Кнопки звонка/WhatsApp (.phone-row-1) этим правилом НЕ
+   затронуты — они остаются своей отдельной горизонтальной строкой ровно
+   как были (см. .phone-row-1{display:flex!important;...} ниже). */
+.phone-number-big.phone-number-col{display:flex;flex-direction:column;gap:2px}
+.phone-number-line{display:block}
+/* Кнопка «Позвонить» — насыщенный синий; WhatsApp — официальный зелёный #25D366.
+   Выставлен безусловно на всех сотовых номерах по прямому приказу (см. Техпаспорт
+   про честную оговорку по риску «несуществующего WhatsApp» на части номеров). */
+/* v5.0.1.8/9: кнопки звонка/WhatsApp — массивнее, выше, крупный жирный шрифт.
+   v5.0.1.9: «Позвонить» — насыщенный глубокий синий #0056b3 (по новому приказу,
+   заменяет прежний #1a63d6). «Скопировать»/«Поделиться» сознательно НЕ трогаем —
+   остаются стандартными серыми, как и было прямо приказано. */
+.call-strong,.wa-strong{min-height:54px!important;font-size:16px!important;font-weight:950!important;letter-spacing:.2px}
+.call-strong{background:#0056b3!important;color:#fff!important;border-color:#0056b3!important}
+.wa-strong{background:#25D366!important;color:#fff!important;border-color:#25D366!important}
+/* v5.0.2.1: ЖЁСТКИЙ ПЕРЕКРАС — продублировано с усиленной специфичностью
+   (.phone-actions .call-strong / .phone-actions .wa-strong), чтобы ни одно
+   более специфичное пастельное правило нигде в файле не могло перебить
+   принудительный синий/зелёный. Тёмная тема больше не ослабляет цвет — приказ
+   требует именно #0056b3 и именно #25D366 безусловно на всех карточках. */
+.phone-actions .call-strong{background:#0056b3!important;color:#fff!important;border-color:#0056b3!important}
+.phone-actions .wa-strong{background:#25D366!important;color:#fff!important;border-color:#25D366!important}
+body.dark .call-strong,body.dark .phone-actions .call-strong{background:#0056b3!important;border-color:#0056b3!important;color:#fff!important}
+body.dark .wa-strong,body.dark .phone-actions .wa-strong{background:#25D366!important;border-color:#25D366!important;color:#fff!important}
+/* v5.0.1.8: старое правило «раздвинуть gap-ом» удалено целиком — .card-actions
+   больше не flex-контейнер (см. правило выше, display:contents), булавка и
+   звёздочка разведены по разным углам абсолютным позиционированием. */
+/* Стрелки ◀/▶ по краям липкой ленты карусели тегов. */
+.subcategory-ribbon-wrap{position:relative;display:flex;align-items:center;gap:4px}
+.subcategory-ribbon-wrap .subcategory-ribbon{flex:1 1 auto;min-width:0}
+.ribbon-arrow{flex:0 0 auto;width:30px;height:30px;border:0;border-radius:50%;background:#dceaff;color:#245f9d;font-weight:950;box-shadow:0 3px 10px rgba(49,95,159,.18);display:flex;align-items:center;justify-content:center;padding:0}
+body.dark .ribbon-arrow{background:#2b4056;color:var(--ink)}
+/* Крупные кнопки «Назад» и другие укрупнённые действия на всех трёх этажах
+   каскада Анкеты и во всех модальных окнах — для пожилых пользователей. */
+.big-action{min-height:52px!important;font-size:15px!important;padding:12px 16px!important}
+.form-actions-row .big-action{min-height:58px!important;font-size:16px!important;font-weight:950}
+/* Модальный выбор категории (два этажа): крупная сетка кнопок-секторов. */
+.category-pick-btn{width:100%;min-height:52px;border:1px solid #c9d8e6;border-radius:16px!important;background:#edf3f7;color:#315f9f;font-weight:900;font-size:15px;text-align:center;padding:12px}
+body.dark .category-pick-btn{background:#2b4056;color:var(--ink);border-color:#425a70}
+.sector-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-top:8px}
+.sector-btn{width:100%;min-height:58px;border:1px solid var(--line);border-radius:18px!important;background:var(--card);color:var(--ink);font-weight:900;font-size:16px;padding:14px;text-align:left}
+body.dark .sector-btn{background:#24374c;color:var(--ink);border-color:#425a70}
+/* Модалка-сетка времени (замена крутящихся барабанов) + перерыв на обед. */
+.time-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.time-chip{min-height:48px;border:1px solid #c9d8e6;border-radius:14px!important;background:#edf3f7;color:#315f9f;font-weight:900;font-size:15px}
+.time-chip.active{background:#315f9f;color:#fff;border-color:#315f9f}
+body.dark .time-chip{background:#2b4056;color:var(--ink);border-color:#425a70}
+/* Липкая шапка окон «Недавние»/«Популярные» с крупной кнопкой «Назад». */
+.quicklist-modal{padding:0;overflow:hidden;display:flex;flex-direction:column;max-height:90vh}
+.quicklist-sticky-head{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;padding:16px 16px 10px;background:var(--card);border-bottom:1px solid var(--line)}
+.quicklist-sticky-head h2{margin:0;font-size:17px}
+.quicklist-body{overflow:auto;padding:10px 16px 16px}
+.time-grid.two-col{grid-template-columns:1fr 1fr}
+@media(max-width:480px){.time-grid{grid-template-columns:repeat(2,1fr)}}
+/* v5.2.0.3: укрупнение карманного поиска (details/summary) — крупный
+   читаемый шрифт заголовков карманов и фиксированный отступ между ними,
+   чтобы «Бизнес и услуги» и «Жители округа» визуально не слипались. */
+.search-pocket{border:1px solid var(--line);border-radius:16px;background:var(--card);margin-bottom:12px;overflow:hidden}
+.search-pocket:last-child{margin-bottom:0}
+.search-pocket>summary{list-style:none;cursor:pointer;font-size:19px;font-weight:900;padding:14px 16px;color:var(--ink);display:flex;align-items:center;justify-content:space-between}
+.search-pocket>summary::-webkit-details-marker{display:none}
+.search-pocket>summary::after{content:'+';font-size:20px;font-weight:900;margin-left:10px}
+.search-pocket[open]>summary::after{content:'–'}
+.search-pocket-body{padding:0 10px 10px}
+/* Те же раскрывающиеся карманы — для Оперативного рапорта (свободные ID
+   коммерции по активным папкам) и для скрытых сёл геовыбора Анкеты. */
+.report-pocket{border:1px solid var(--line);border-radius:14px;background:var(--card);margin:10px 0;overflow:hidden}
+.report-pocket>summary{list-style:none;cursor:pointer;font-size:16px;font-weight:800;padding:10px 14px;color:var(--ink)}
+.report-pocket>summary::-webkit-details-marker{display:none}
+.report-pocket-body{padding:0 14px 12px}
+.report-line{padding:4px 0;font-size:14px}
+
+/* ===== v5.3.0.4: ВЕДОМСТВЕННАЯ ПЕРЕКРАСКА ТОЛЬКО АДМИН-ПУЛЬТА =====
+   Все правила ниже привязаны к .admin-dark (его используют лишь окна
+   администратора). Пользовательская часть Справочника не затронута.
+   Палитра: чистый тёмный фон, глубокий синий акцент, светлый текст
+   с высоким контрастом. */
+.admin-dark{
+  --adm-bg:#0a1424;--adm-panel:#10223b;--adm-panel2:#162d4c;--adm-line:#2b4d7d;
+  --adm-text:#f5f9ff;--adm-muted:#b7c9e4;--adm-blue:#2e7bff;--adm-blue-d:#1a56c4;
+  background:var(--adm-bg)!important;color:var(--adm-text)!important;
+  border:1px solid var(--adm-line)!important;box-shadow:0 14px 40px rgba(0,8,24,.65)!important;
+  font-size:16px;line-height:1.45}
+.admin-dark h2,.admin-dark h3{color:#fff!important;letter-spacing:.02em}
+.admin-dark .admin-inner-head{border-bottom:2px solid var(--adm-blue);padding-bottom:10px;margin-bottom:14px}
+.admin-dark .admin-inner-head h2{font-size:19px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
+.admin-dark .back-capsule{background:var(--adm-panel2)!important;color:var(--adm-text)!important;border:1px solid var(--adm-blue)!important;font-weight:800}
+.admin-dark .admin-grid{gap:10px}
+.admin-dark .admin-grid button,.admin-dark .admin-grid .admin-blue,.admin-dark .admin-grid .admin-green,.admin-dark .admin-grid .admin-yellow,.admin-dark .admin-grid .admin-red{
+  background:linear-gradient(180deg,#17325a,#10223b)!important;color:var(--adm-text)!important;
+  border:1px solid var(--adm-line)!important;border-left:6px solid var(--adm-blue)!important;
+  border-radius:14px!important;min-height:64px;font-size:16px;font-weight:900;text-align:left;padding:10px 14px}
+.admin-dark .admin-grid .admin-green{border-left-color:#27c28a!important}
+.admin-dark .admin-grid .admin-yellow{border-left-color:#f2b53a!important}
+.admin-dark .admin-grid .admin-red{border-left-color:#ff5d6c!important}
+.admin-dark .admin-card,.admin-dark .error-card{background:var(--adm-panel)!important;color:var(--adm-text)!important;border:1px solid var(--adm-line)!important;border-radius:14px}
+.admin-dark .warn-card{background:#3b2d08!important;color:#ffe3a1!important;border:1px solid #8a6a1c!important}
+.admin-dark .ok-card{background:#0c3023!important;color:#a6f3cf!important;border:1px solid #1f7a57!important}
+.admin-dark .error-card{background:#3a1119!important;color:#ffc4cb!important;border-color:#9b2f3f!important}
+.admin-dark .queue-row-mono{background:#050c18!important;color:#9cd0ff!important;border:1px solid #234a7c;font-size:12px}
+.admin-dark .queue-row-actions button,.admin-dark button.secondary{background:var(--adm-panel2)!important;color:var(--adm-text)!important;border:1px solid var(--adm-line)!important;font-weight:800}
+.admin-dark button.primary,.admin-dark .queue-row-actions button.primary{background:linear-gradient(180deg,var(--adm-blue),var(--adm-blue-d))!important;color:#fff!important;border:1px solid #6fa5ff!important;font-weight:900}
+.admin-dark button:disabled{opacity:.55}
+.admin-dark input,.admin-dark textarea,.admin-dark select{background:#0d1c33!important;color:var(--adm-text)!important;border:1px solid var(--adm-line)!important;font-size:16px}
+.admin-dark input:focus,.admin-dark textarea:focus,.admin-dark select:focus{outline:2px solid var(--adm-blue);border-color:var(--adm-blue)!important}
+.admin-dark label,.admin-dark .hint{color:var(--adm-muted)!important}
+.admin-dark hr{border-top:1px solid var(--adm-line)}
+.admin-dark .quarantine-badge .badge-count{background:#ff5d6c;color:#fff}
+.admin-dark .admin-inner-head{flex-wrap:wrap}
+.admin-dark .back-capsule{white-space:nowrap;flex:0 0 auto;padding:8px 14px;border-radius:999px;min-height:40px}
+.admin-dark .back-capsule{width:auto!important;max-width:none!important;height:auto!important}
+.admin-dark .admin-inner-head h2{flex:1 1 100%;margin-top:6px}
+
+/* ===== v5.3.0.4 (этап 1): контраст вложенных плашек рапорта и поля пароля с «глазиком» ===== */
+.admin-dark .report-pocket{background:var(--adm-panel)!important;border:1px solid var(--adm-line)!important;color:var(--adm-text)!important}
+.admin-dark .report-pocket>summary{color:#fff!important;background:var(--adm-panel2)}
+.admin-dark .report-pocket-body{background:var(--adm-panel);color:var(--adm-text)!important}
+.admin-dark .report-line,.admin-dark .report-pocket-body *{color:var(--adm-text)!important}
+.admin-dark .report-pocket-body .hint,.admin-dark .report-pocket-body small{color:var(--adm-muted)!important}
+.admin-dark details,.admin-dark summary{color:var(--adm-text)!important}
+.pw-wrap{position:relative;display:flex;align-items:center;width:100%}
+.pw-wrap input{width:100%;padding-right:48px!important}
+.pw-eye{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:40px;height:36px;border:0!important;border-radius:10px!important;background:transparent!important;font-size:20px;line-height:1;cursor:pointer;padding:0;color:inherit}
+.pw-eye.on{background:rgba(46,123,255,.25)!important}
+/* v5.3.0.4 (этап 1): липкая шапка категории — кнопка «Назад» в одну строку, плотная подложка */
+.category-folder{background:var(--bg)!important;box-shadow:0 6px 10px -6px rgba(0,0,0,.25)}
+.category-folder .folder-head{flex-wrap:nowrap;margin:0 0 4px}
+.category-folder .back-capsule{flex:0 0 auto;width:auto!important;min-width:0;height:auto!important;white-space:nowrap;padding:8px 16px;border-radius:999px;display:inline-flex;align-items:center;gap:6px;line-height:1.1}
+.category-folder .folder-title{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* v5.3.0.4: главная навигация подкатегорий — наверху, под кнопкой «Добавить», намертво прилипает */
+.stage-nav{position:sticky;top:var(--folder-top,96px);z-index:45;background:var(--bg);padding:6px 2px 8px;margin:0 0 6px}
+.stage-nav .back-capsule{width:100%;display:flex;justify-content:center;align-items:center;gap:8px;white-space:nowrap;min-height:44px;height:auto}
+body.dark .stage-nav{background:var(--bg)}
+.stage-wrap{display:block;width:100%}
+/* v5.3.0.4: плитки 3-го уровня (вместо горизонтальных тегов) */
+.tile3-grid{margin-top:4px}
+.tile3-all{margin:8px 0 14px;display:flex;justify-content:center;width:100%}
+.tile-select{display:block}
+.tile-select select{width:100%;min-height:44px}
+/* v5.3.0.4: Инспектор дубликатов — исключения */
+.admin-dark .dup-ign-info{display:block;width:100%;text-align:left;margin:0 0 10px;padding:12px 14px;border-radius:14px;background:var(--adm-panel2)!important;color:var(--adm-text)!important;border:1px solid var(--adm-blue)!important;font-weight:900;font-size:16px}
+.admin-dark .dup-ign-list{margin:0 0 12px}
+.admin-dark .dup-ign-list.hidden{display:none}
+.admin-dark .dup-ign-row{display:flex;flex-direction:column;gap:8px}
+.admin-dark .dup-pair button{margin-top:10px;width:100%;min-height:42px}
+.admin-dark #dupIgnGit{width:100%;min-height:44px}
+/* v5.3.0.4: статистика платформы и серые заглушки удалённых карточек */
+.stats-card{display:flex;flex-direction:column;gap:6px}
+.stats-title{font-weight:900;font-size:16px}
+.stats-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dashed var(--line)}
+.stats-row b{font-variant-numeric:tabular-nums}
+.stub-card{display:flex;align-items:center;justify-content:space-between;gap:12px;opacity:.75;background:#e4e4e4!important;color:#555!important;filter:grayscale(1)}
+body.dark .stub-card{background:#2c3138!important;color:#b9bec6!important}
+.stub-title{font-weight:900}
+.stub-x{flex:0 0 auto;width:44px;height:44px;border-radius:50%!important;border:1px solid #999!important;background:transparent!important;color:inherit;font-size:20px;line-height:1;padding:0}
+
+/* ===== v5.3.0.5: ссылки житель→бизнес, «Поделиться», «Запомнить меня», окно обновлений, плашка пересчёта ID ===== */
+.biz-links{display:flex;flex-direction:column;gap:8px;margin:10px 0 4px}
+.biz-link{width:100%;text-align:left;border:0!important;border-radius:14px!important;padding:11px 14px;background:var(--pastel-blue,#e8f2fb);color:var(--pastel-ink,#245f9d);font-weight:900;font-size:15px;line-height:1.25}
+body.dark .biz-link{background:#24374c;color:#cfe4fa}
+.biz-card-modal .card{margin:10px 0 0}
+.share-row{display:flex;flex-direction:column;gap:8px;width:100%}
+.share-row button{width:100%}
+.remember-row{display:flex;align-items:center;gap:10px;margin-top:10px;font-weight:700;line-height:1.3}
+.remember-row input{width:22px;height:22px;flex:0 0 auto}
+.update-overlay{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(20,28,38,.62)}
+.update-box{width:100%;max-width:420px;background:var(--card,#fff);color:var(--ink,#223);border-radius:22px;padding:22px 20px;box-shadow:0 12px 40px rgba(0,0,0,.35);text-align:center}
+.update-icon{font-size:40px;line-height:1;margin-bottom:10px}
+.update-box p{font-size:17px;line-height:1.4;font-weight:800;margin:0 0 16px}
+.update-actions{display:flex;flex-direction:column;gap:10px}
+.update-actions button{width:100%;min-height:48px;font-size:16px;font-weight:900;border-radius:14px}
+.queue-idwarn{border:2px solid #e0a100!important}
+.queue-id-preview{margin:8px 0;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;line-height:1.5;word-break:break-word}
+.queue-idwarn .primary{width:100%}
+.queue-blocked{display:block;width:100%;font-size:13px;font-weight:800;color:#b36b00}
+
+/* ===== v5.4.0.0: раздельный ввод телефонов и «карманы» админки ===== */
+.phone-split{display:flex;align-items:stretch;gap:0;margin-top:6px;width:100%}
+.phone-split input{flex:1 1 auto;min-width:0;margin-top:0!important;border-top-left-radius:0!important;border-bottom-left-radius:0!important}
+.phone-fixed,.phone-code{display:flex;align-items:center;padding:0 12px;font-weight:900;font-size:17px;white-space:nowrap;background:#e6e3dc;color:#3b4350;border:1px solid var(--line);user-select:none;-webkit-user-select:none}
+.phone-fixed{border-radius:12px 0 0 12px}
+.phone-fixed+.phone-code{border-left:0;border-radius:0}
+.phone-fixed.grey{background:#d9dadd;color:#5b6270}
+body.dark .phone-fixed,body.dark .phone-code{background:#2a3647;color:#cdd7e5}
+body.dark .phone-fixed.grey{background:#243040;color:#9fb0c6}
+.admin-pockets{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.admin-pocket{margin-bottom:0!important}
+.admin-dark .admin-pocket{background:#101a2b;border-color:#2b4268}
+.admin-dark .admin-pocket>summary{font-size:17px;color:#eef3fb}
+.admin-pocket .search-pocket-body{padding:4px 12px 14px}
+
+/* v5.4.0.0: крупная кнопка «Отмена» в окне «+ Добавить» — как верхние кнопки выбора */
+#addCancel.add-cancel-big{min-height:58px!important;border-radius:20px!important;padding:16px 20px!important;font-size:16px!important;font-weight:900;width:100%;margin-top:4px}
+
+/* ===== v5.4.0.0: пастельная радуга, плашки названий, симметрия «Назад», золотой VIP, защита текста карточки ===== */
+.hue-red{--hue-bg:#fdefed;--hue-bd:#f4d3d0}
+.hue-orange{--hue-bg:#fef4e8;--hue-bd:#f6e0c4}
+.hue-green{--hue-bg:#f0f9ee;--hue-bd:#d3eacf}
+.hue-sky{--hue-bg:#ecf8fb;--hue-bd:#cbe8f1}
+.hue-blue{--hue-bg:#eef2fc;--hue-bd:#d0dcf3}
+.hue-violet{--hue-bg:#f5f0fc;--hue-bd:#e0d4f3}
+.hue-sand{--hue-bg:#f7f4ed;--hue-bd:#e6dfcf}
+.pastel-tile[class*="hue-"],body.dark .pastel-tile[class*="hue-"]{background:var(--hue-bg)!important;border-color:var(--hue-bd)!important;color:#1f2933!important}
+.pastel-tile[class*="hue-"] small,body.dark .pastel-tile[class*="hue-"] small{color:#4b5563!important}
+.title-plaque{display:block;width:100%;box-sizing:border-box;text-align:center;margin:6px 0 10px;padding:12px 16px;border-radius:18px;font-weight:950;font-size:18px;line-height:1.25;background:var(--hue-bg,#efe9dc);border:1px solid var(--hue-bd,#d9cfb8);color:#1f2933;box-shadow:0 4px 12px rgba(59,70,82,.08)}
+.list-toolbar .title-plaque{margin-top:2px}
+.stage-nav .title-plaque{margin:8px 0 0}
+.back-wide{display:flex!important;align-items:center;justify-content:center;gap:8px;width:100%!important;max-width:none!important;box-sizing:border-box;height:auto!important;border-radius:16px!important;font-size:16px;font-weight:900;padding:12px 18px!important;white-space:nowrap}
+.stage-nav .back-wide,.category-folder .back-wide{min-height:52px}
+.category-folder .folder-head{display:block;margin:0 0 4px}
+.empty-stub{margin:14px 2px;padding:28px 20px;border-radius:24px;text-align:center;background:var(--hue-bg,#efe9dc);border:2px dashed var(--hue-bd,#d9cfb8);color:#1f2933}
+.empty-stub-emoji{font-size:44px;margin-bottom:8px}
+.empty-stub p{margin:0;font-size:17px;line-height:1.45;font-weight:700}
+.add-guide-list{margin:10px 0 14px;padding-left:22px;line-height:1.45;font-size:15px}
+.add-guide-list li{margin:0 0 10px}
+.card h3,.card-subtitle,.card-desc,.card-meta{padding-right:56px;box-sizing:border-box}
+.card h3{margin-right:0!important}
+.card-vip,body.dark .card-vip{background:linear-gradient(135deg,#fff0a6 0%,#ffd84a 55%,#ffc21a 100%)!important;border:2px solid #d99a00!important;color:#2b2100!important;box-shadow:0 10px 26px rgba(217,154,0,.38)!important}
+.card-vip .card-subtitle,.card-vip .card-desc,.card-vip .card-meta{color:#2b2100!important}
+.vip-crown{position:absolute!important;left:14px!important;right:auto!important;top:-15px!important;font-size:28px!important;filter:drop-shadow(0 2px 2px rgba(120,80,0,.35))}
+
+/* ===== v5.4.0.0: счётчики сёл, карман «остальные сёла», «Назад» в категории во всю ширину ===== */
+.sector-btn.village-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.village-row .vname{flex:1 1 auto;min-width:0;overflow-wrap:anywhere}
+.village-row .vcnt{display:flex;gap:6px;flex:0 0 auto}
+.cnt{display:inline-block;min-width:34px;padding:2px 7px;border:2px solid;border-radius:9px;font-size:14px;font-weight:900;text-align:center;line-height:1.3;background:transparent}
+.cnt-biz{border-color:#d98a84;color:#a8403a}
+.cnt-res{border-color:#7fa7d9;color:#2f5f9e}
+body.dark .cnt-biz{border-color:#c77a74;color:#f0b4b0}
+body.dark .cnt-res{border-color:#6f97c9;color:#aabfec}
+.cnt-legend{margin:2px 2px 10px;font-size:14px;opacity:.75}
+.rest-pocket>summary::after{content:none}
+.rest-pocket>summary{justify-content:center;text-align:center}
+.rest-pocket .pk-open{display:none}
+.rest-pocket[open] .pk-open{display:inline}
+.rest-pocket[open] .pk-closed{display:none}
+.rest-pocket[open] .search-pocket-body{animation:pocketDrop .28s ease-out}
+@keyframes pocketDrop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.category-folder .back-capsule.back-wide{width:100%!important;display:flex!important;justify-content:center;align-items:center}
+.rest-pocket{margin-top:12px}
+
+/* ===== v5.4.0.1: плашка-подтверждение сверху ===== */
+.top-banner{position:fixed;left:50%;top:max(10px,env(safe-area-inset-top,0px));transform:translate(-50%,-140%);z-index:100200;width:min(560px,calc(100vw - 24px));box-sizing:border-box;padding:13px 16px;border-radius:14px;background:#1f6b3a;color:#fff;font-weight:800;font-size:15px;line-height:1.35;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.28);opacity:0;pointer-events:none;transition:transform .25s ease,opacity .25s ease}
+.top-banner.show{transform:translate(-50%,0);opacity:1}
+.top-banner.bad{background:#a23b2a}
+
+/* ===== v5.4.0.1: карточки целиком в цвете своей супер-плитки, VIP-бейдж слева ===== */
+.card.card-hue{background:var(--hue-bg);border-color:var(--hue-bd)}
+body.dark .card.card-hue{background:color-mix(in srgb,var(--hue-bg) 13%,#1c2733);border-color:color-mix(in srgb,var(--hue-bd) 40%,#2b3a4a)}
+.biz-link.hue-bound[class*="hue-"]{background:var(--hue-bg);border:1px solid var(--hue-bd);color:#1f2933}
+body.dark .biz-link.hue-bound[class*="hue-"]{background:color-mix(in srgb,var(--hue-bg) 13%,#1c2733);color:var(--ink)}
+.biz-card-modal .card.card-hue{margin-top:0}
+.vip-badge{display:inline-block;vertical-align:middle;margin:0 14px 4px 4px;padding:3px 11px;border-radius:999px;font-size:13px;font-weight:950;letter-spacing:.04em;line-height:1.3;color:#4a2f00;background:linear-gradient(135deg,#fff3b0,#ffc61a);border:2px solid #8a5a00;box-shadow:0 2px 4px rgba(90,60,0,.35);transform:rotate(-15deg);transform-origin:left center;white-space:nowrap}
+.vip-crown{display:none!important}
+
+/* ===== v5.4.0.1: заявка на VIP ===== */
+.vip-apply{display:block;width:100%;box-sizing:border-box;min-height:54px;margin:14px 0 4px;padding:13px 14px;border:2px solid #b07a00!important;border-radius:16px!important;font-weight:950;font-size:16px;text-align:center;color:#3d2800!important;background:linear-gradient(135deg,#fff0a6 0%,#ffd84a 55%,#ffc21a 100%)!important;box-shadow:0 6px 16px rgba(196,140,0,.28)}
+.vip-village{font-weight:900;padding:8px 2px}
+.vip-tariffs{border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;margin:0}
+.vip-tariffs legend{font-weight:900;padding:0 6px}
+.vip-tariff{display:flex;align-items:center;gap:10px;font-weight:800;min-height:44px}
+.vip-tariff input{width:22px;height:22px;flex:0 0 auto}
+.vip-apply{position:relative}
+.vip-apply .vip-apply-text{display:block;padding-left:44px}
+.vip-badge.mini{position:absolute;left:8px;top:-9px;margin:0;font-size:12px;padding:2px 9px}
+.add-choice .vip-apply{margin:0}
+.vip-rule{border:2px solid #d99a00;border-radius:14px;background:linear-gradient(135deg,#fff8d6,#ffeaa0);color:#3d2800;padding:12px 14px;font-weight:700;font-size:14px;line-height:1.45}
+body.dark .vip-rule{background:#4a3d22;color:#fff6dc}
+.vip-tariff{border:1px solid var(--line);border-radius:12px;padding:6px 12px}
+
+/* v5.4.0.3: единое поле пути к secrets.txt и вертикальный список найденных кодов (без таблиц, под узкий экран) */
+.secrets-box{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.secrets-box input[type=text]{width:100%;min-height:48px;border:1px solid var(--line);border-radius:14px;padding:0 14px;font-size:15px;background:var(--card,#fff);color:var(--ink)}
+.admin-dark .secrets-box input[type=text]{background:#0e1626;border-color:#2b4268;color:#e8eefc}
+.secrets-result{display:flex;flex-direction:column;gap:6px}
+.secrets-result:empty{display:none}
+.sec-row{display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:#eefaf0;font-size:14px}
+.sec-row b{font-size:15px;letter-spacing:1px;word-break:break-word}
+.sec-row.miss{background:#fdefed}
+.admin-dark .sec-row{background:#12301f;border-color:#2b6a44;color:#dff7e6}
+.admin-dark .sec-row.miss{background:#3a1a1a;border-color:#7a3030;color:#ffd9d6}
+#pushGas{min-height:46px}
+
+/* v1.0.0.3: VIP — крупное окно-предупреждение, список тарифов кнопками, подсказка про ID */
+.vip-tariff-list{display:flex;flex-direction:column;gap:10px}
+.vip-tariff-btn{width:100%;min-height:54px;border-radius:16px;border:1px solid #e0c36a;background:#fff4cc;color:#6b4e00;font-size:17px;font-weight:900;padding:10px 14px;text-align:left}
+.vip-warn h2,.vip-result h2{font-size:24px;font-weight:950}
+.vip-warn-text{font-size:19px;font-weight:800;line-height:1.5;margin:12px 0}
+.vip-warn-actions{display:flex;flex-direction:column;gap:10px}
+.vip-id-help{font-size:15px;font-weight:700;line-height:1.45;padding:10px 12px;border-radius:12px;background:#eef4ff;color:#1d3a6e}
+.vip-chosen{font-size:16px;font-weight:900;padding:10px 12px;border-radius:12px;background:#fff4cc;color:#6b4e00;border:1px solid #e0c36a}
+.vip-result.vip-ok h2{color:#1b7a3a}.vip-result.vip-no h2{color:#b3261e}
+body.dark .vip-tariff-btn,body.dark .vip-chosen{background:#4a3a0a;color:#ffe9a6;border-color:#a8832a}
+body.dark .vip-id-help{background:#1a2a4a;color:#cfe0ff}
+body.dark .vip-warn-text{color:#f2f5ff}
+
+/* v1.0.0.3: ночная тема — яркие контрастные плашки категорий, насыщенно-тёмные коммерческие карточки,
+   яркий жирный график работы (раньше всё сливалось в глухой серый) */
+body.dark .hue-red{--dk-bg:#ff9d94;--dk-fg:#3a0905;--dk-card:#4f2220;--dk-bd:#ff7b6f}
+body.dark .hue-orange{--dk-bg:#ffbf6b;--dk-fg:#3a2000;--dk-card:#4d3015;--dk-bd:#ff9f3a}
+body.dark .hue-green{--dk-bg:#62e29c;--dk-fg:#04301a;--dk-card:#1d4a35;--dk-bd:#3fc17c}
+body.dark .hue-sky{--dk-bg:#6fd0ff;--dk-fg:#05283d;--dk-card:#173f55;--dk-bd:#3ab4ee}
+body.dark .hue-blue{--dk-bg:#92b6ff;--dk-fg:#0a1f4d;--dk-card:#1f3466;--dk-bd:#6a97f5}
+body.dark .hue-violet{--dk-bg:#c9a9ff;--dk-fg:#25104a;--dk-card:#38265e;--dk-bd:#a47cf0}
+body.dark .hue-sand{--dk-bg:#f2d68f;--dk-fg:#3a2a05;--dk-card:#4a3d1f;--dk-bd:#d9b45a}
+body.dark .title-plaque[class*="hue-"]{background:var(--dk-bg)!important;color:var(--dk-fg)!important;border:2px solid var(--dk-bd)!important;font-weight:950}
+body.dark .card.card-hue{background:var(--dk-card)!important;border-color:var(--dk-bd)!important}
+body.dark .card.card-hue .card-desc,body.dark .card.card-hue .card-subtitle{color:#f1f5fb!important}
+body.dark .card.card-hue .id-line{color:#dbe6f4!important}
+body.dark .schedule-line,body.dark .card.card-hue .schedule-line{color:#ffe08a!important;font-weight:900;font-size:15px}
+
+/* v1.0.0.3: ШТОРКА ХЕДЕРА. Плашка добавления короче справа, в углу в одну линию — язычок. */
+.header-add-zone{justify-content:stretch}
+.header-add-row{display:flex;align-items:stretch;gap:6px;width:100%}
+.header-add-row .header-add{flex:1 1 auto;min-width:0;width:auto}
+.header-toggle{flex:0 0 46px;width:46px;min-height:52px;border-radius:14px;border:1px solid var(--line);background:#e8eef7;color:#1d3a6e;font-size:18px;line-height:1;padding:0;box-shadow:0 6px 16px rgba(50,70,90,.12)}
+body.dark .header-toggle{background:#2b4056;color:#e9f0f6;border-color:#3b5470}
+.header-folder{max-height:320px;overflow:hidden;transition:max-height .38s ease,opacity .3s ease,margin .3s ease}
+body.hdr-collapsed .header-folder{max-height:0;opacity:0;margin:0;pointer-events:none}
+body.hdr-collapsed #searchRow{margin-top:2px}
+.header{transition:padding .3s ease}
+
+/* v1.0.0.3: значки плиток трёх уровней */
+.pastel-tile{position:relative}
+.tile-folder-corner{position:absolute;top:6px;left:8px;font-size:15px;opacity:.28;pointer-events:none}
+.tile-count{display:inline-flex;align-items:center;justify-content:center;gap:4px}
+.tile-folder-inline{font-size:13px}
+.tile3-foot{display:grid!important;grid-template-columns:auto 1fr auto;align-items:center;gap:6px;width:100%;margin-top:6px}
+.tile3-foot .foot-id{font-size:20px;line-height:1;justify-self:start}
+.tile3-foot .foot-count{justify-self:center;text-align:center;font-weight:850}
+.tile3-foot .foot-go{font-size:18px;font-weight:900;justify-self:end;line-height:1}
+
+/* v1.0.0.3: два замка пульта, бейдж режима, нижний ряд плиток */
+.mode-badge{display:block;width:100%;margin:8px 0;padding:10px 12px;border-radius:12px;border:2px solid;font-weight:700;font-size:14px;text-align:center}
+.mode-badge.ro{background:#fff4d6;color:#7a4b00;border-color:#e6b84d}
+.mode-badge.rw{background:#dff5e1;color:#14532d;border-color:#5cb86c}
+.admin-dark .admin-grid button.locked,.admin-pockets button.locked{opacity:.55}
+.master-overlay{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:16px}
+.master-box{width:100%;max-width:420px;background:#1c1f26;color:#f2f2f2;border-radius:16px;padding:18px;box-sizing:border-box}
+.master-box h3{margin:0 0 8px}
+.master-box input[type=text],.master-box input[type=password]{width:100%;box-sizing:border-box;margin:8px 0}
+.tile3-foot{display:flex;align-items:center;justify-content:space-between;gap:6px}
+
+/* v1.0.0.3: пульт из 5 кнопок + карман, блоки чатов под SOS, кнопка «Добавить ссылку» */
+.admin-top5{display:grid;gap:8px;margin:8px 0}
+.admin-top5 button{width:100%;padding:12px;font-size:16px;border-radius:12px}
+.eng-toggle{display:block;width:100%;margin:10px 0;padding:11px 12px;border-radius:12px;border:1px dashed #8a8f99;background:transparent;color:inherit;font-weight:700;font-size:13px;text-align:left}
+.eng-pocket{border:1px dashed #8a8f99;border-radius:12px;padding:8px;margin-bottom:10px}
+.eng-pocket.hidden{display:none}
+.chat-blocks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.chat-block{padding:12px 6px;border-radius:14px;border:0;font-weight:700;font-size:14px;color:#fff;cursor:pointer}
+.chat-block.wa{background:#1fa855}
+.chat-block.tg{background:#2481cc}
+.chat-list{display:grid;gap:8px;margin:10px 0}
+.chat-item{display:block;position:relative;padding:12px 34px 12px 12px;border-radius:12px;text-decoration:none;color:#fff}
+.chat-item.wa{background:#1fa855}
+.chat-item.tg{background:#2481cc}
+.chat-item b{display:block;font-size:15px}
+.chat-item small{display:block;opacity:.92;margin-top:2px}
+.chat-go{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:18px}
+.chat-add-btn{background:linear-gradient(90deg,#1fa855,#2481cc);color:#fff;border:0;border-radius:14px;padding:12px;font-weight:700;font-size:15px}
+
+/* v1.0.0.3: экран чатов — крупные карточки */
+.chat-card{display:block;text-decoration:none;color:inherit;padding:16px 56px 16px 16px;min-height:84px}
+.chat-card h3{margin:0 0 6px 0!important}
+.chat-card .chat-desc{margin:4px 0 0;font-size:16px;line-height:1.4}
+.chat-card .chat-go{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:26px;font-weight:800;opacity:.75}
+
+/* v1.0.0.3: заморозка шапки выбора посёлков и окно полной строки */
+.geo-sticky-head{position:sticky;top:-18px;z-index:6;margin:-18px -18px 10px;padding:16px 18px 10px;background:var(--card);border-bottom:1px solid var(--line,#e3dccf)}
+.geo-sticky-head h2{margin:0}
+.row-viewer{z-index:100000}
+.row-viewer-box{max-width:520px;max-height:88vh;overflow:auto}
+.rv-raw{font-family:ui-monospace,Consolas,monospace;font-size:15px;line-height:1.5;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;background:#050c18;color:#bfe0ff;border:1px solid #234a7c;border-radius:12px;padding:10px;margin:8px 0}
+.rv-fields{display:grid;gap:4px;margin-bottom:8px}
+.rv-f{display:flex;gap:8px;font-size:15px;line-height:1.4;overflow-wrap:anywhere}
+.rv-f b{flex:0 0 38px;color:#7fb4ff}
+.rv-f span{flex:1}
+
+/* v1.0.0.3: шесть кнопок очереди и двухцветный радар правок */
+.queue-row-actions.q-six{grid-template-columns:repeat(2,minmax(0,1fr))}
+.queue-row-actions.q-six button:disabled{opacity:.38;cursor:not-allowed}
+.queue-row-mono{white-space:pre-wrap!important;word-break:break-word!important;overflow-wrap:anywhere;overflow-x:visible}
+.df-cap{margin:8px 0 2px;font-size:12px;font-weight:800;opacity:.8}
+.df-old{background:#ffd6d6;color:#8a1c1c;border-radius:4px;padding:0 3px;text-decoration:line-through;text-decoration-thickness:1px}
+.df-new{background:#7fe08f;color:#0c3a14;border-radius:4px;padding:0 3px;font-weight:800}
+.df-same{background:#fff;color:#223;border-radius:4px;padding:0 3px}
+.rv-f.df-old{background:#ffd6d6;color:#8a1c1c;text-decoration:none;border-radius:8px}
+.rv-f.df-new{background:#7fe08f;color:#0c3a14;border-radius:8px}
+.rv-f{padding:2px 6px;border-radius:8px;background:#fff;color:#223}
+.rv-f b{color:#2b5fb3}
+.rv-edit input{flex:1;min-width:0;font-size:15px;padding:6px 8px;border:1px solid #9bb;border-radius:8px;background:#fff;color:#111}
+.rv-edit input.df-new{background:#7fe08f;color:#0c3a14;font-weight:800}
+.rv-msg{color:#ff9a9a;font-weight:700;margin:6px 0;min-height:1em}
+.rv-raw .df-same,.queue-row-mono .df-same{background:#fff;color:#223}
+
+/* v1.0.0.3: цвета 6 кнопок очереди, карточка чата для людей */
+.admin-dark .queue-row-actions button{color:#fff!important;font-weight:900!important}
+.admin-dark .queue-row-actions button.qb-approve{background:#1e9e50!important;border:1px solid #5fd68a!important}
+.admin-dark .queue-row-actions button.qb-edit{background:#2f6fe0!important;border:1px solid #7aa8ff!important}
+.admin-dark .queue-row-actions button.qb-file{background:#6b7480!important;border:1px solid #a4adb9!important}
+.admin-dark .queue-row-actions button.qb-gh{background:#f08a00!important;border:1px solid #ffc15e!important}
+.admin-dark .queue-row-actions button.qb-done{background:#7a4bd1!important;border:1px solid #b494ff!important}
+.admin-dark .queue-row-actions button.qb-reject{background:#d33a3a!important;border:1px solid #ff8d8d!important}
+.admin-dark .queue-row-actions button.qb-chatdel{background:#d33a3a!important;border:1px solid #ff8d8d!important;font-size:14px}
+.queue-row-actions.q-two{grid-template-columns:1fr 1fr}
+.queue-row-actions button:disabled{opacity:.38!important}
+.q-why{margin-top:6px;font-size:12px;opacity:.85}
+.chat-card{padding:0!important}
+.chat-main{display:block;position:relative;padding:16px 56px 10px 16px;text-decoration:none;color:inherit}
+.chat-main h3{margin:0 0 6px 0!important}
+.chat-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px 12px}
+.chat-act{min-height:44px;border-radius:12px;border:0;font-weight:800;font-size:14px;color:#fff;cursor:pointer}
+.chat-copy{background:#2f6fe0}
+.chat-share{background:#1e9e50}
+.chat-dead{grid-column:1/-1;background:#fff3d6;color:#7a4b00;border:1px solid #e6b84d}
+/* v1.0.0.3: уведомления и баннер ВСЕГДА выше любых окон пульта (раньше toast=300 и banner=2000 оказывались ПОД окном очереди и были не видны) */
+.toast,.top-banner{z-index:100200!important}

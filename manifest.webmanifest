@@ -1,0 +1,34 @@
+{
+  "name": "КАРТОТЕКА — Справочник округа",
+  "short_name": "КАРТОТЕКА",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4eee2",
+  "theme_color": "#f4eee2",
+  "description": "Автономный справочник округа, v1.0.0.3",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "version": "1.0.0.3",
+  "scope": "./",
+  "cartoteka_environments": {
+    "prod": {
+      "config": "config.json",
+      "repository": "zko-spravochnik/cartoteka"
+    },
+    "test": {
+      "config": "test_config.json",
+      "repository": "zko-spravochnik/test-cartoteka"
+    },
+    "detect": "host/port/path → script.js (CART_ENV) и service-worker.js"
+  }
+}
