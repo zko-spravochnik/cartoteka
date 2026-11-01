@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "v1.0.0.3",
-  "appVersion": "v1.0.0.3",
+  "schemaVersion": "v1.0.0.4",
+  "appVersion": "v1.0.0.4",
   "qrShareUrl": "https://zko-spravochnik.github.io/test-cartoteka/",
   "shareAppText": "Сохраните этот контакт! А чтобы скачать весь Справочник округа Бәйтерек себе на телефон и бесплатно искать мастеров, такси и магазины без интернета, переходите по ссылке:",
   "qrMode": "admin-configured",
@@ -1939,13 +1939,13 @@
     "oldPath": "backups/old backup",
     "newPath": "backups/backup"
   },
-  "intakeWebhookUrl": "https://script.google.com/macros/s/AKfycbzJwuyI_ixPJdlLOVf1Vth1SC8eLACf-mXr03JjupV45bCTvt43CfL0Wek_wiYqAvYoaA/exec",
+  "intakeWebhookUrl": "",
   "intakeSheetName": "Baiterek_Ochered_2026",
   "branch": "main",
   "ignored_pairs": [],
   "updateCritical": true,
   "updateNote": "true — критическое обновление (окно без отмены, только «Обновить сейчас»); false — обычное («Обновить» / «Позже»). Меняется перед каждым выпуском.",
-  "dbEpoch": "2026-11-03-v1003-cache-reset",
+  "dbEpoch": "2026-11-04-v1004-cache-reset",
   "nameNote": "name — чистое официальное имя (витрина и Г11 базы). fullName/legacyName — старое название в скобках только для преемственности СУБД. Для Байконыса на витрине показывается «Байконыс (Трекино)» (geo: displayRu).",
   "dbRoot": "bazy_zko",
   "repositoryUrl": "https://github.com/zko-spravochnik/test-cartoteka",
@@ -2612,6 +2612,5 @@
       0,
       0
     ]
-  },
-  "workMode": "test"
+  }
 }
