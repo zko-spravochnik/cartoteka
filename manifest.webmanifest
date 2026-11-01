@@ -5,7 +5,7 @@
   "display": "standalone",
   "background_color": "#f4eee2",
   "theme_color": "#f4eee2",
-  "description": "Автономный справочник округа, v1.0.0.4",
+  "description": "Автономный справочник округа, v1.0.0.6",
   "icons": [
     {
       "src": "icon-192.png",
@@ -18,7 +18,7 @@
       "type": "image/png"
     }
   ],
-  "version": "1.0.0.4",
+  "version": "1.0.0.6",
   "scope": "./",
   "cartoteka_environments": {
     "prod": {

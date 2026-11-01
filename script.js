@@ -13,8 +13,8 @@
    нижестоящая логика (idTile/idSub, рендер плиток, buildCandidateRow)
    не требовала структурных правок — меняется только источник данных.
    Резервные слоты 7-9 на обоих уровнях 9×9 помечены hidden:true. */
-const APP_VERSION='v1.0.0.4',SCHEMA=20;
-/* v1.0.0.4: единый «Код входа в админку» = ADMIN_CODE шлюза. В код сайта он НЕ вшивается: проверку делает локальный сервер (/__auth), на нём хранится только отпечаток. */
+const APP_VERSION='v1.0.0.6',SCHEMA=20;
+/* v1.0.0.6: единый «Код входа в админку» = ADMIN_CODE шлюза. В код сайта он НЕ вшивается: проверку делает локальный сервер (/__auth), на нём хранится только отпечаток. */
 /* Нормализация введённой фразы: без кавычек-ёлочек и обычных кавычек, лишние
    пробелы схлопываются, регистр не учитывается (Пойду Покурю = ПОЙДУ ПОКУРЮ). */
 function normPhrase(v){return String(v||'').replace(/[«»"'“”„‘’`]/g,'').replace(/\s+/g,' ').trim().toLowerCase().replace(/ё/g,'е')}
@@ -30,7 +30,7 @@ const MASK19_RE=/^\d+\/[01]\/[12]\/[01]\/[0-9]\/0\/0$/;
 const MARKER_RE=/^(\$|NEW|ORIGINAL|EDIT|DELETE_[1-4]|DELETE_.+)$/;
 const isPublicMarker=m=>m==='$';
 const isQuarantineMarker=m=>MARKER_RE.test(m)&&m!=='$';
-/* v1.0.0.4: строки-ссылки на чаты (Г20 = wa | tg) живут в тех же 20-графовых базах, но в карточки не попадают. */
+/* v1.0.0.6: строки-ссылки на чаты (Г20 = wa | tg) живут в тех же 20-графовых базах, но в карточки не попадают. */
 const CHAT_MARKER_RE=/^(wa|tg)$/;
 const isChatRow=l=>{const f=String(l||'').split(' | ');return f.length===20&&CHAT_MARKER_RE.test(f[19].trim())};
 function chatOf(f,file){const id=Number(f[0]);if(!/^\d{1,4}$/.test(f[0].trim())||id<1||id>1100)return null;const name=clean(f[1]),link=clean(f[3]);if(!name||name==='.'||!/^https?:\/\//i.test(link))return null;return{id:f[0].trim(),name,desc:clean(f[2])==='.'?'':clean(f[2]),link,kind:clean(f[19]),file,raw:f.map(clean).join(' | ')}}
@@ -301,7 +301,7 @@ async function loadDatabases(){
 }
 
 /* ===== Выборки по плиткам / ДВУХСЛОЙНЫЙ ГИБРИДНЫЙ ПОИСК (сохранено v5.0.2.2) ===== */
-/* v1.0.0.4: АВТОПИЛОТ КОММЕРЦИИ. Описание жителя (примечание, теги, место работы) проверяется по словарю residentCrafts
+/* v1.0.0.6: АВТОПИЛОТ КОММЕРЦИИ. Описание жителя (примечание, теги, место работы) проверяется по словарю residentCrafts
    из categories.json (десятки корней по всем разделам). Нашёлся маркер коммерции — карточка жителя дублируется на экране в
    нужный раздел бизнеса (Мастера, Магазины, Транспорт, Медицина, Прочее). Оригинал остаётся в «Жителях», в базе строка одна. */
 function craftRe(c){
@@ -505,7 +505,7 @@ function hueOf(mainId,subId){
  const sb=subId?(SUB_TILES[mainId]||[]).find(x=>x.sub===Number(subId)):null;
  return 'hue-'+((sb&&sb.hue)||(st&&st.hue)||'sand');
 }
-/* v1.0.0.4: «1 контакт / 2 контакта / 5 контактов» */
+/* v1.0.0.6: «1 контакт / 2 контакта / 5 контактов» */
 function contactsLabel(n){n=Number(n)||0;if(S.lang==='kz')return `${n} ${T('contacts')}`;const m=n%100,d=n%10;const w=(m>=11&&m<=14)?'контактов':d===1?'контакт':(d>=2&&d<=4)?'контакта':'контактов';return `${n} ${w}`}
 const plaqueHtml=(text,hue)=>`<div class="title-plaque ${hue}">${esc(text)}</div>`;
 function tilesOf(sb){return sb&&Array.isArray(sb.tiles)&&sb.tiles.length?sb.tiles.filter(t=>!t.hidden):null}
@@ -759,7 +759,7 @@ function render(){
   else if(S.view==='favorites'){$('#listToolbar').innerHTML=`<div class="list-title">⭐ ${esc(T('navFavorites'))}</div><button id="favSettingsBtn" class="fav-settings-btn" type="button" aria-label="${esc(T('favSettingsAria'))}">⚙️</button>`;const gb=$('#favSettingsBtn');if(gb)gb.onclick=favSettingsModal;renderCards()}
   else{$('#listToolbar').innerHTML=`<div class="list-title">… ${esc(T('navMore'))}</div>`;renderMore()}
 }
-/* v1.0.0.4: ШТОРКА ХЕДЕРА. Язычок справа от синей плашки сворачивает всю шапку «Картотека» вверх; состояние запоминается
+/* v1.0.0.6: ШТОРКА ХЕДЕРА. Язычок справа от синей плашки сворачивает всю шапку «Картотека» вверх; состояние запоминается
    навсегда (localStorage) и не сбрасывается при переходах по категориям и вкладкам, т.к. класс висит на body. */
 let HDR_COLLAPSED=(()=>{try{return storageGet('cart_hdr_collapsed','')==='1'}catch(e){return false}})();
 function applyHeaderCollapse(){
@@ -860,13 +860,13 @@ function banner(msg,bad){
 }
 function toast(s){const e=$('#toast');e.textContent=s;e.classList.add('show');setTimeout(()=>e.classList.remove("show"),3200)}
 function scrollTop(){window.scrollTo({top:0,behavior:'smooth'})}
-function infoModal(){
- /* v1.0.0.4: подробный двуязычный гид по всем кнопкам; разделы лежат в languages.json (guide1T/guide1B … guideNT/guideNB), язык — текущий */
+function infoModal(openIdx){
+ /* v1.0.0.6: подробный двуязычный гид по всем кнопкам; разделы лежат в languages.json (guide1T/guide1B … guideNT/guideNB), язык — текущий */
  const n=Number(T('guideCount'))||0;let body='';
- for(let i=1;i<=n;i++)body+=`<details class="guide-sec"${i===1?' open':''}><summary>${esc(T('guide'+i+'T'))}</summary><div class="guide-body">${esc(T('guide'+i+'B'))}</div></details>`;
+ for(let i=1;i<=n;i++)body+=`<details class="guide-sec"${i===(Number(openIdx)||1)?' open':''}><summary>${esc(T('guide'+i+'T'))}</summary><div class="guide-body">${esc(T('guide'+i+'B'))}</div></details>`;
  showModal(`<div class="modal-content guide-modal"><div class="langs"><button class="lang-toggle" id="gToggle" data-lang-toggle="1">${S.lang==='kz'?'KZ':'RU'}</button></div><h2>${esc(T('guideTitle'))}</h2><div class="hint">${esc(T('infoText'))}</div><div class="guide-list">${body}</div><div class="modal-actions"><button class="secondary" id="closeInfo">${esc(T('close'))}</button></div></div>`);
  const c=$('#closeInfo');if(c)c.onclick=closeModal;
- const g=$('#gToggle');if(g)g.onclick=()=>{setLang(S.lang==='ru'?'kz':'ru');infoModal()};
+ const g=$('#gToggle');if(g)g.onclick=()=>{setLang(S.lang==='ru'?'kz':'ru');infoModal(openIdx)};
 }
 function shareUrl(){
  const u=clean(APP_CFG.qrShareUrl||'');if(u)return u;
@@ -1068,8 +1068,8 @@ function buildCandidateRow(fd,mode){
     служебного технического префикса «зона». */
  return [id,folder,title,resident?'.':person,resident?person:'.',city,m1,m2,address,tags,`с. ${village}`,schedule,social,'R','R','R',home,res,search,'NEW'].join(' | ');
 }
-/* ===== v1.0.0.4: блоки «Группы WhatsApp» / «Каналы Telegram» и анкета «Добавить ссылку» ===== */
-/* v1.0.0.4: официальная группа WhatsApp с. Дарьинское зашита в код и выводится с первого запуска (строка в формате базы, Г4 склеивается без пробелов). */
+/* ===== v1.0.0.6: блоки «Группы WhatsApp» / «Каналы Telegram» и анкета «Добавить ссылку» ===== */
+/* v1.0.0.6: официальная группа WhatsApp с. Дарьинское зашита в код и выводится с первого запуска (строка в формате базы, Г4 склеивается без пробелов). */
 const DEFAULT_CHATS=[{file:'baza_zko_baiterek_daryinskoe.txt',row:['0001','Дарьинск. Адресная и Телефонная база','Поиск номеров телефона ☎️ 📝 и адресов 🏪 магазинов, ЦОН, аптека, почта, парикмахерская и так далее..🏡⛪🏢🏥🏪⛲🏦 Нажмите, чтобы вступить в группу WhatsApp.','h t t p s : / / c h a t . w h a t s a p p . c o m / C w 9 L e h x o M u Z L S 0 v w V S 3 y v 0 ? s = c l & p = a & i a m = 2'.replace(/\s+/g,''),'.','.','.','.','.','.','.','.','.','R','R','R','0','0','0','wa']}];
 function ensureDefaultChats(file){
  for(const d of DEFAULT_CHATS){
@@ -1078,7 +1078,7 @@ function ensureDefaultChats(file){
   if(!(S.chats||[]).some(x=>x.file===file&&x.link.toLowerCase()===c.link.toLowerCase()))S.chats.push(c);
  }
 }
-/* v1.0.0.4: блоки под SOS — «парадные двери»: отдельный экран раздела (S.view='chats'), без модальных окон. */
+/* v1.0.0.6: блоки под SOS — «парадные двери»: отдельный экран раздела (S.view='chats'), без модальных окон. */
 async function openChats(kind){
  S.view='chats';S.chatKind=kind==='tg'?'tg':'wa';S.tile=null;S.sub=null;S.tag=null;S.search='';
  render();scrollTop();
@@ -1412,7 +1412,7 @@ function showAddGuide(next,mode){
    бот присылает администратору сообщение с кнопками «Написать в WhatsApp» и «Позвонить». */
 const VIP_TARIFFS=[{days:'7',key:'vipT7'},{days:'14',key:'vipT14'},{days:'30',key:'vipT30'},{days:'90',key:'vipT90'},{days:'180',key:'vipT180'},{days:'365',key:'vipT365'},{days:'forever',key:'vipTForever'}];
 function siteBaseUrl(){try{return location.origin+location.pathname.replace(/[^/]*$/,'')}catch(e){return''}}
-/* v1.0.0.4: VIP в три шага. 1) плитки тарифов; 2) крупное окно-предупреждение о сверке телефона владельца
+/* v1.0.0.6: VIP в три шага. 1) плитки тарифов; 2) крупное окно-предупреждение о сверке телефона владельца
    («ПОНЯТНО» / «НАЗАД / ОТМЕНА»); 3) анкета из 3 полей: ID карточки, имя, телефон. Сверку делает сайт по базе
    выбранного села (она уже в памяти страницы): совпал телефон с карточкой → «Заявка отправлена», иначе → «Заявка отклонена». */
 function digitsOf(v){return String(v||'').replace(/\D/g,'')}
@@ -1460,7 +1460,7 @@ function vipApplyForm(days){
   if(!owner){banner(T('vipNeedOwner'),true);return}
   if(phone==='.'){banner(T('vipBadPhone'),true);return}
   let chk=vipVerify(village,id,phone);
-  /* v1.0.0.4: если запущен локальный сервер, сверку делает Python по файлу базы (главный судья); иначе — сайт по базе села в памяти */
+  /* v1.0.0.6: если запущен локальный сервер, сверку делает Python по файлу базы (главный судья); иначе — сайт по базе села в памяти */
   try{const rr=await fetch('/__vipcheck',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({file:v0?.file||'',id,phone}),cache:'no-store'});const jj=rr.ok?await rr.json():null;
    if(jj&&jj.ok&&(jj.result==='ok'||jj.result==='no_id'||jj.result==='phone')){if(jj.result==='ok'){if(!chk.row)chk={ok:true,row:S.rows.find(x=>String(x.id)===String(id))||{title:''}};else chk.ok=true}else chk={ok:false,reason:jj.result==='no_id'?'noId':'phone'}}}catch(e){}
   if(!chk.ok){vipResultModal(false,chk.reason==='noId'?'vipRejNoId':'vipRejPhone');return}
@@ -2121,7 +2121,7 @@ async function vaultRestore(){
  if(v.code&&!ADMIN_CODE_MEM)ADMIN_CODE_MEM=v.code;
  if(v.token&&!S.token){S.token=v.token;relayAdminTokenToSw(v.token)}
 }
-/* v1.0.0.4: ДВА ЗАМКА. Код входа открывает пульт в режиме «Только чтение»; изменения (запись, отправка, облачные действия)
+/* v1.0.0.6: ДВА ЗАМКА. Код входа открывает пульт в режиме «Только чтение»; изменения (запись, отправка, облачные действия)
    требуют Мастер-пароля: сервер выдаёт временную сессию (10 минут). Пароль и сессия живут только в памяти страницы. */
 let MSESS='',MSESS_UNTIL=0,MASTER_MEM='';
 const MUT_ACTIONS=['setStatus','reid','updateRow','setTelegram','testTelegram'];
@@ -2190,7 +2190,7 @@ function saveAdminCode(v){
  else storageSetSession('cart_admin_code',v);
  vaultSync();
 }
-/* v1.0.0.4: мастер-сессия продлевается каждым успешным действием; если истекла посреди операции — окно пароля открывается ОДИН раз, и действие продолжается. */
+/* v1.0.0.6: мастер-сессия продлевается каждым успешным действием; если истекла посреди операции — окно пароля открывается ОДИН раз, и действие продолжается. */
 function touchMaster(){if(MSESS)MSESS_UNTIL=Date.now()+600000-5000}
 function needMaster(){return new Promise(res=>{if(hasMaster()){res(true);return}const t=setTimeout(()=>res(false),180000);masterModal(()=>{clearTimeout(t);res(true)})})}
 async function adminIntake(payload){
@@ -2210,10 +2210,10 @@ function intakeErrorText(res){
  if(e==='master_required')return T('masterCloudToast');
  return T('intakeNetworkToast');
 }
-/* ===== v1.0.0.4: БРОНЯ ОЧЕРЕДИ ЗАЯВОК ===== */
+/* ===== v1.0.0.6: БРОНЯ ОЧЕРЕДИ ЗАЯВОК ===== */
 /* Правки администратора (опечатки) живут в памяти вкладки по uid заявки и подхватываются ВСЕМИ кнопками: Одобрить, В файл + Буфер, В GitHub. */
 const QEDIT=new Map((()=>{try{return JSON.parse(storageGetSession('cart_qedit','[]'))||[]}catch(e){return []}})());
-/* v1.0.0.4: заявки, одобрение которых облако УЖЕ подтвердило. Карточка с такой отметкой рисуется как «Одобрена» с рабочими кнопками файла/GitHub,
+/* v1.0.0.6: заявки, одобрение которых облако УЖЕ подтвердило. Карточка с такой отметкой рисуется как «Одобрена» с рабочими кнопками файла/GitHub,
    даже если список из облака пришёл со старым статусом или запрос списка не удался. Отметка снимается, когда облако сообщает «Внесена»/«Отклонена». */
 const QAPPROVED=new Set();
 function qeditSave(){try{storageSetSession('cart_qedit',JSON.stringify(Array.from(QEDIT.entries())))}catch(e){}}
@@ -2279,7 +2279,7 @@ function queueCardHtml(item,source){
 let QITEMS=new Map();
 let QAUDIT={flags:new Map(),plan:[]};
 /* Окно «Полная строка»: читать (радар красный/зелёный) или Редактировать (20 полей ввода). Отдельный слой поверх пульта: очередь под ним не сбрасывается. */
-/* v1.0.0.4: АВТОСВЯЗКА Г2↔Г1. Название категории в Г2 («Главная — Подкатегория») -> индексы плитки C и подкатегории T1.
+/* v1.0.0.6: АВТОСВЯЗКА Г2↔Г1. Название категории в Г2 («Главная — Подкатегория») -> индексы плитки C и подкатегории T1.
    Узнаёт названия на обоих языках. Возвращает {c,sb} либо null (не бизнес-папка/не найдено). */
 function folderToIds(folder){
  const f=String(folder||'').split('—').map(x=>x.trim().toLowerCase());if(!f[0]||f[0]==='жители')return null;
@@ -2302,7 +2302,7 @@ function linkFolderToId(vals,file,ownId){
  out[0]=nid;
  return{vals:out,log:`Г2 «${vals[1]}» → плитка ${ids.c}, подкатегория ${ids.sb}; Г1 ${vals[0]} → ${nid}; Г17 и Г19 пересчитаны`};
 }
-/* v1.0.0.4: Г2 выбирается ДВУМЯ окнами подряд (главная категория → подкатегория), без ручного ввода.
+/* v1.0.0.6: Г2 выбирается ДВУМЯ окнами подряд (главная категория → подкатегория), без ручного ввода.
    В обоих окнах есть [ ⬅️ Назад ]: из окна 2 — в окно 1, из окна 1 — обратно в редактор. Текст Г2 подставляется
    готовым («Магазины — Онлайн-магазины/ПВЗ»), опечатки невозможны. */
 function g2Picker(done){
@@ -2401,7 +2401,7 @@ async function requestQueueMonitor(){
  const localReport=(r,kind)=>r&&r.ok?(r.duplicate?'queueAlreadyThereToast':'queueLocalWriteOkToast'):null;
  $$('[data-q-edit]').forEach(b=>{b.onclick=()=>{const it=itemOf(b.dataset.qEdit);if(it)rowViewer(it,true)}});
  $$('[data-q-approve]').forEach(b=>run(b,async()=>{
-  /* СКВОЗНОЕ «Одобрить» (v1.0.0.4: никогда не молчит, замки снимаются по собственному успеху страницы):
+  /* СКВОЗНОЕ «Одобрить» (v1.0.0.6: никогда не молчит, замки снимаются по собственному успеху страницы):
      (1) заявка в облаке, (2) облако: исправленная строка + статус «Одобрена» → СРАЗУ отметка QAPPROVED и перерисовка с рабочими кнопками,
      (3) файл села на телефоне: дописать (NEW) или заменить/перенести по ID (EDIT). Любой сбой — виден на экране с названием шага. */
   const uid=b.dataset.qApprove,it0=itemOf(uid);
@@ -2478,7 +2478,7 @@ async function postSkipWaiting(){try{const reg=await navigator.serviceWorker?.re
 /* ===== v5.3.0.4: ПЛАТФОРМЕННАЯ СТАТИСТИКА (счётчик в подвале «...Ещё») ===== */
 /* Случайный номер устройства хранится сразу в localStorage и IndexedDB (потерялся один — восстанавливается из другого).
    Ничего личного: ни IP, ни телефонов. Пинг уходит на тот же веб-хук, что и заявки; сводка кэшируется на 4 часа. */
-const STATS_TTL_MS=4*3600*1000,SESSION_GAP_MS=30*60*1000,STATS_RETRY_MS=5*60*1000;
+const STATS_TTL_MS=5*60*1000,SESSION_GAP_MS=30*60*1000,STATS_RETRY_MS=5*60*1000;
 let DEV_ID='';
 function rndHex32(){const a=new Uint8Array(16);try{crypto.getRandomValues(a)}catch(e){for(let i=0;i<16;i++)a[i]=Math.floor(Math.random()*256)}return Array.from(a,b=>b.toString(16).padStart(2,'0')).join('')}
 async function deviceId(){
@@ -2707,7 +2707,7 @@ function bindAdminHome(){const b=$('#adminHomeBtn');if(b)b.onclick=adminOpen}
    кнопка «Сохранить token локально для фоновых уведомлений» (persistToken)
    для фонового робот-радара Service Worker (п.4 наряда). */
 function adminOpen(pocketOpen){
- /* v1.0.0.4: наверху ровно 5 главных кнопок; весь инженерный шум спрятан в закрытый карман внизу (вход — по Мастер-паролю, строка 2). */
+ /* v1.0.0.6: наверху ровно 5 главных кнопок; весь инженерный шум спрятан в закрытый карман внизу (вход — по Мастер-паролю, строка 2). */
  const rw=hasMaster(),po=(pocketOpen===true||storageGetSession('cart_eng_open','')==='1')&&rw;
  showModal(`<div class="modal-content admin-dark"><div class="admin-inner-head"><h2>${esc(T('adminPanelTitle'))}</h2></div>
   <div class="admin-top5">
@@ -2780,9 +2780,9 @@ async function pushGasCode(){
   else banner(T('syncNoServer'),true);
  }finally{if(btn)btn.disabled=false}
 }
-/* v1.0.0.4: чтение secrets.txt. Сервер (cartoteka_server.py) читает файл по пути администратора, режет строки по первому
+/* v1.0.0.6: чтение secrets.txt. Сервер (cartoteka_server.py) читает файл по пути администратора, режет строки по первому
    двоеточию и отдаёт секреты странице: токен GitHub и Telegram живут только в памяти страницы, на экране — «••••». */
-const SECRET_FIELDS=['code','master','githubToken','repoName','branch','siteTest','siteProd','webhook','tgToken','tgChat','dbRoot','mode','sheetId'];
+const SECRET_FIELDS=['code','master','githubToken','repoName','branch','siteTest','siteProd','webhook','tgToken','tgChat','dbRoot','sheetId'];
 function renderSecretsResult(found,problems,tgLine){
  const el=$('#secretsResult');if(!el)return;
  el.innerHTML=SECRET_FIELDS.map(k=>`<div class="sec-row ${found[k]?'ok':'miss'}"><span>${esc(T('sf_'+k))}</span><b>${found[k]?'••••••••':esc(T('secretsMissing'))}</b></div>`).join('')
@@ -2830,16 +2830,35 @@ async function auditModal(){
 function setupTheme(){try{if(storageGet('cart_theme','')==='dark')document.body.classList.add('dark');const b=$('#themeBtn');if(!b)return;b.onclick=()=>{try{document.body.classList.toggle('dark');storageSet('cart_theme',document.body.classList.contains('dark')?'dark':'light')}catch(e){}}}catch(e){}}
 function setupAdmin(){let tm=0,suppress=false;const b=$('#infoBtn');if(!b)return;b.addEventListener('pointerdown',()=>{suppress=false;tm=setTimeout(async()=>{suppress=true;if(!(await serverAlive())){banner(T('needServer'),true);foreignAlarm();return}if(ADMIN_PIN_OK)adminOpen();else adminPinModal()},3000)});['pointerup','pointercancel','pointerleave'].forEach(e=>b.addEventListener(e,()=>clearTimeout(tm)));b.onclick=()=>{if(!suppress)infoModal();suppress=false}}
 function setupPWA(){
+ /* v1.0.0.6: зелёная плашка установки приложения — НАВЕРХУ, поверх шапки, на всю ширину экрана. Горит 25 секунд и плавно уходит;
+    крестик [ × ] закрывает сразу (и молчит 24 часа). Не показывается тем, кто уже установил приложение. */
  try{
-  window.addEventListener('beforeinstallprompt',e=>{try{e.preventDefault();S.installPrompt=e;const b=$('#installBanner');if(b){b.classList.remove('hidden');setTimeout(()=>b.classList.add('hidden'),30000)}}catch(err){}});
-  const now=$('#installNow');if(now)now.onclick=()=>{installPWA();const b=$('#installBanner');if(b)b.classList.add('hidden')};
-  const close=$('#installClose');if(close)close.onclick=()=>{const b=$('#installBanner');if(b)b.classList.add('hidden')};
+  const bar=$('#pwaBar');if(!bar)return;
+  const NOW=()=>Date.now(),SNOOZE='cart_pwa_snooze',DONE='cart_pwa_done';
+  const installed=()=>isStandaloneApp()||storageGet(DONE,'')==='1';
+  const snoozed=()=>(Number(storageGet(SNOOZE,'0'))||0)>NOW();
+  let timer=0,shown=false;
+  const hide=snooze=>{clearTimeout(timer);bar.classList.remove('show');setTimeout(()=>bar.classList.add('hidden'),450);shown=false;if(snooze)storageSet(SNOOZE,String(NOW()+24*3600*1000))};
+  const show=()=>{
+   if(shown||installed()||snoozed())return;
+   shown=true;$('#pwaText').textContent=T('installBannerText');$('#pwaGo').textContent=T('installBannerBtn');
+   bar.classList.remove('hidden');requestAnimationFrame(()=>requestAnimationFrame(()=>bar.classList.add('show')));
+   timer=setTimeout(()=>hide(true),25000);
+  };
+  if(isStandaloneApp())storageSet(DONE,'1');
+  try{if(navigator.getInstalledRelatedApps)navigator.getInstalledRelatedApps().then(a=>{if(a&&a.length){storageSet(DONE,'1');hide(false)}}).catch(()=>{})}catch(e){}
+  window.addEventListener('beforeinstallprompt',e=>{try{e.preventDefault();S.installPrompt=e;show()}catch(err){}});
+  window.addEventListener('appinstalled',()=>{storageSet(DONE,'1');hide(false)});
+  const ios=/iphone|ipad|ipod/i.test(navigator.userAgent||'')&&!window.MSStream;
+  if(ios)setTimeout(show,1200);
+  $('#pwaX').onclick=()=>hide(true);
+  $('#pwaGo').onclick=async()=>{if(S.installPrompt){await installPWA()}else infoModal(10);hide(true)};
  }catch(e){}
 }
 function welcomeModal(){
  if(storageGet('cart_welcome_done',''))return;
  const lang=S.lang==='kz'?'kz':'ru';
- /* v1.0.0.4: две кнопки — [ 👍 Понятно ] закрывает окно, [ ℹ️ О кнопках и функциях ] ведёт в подробный раздел «Информация» */
+ /* v1.0.0.6: две кнопки — [ 👍 Понятно ] закрывает окно, [ ℹ️ О кнопках и функциях ] ведёт в подробный раздел «Информация» */
  showModal(`<div class="modal-content welcome-modal"><div class="langs"><button class="lang-toggle" id="wToggle" data-lang-toggle="1">${lang==='kz'?'KZ':'RU'}</button></div><h2>${esc(L[lang]?.welcomeTitle||T('welcomeTitle'))}</h2><p id="welcomeText" class="welcome-text">${esc(L[lang]?.welcomeText||T('welcomeText'))}</p><div class="modal-actions welcome-actions"><button class="primary" id="welcomeOk">${esc(L[lang]?.welcomeOk||T('welcomeOk'))}</button><button class="secondary" id="welcomeGuide">${esc(L[lang]?.welcomeGuide||T('welcomeGuide'))}</button></div></div>`);
  const toggle=$('#wToggle'), text=$('#welcomeText'), ok=$('#welcomeOk'), guide=$('#welcomeGuide');
  if(!toggle||!text||!ok||!guide)return;
@@ -2990,7 +3009,7 @@ function init(){
  try{setupPWA()}catch(e){}
  try{setupSwMessageBridge()}catch(e){}
  if('serviceWorker' in navigator){
-   navigator.serviceWorker.register('./service-worker.js').then(reg=>{scheduleSwNotifyCheck();setupUpdateFlow(reg)}).catch(()=>{});
+   navigator.serviceWorker.register('./service-worker.js?env='+encodeURIComponent(ENV.mode||'prod')).then(reg=>{scheduleSwNotifyCheck();setupUpdateFlow(reg)}).catch(()=>{});
  }
  try{const v=$('#villagePicker');if(v)v.onclick=()=>openGeomodal();const header=$('#mainHeader');if(header)header.addEventListener('click',e=>{const b=e.target.closest?.('[data-lang-toggle]');if(b)cycleLang()});setupNav();setupCardDelegation()}catch(e){}
  try{
