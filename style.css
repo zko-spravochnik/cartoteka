@@ -922,3 +922,10 @@ body.dark .brand-footer{color:#f4eee2}
 .pwa-bar .pwa-text{flex:1;font-weight:900;font-size:15px;line-height:1.3}
 .pwa-bar .pwa-go{min-height:40px;padding:8px 16px;border:0;border-radius:999px;background:#fff;color:#1f6b3a;font-weight:900;font-size:15px}
 .pwa-bar .pwa-x{width:34px;height:34px;min-width:34px;border:0;border-radius:50%;background:rgba(255,255,255,.22);color:#fff;font-weight:900;font-size:22px;line-height:1;padding:0}
+
+/* v1.0.0.7: окно копирования и ряд кнопок у карточек без телефонов */
+.copy-modal .copy-opt{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
+.copy-modal .copy-sub{font-weight:700;font-size:13px;opacity:.75}
+.phone-block-bare{margin-top:2px}
+.phone-block-bare .phone-row-2{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.phone-block-bare .phone-row-2 .error-btn{grid-column:1/-1;order:3}

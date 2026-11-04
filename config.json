@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "v1.0.0.6",
-  "appVersion": "v1.0.0.6",
+  "schemaVersion": "v1.0.0.7",
+  "appVersion": "v1.0.0.7",
   "qrShareUrl": "https://zko-spravochnik.github.io/cartoteka/",
   "shareAppText": "Сохраните этот контакт! А чтобы скачать весь Справочник округа Бәйтерек себе на телефон и бесплатно искать мастеров, такси и магазины без интернета, переходите по ссылке:",
   "qrMode": "admin-configured",
@@ -1953,7 +1953,7 @@
   "envNote": "БОЕВОЙ конфиг. Подхватывается на живом домене. Запись идёт строго в репозиторий zko-spravochnik/cartoteka. Тестовый двойник — test_config.json.",
   "counts": {
     "baza_zko_baiterek_daryinskoe.txt": [
-      257,
+      256,
       164
     ],
     "baza_zko_baiterek_rubezhinskoe.txt": [

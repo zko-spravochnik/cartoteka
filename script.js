@@ -13,7 +13,7 @@
    нижестоящая логика (idTile/idSub, рендер плиток, buildCandidateRow)
    не требовала структурных правок — меняется только источник данных.
    Резервные слоты 7-9 на обоих уровнях 9×9 помечены hidden:true. */
-const APP_VERSION='v1.0.0.6',SCHEMA=20;
+const APP_VERSION='v1.0.0.7',SCHEMA=20;
 /* v1.0.0.6: единый «Код входа в админку» = ADMIN_CODE шлюза. В код сайта он НЕ вшивается: проверку делает локальный сервер (/__auth), на нём хранится только отпечаток. */
 /* Нормализация введённой фразы: без кавычек-ёлочек и обычных кавычек, лишние
    пробелы схлопываются, регистр не учитывается (Пойду Покурю = ПОЙДУ ПОКУРЮ). */
@@ -226,7 +226,7 @@ function geoName(kind,e){
 }
 const districtName=d=>geoName('district',d),regionName=r=>geoName('region',r);
 function geoDistrictBySlug(slug){return GEO.districts.find(d=>d.slug===slug)}
-async function loadLang(){try{const r=await fetch(`languages.json?v=${Date.now()}`,{cache:'no-store'});if(r.ok)L=await r.json()}catch(e){}}
+async function loadLang(){try{const r=await fetch(`languages.json?v=${Date.now()}`,{cache:'no-store'});if(r.ok)L=await r.json()}catch(e){}try{S.pwaSync&&S.pwaSync()}catch(e){}}
 async function loadVip(){S.vip.clear();try{const text=await fetchText(CONFIG.PATH_REKLAMA);for(const line of text.split(/\r?\n/)){const p=line.split('|').map(clean);if(p.length>=3)S.vip.set(`${p[0]}::${p[1]}`,p[2])}}catch(e){}}
 function isVip(r){const code=CONFIG.VILLAGES.find(v=>v.file===r.file)?.code,d=S.vip.get(`${code}::${r.id}`);if(!d)return false;if(/^(навсегда|бессрочно|forever)$/i.test(String(d).trim()))return true;const m=d.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);return !!m&&new Date(+m[3],+m[2]-1,+m[1])>new Date()}
 function buildRows(){S.byKey=new Map();S.rows.sort((a,b)=>Number(a.id)-Number(b.id)||a.file.localeCompare(b.file));for(const r of S.rows)S.byKey.set(favKey(r),r)}
@@ -385,7 +385,7 @@ function card(r){
  if(r.tags&&r.tags!=='.')h+=`<div class="card-desc">${esc(r.tags)}</div>`;
  if(r.social&&r.social!=='.')h+=`<div class="card-desc">🏷️ ${esc(r.social)}</div>`;
  if(r.address&&r.address!=='.')h+=`<div class="card-desc">📍 ${esc(r.address)}</div>`;
- h+=phoneBlockHtml(r);
+ h+=phoneBlockHtml(r)||noPhoneActionsHtml(r);
  h+=bizLinksHtml(r);
  if(r.schedule&&/^SHIFT\|/i.test(r.schedule))h+=shiftCalendar(r);
  h+=`<div class="schedule-line">🕒 ${esc(/^SHIFT\|/i.test(r.schedule)?shiftSummary(r.schedule):(r.schedule&&r.schedule!=='.'?r.schedule:T('scheduleMissing')))}</div><div class="id-line">${esc(r.geo)} · ${esc(T('idLinePrefix'))} ${esc(r.id)}</div></article>`;
@@ -406,6 +406,7 @@ function businessCardText(r,numbers){
  if(line3&&line3!=='.')lines.push(line3);
  if(r.tags&&r.tags!=='.')lines.push(r.tags);
  if(numbers&&numbers.length)lines.push(fmtPhone(numbers[0].phone));
+ else{const sc=scheduleCopyText(r);if(sc)lines.push(sc)}
  const appText=clean(APP_CFG.shareAppText||''),qrUrl=clean(shareUrl());
  let footer='';
  if(appText&&qrUrl)footer=`\n\n${appText}\n${qrUrl}`;
@@ -434,10 +435,48 @@ function phoneBlockHtml(r){
  if(wa1)waBtns+=`<a class="wa wa-strong pastel-action" href="https://wa.me/${digits(m1)}" target="_blank" rel="noopener">${esc(waCount===1?T('waBtnSingle'):T('waBtn1'))}</a>`;
  if(wa2)waBtns+=`<a class="wa wa-strong pastel-action" href="https://wa.me/${digits(m2)}" target="_blank" rel="noopener">${esc(waCount===1?T('waBtnSingle'):T('waBtn2'))}</a>`;
  const row1=`<div class="phone-actions phone-row-1">${callBtn}${waBtns}</div>`;
- const copyAll=numbers.map(n=>n.phone).join(', ');
- const shareText=businessCardText(r,numbers);
- const row2=`<div class="phone-actions phone-row-2"><button class="neutral pastel-action" data-copy="${esc(copyAll)}">${esc(T('copyBtn'))}</button><button class="error-btn pastel-action" data-error="1">${esc(T('errorBtn'))}</button><button class="neutral pastel-action" data-share="${esc(shareText)}">${esc(T('shareBtn'))}</button></div>`;
+ const row2=actionsRowHtml(r,numbers);
  return `<div class="phone-block"><div class="phone-number-big phone-number-col">${numbersLinesHtml}</div>${row1}${row2}</div>`;
+}
+/* ===== v1.0.0.7: общий ряд кнопок [Скопировать][Ошибка][Поделиться] и умное окно копирования ===== */
+function rowNumbers(r){
+ const out=[],add=(label,p)=>{if(p&&p!=='.')out.push({label,phone:p})};
+ add(T('landlineLabel'),r.city);add(T('mobile1Label'),r.mobile1);add(T('mobile2Label'),r.mobile2);
+ return out;
+}
+function actionsRowHtml(r,numbers){
+ const share=businessCardText(r,numbers),errLbl=(numbers&&numbers.length)?T('errorBtn'):T('busErrorBtn');
+ return `<div class="phone-actions phone-row-2"><button class="neutral pastel-action" data-copymenu="1">${esc(T('copyBtn'))}</button><button class="error-btn pastel-action" data-error="1">${esc(errLbl)}</button><button class="neutral pastel-action" data-share="${esc(share)}">${esc(T('shareBtn'))}</button></div>`;
+}
+function noPhoneActionsHtml(r){return `<div class="phone-block phone-block-bare">${actionsRowHtml(r,[])}</div>`}
+function scheduleCopyText(r){
+ const v=r.schedule;if(!v||v==='.')return'';
+ if(/^SHIFT\|/i.test(v))return shiftSummary(v);
+ return String(v).split(/\s*[|｜]\s*/).map(x=>x.trim()).filter(Boolean).join('\n');
+}
+/* full — всё видимое на карточке (без технической строки с ID и без кнопок); info — только сама информация (без названия, владельца и телефонов) */
+function cardPlainText(r,mode){
+ const lines=[],sub=r.folder==='ЖИТЕЛИ'?r.residentNote:r.owner,ok=v=>v&&v!=='.';
+ if(mode==='full'){lines.push(r.title);if(ok(sub)&&norm(sub)!==norm(r.title))lines.push('👤 '+sub)}
+ if(ok(r.tags))lines.push(r.tags);
+ if(ok(r.social))lines.push('🏷️ '+r.social);
+ if(ok(r.address))lines.push('📍 '+r.address);
+ if(mode==='full')for(const n of rowNumbers(r))lines.push('📞 '+fmtPhone(n.phone));
+ const sc=scheduleCopyText(r);if(sc)lines.push('🕒 '+sc);
+ return lines.join('\n');
+}
+async function copyText(txt){
+ try{if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(txt);return true}}catch(e){}
+ try{const ta=document.createElement('textarea');ta.value=txt;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;top:0;left:0;opacity:0';document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,txt.length);const ok=document.execCommand('copy');ta.remove();return !!ok}catch(e){return false}
+}
+function openCopyMenu(r){
+ const nums=rowNumbers(r),items=[{txt:cardPlainText(r,'full'),label:T('copyFullCard')}];
+ if(nums.length)nums.forEach((n,i)=>items.push({txt:fmtPhone(n.phone),label:T('copyNumN',{n:i+1}),sub:fmtPhone(n.phone)}));
+ else items.push({txt:cardPlainText(r,'info'),label:T('copyInfoOnly')});
+ const html=items.map((it,i)=>`<button type="button" class="sector-btn big-action copy-opt" data-i="${i}">${esc(it.label)}${it.sub?`<small class="copy-sub">${esc(it.sub)}</small>`:''}</button>`).join('');
+ showModal(`<div class="modal-content copy-modal"><div class="form-head"><button class="back-capsule big-action" id="copyBack">⬅️ ${esc(T('back'))}</button><h2>${esc(T('copyMenuTitle'))}</h2></div><div class="sector-grid">${html}</div></div>`);
+ $('#copyBack').onclick=closeModal;
+ $$('.copy-opt').forEach(b=>b.onclick=async()=>{const it=items[Number(b.dataset.i)];const ok=await copyText(it.txt);closeModal();toast(ok?T('copiedToast'):T('copyFailToast'))});
 }
 function openCallPicker(numbers){
  const html=(numbers||[]).map(n=>`<a class="sector-btn big-action" href="tel:${esc(n.phone)}" style="display:block;text-decoration:none;text-align:center">${esc(n.label)} — ${esc(fmtPhone(n.phone))}</a>`).join('');
@@ -480,7 +519,7 @@ function bindCards(){}
 function setupCardDelegation(){
  if(document.body.dataset.cardDelegation==='1')return;document.body.dataset.cardDelegation='1';
  document.addEventListener('click',async e=>{
-  const b=e.target.closest?.('[data-bizlink],[data-fav],[data-pin],[data-copy],[data-share],[data-error],[data-callpicker],a.call,a.wa');
+  const b=e.target.closest?.('[data-bizlink],[data-fav],[data-pin],[data-copy],[data-copymenu],[data-share],[data-error],[data-callpicker],a.call,a.wa');
   if(!b)return;
   if(b.matches('[data-bizlink]')){e.stopPropagation();openBizCard(b.dataset.bizlink);return}
   const el=b.closest('.card'),r=el&&S.byKey.get(`${el.dataset.file}::${el.dataset.id}`);
@@ -489,6 +528,7 @@ function setupCardDelegation(){
   if(b.matches('[data-fav]')){e.stopPropagation();toggleFav(r);return}
   if(b.matches('[data-callpicker]')){rememberAction(r);try{openCallPicker(JSON.parse(b.dataset.callpicker))}catch(err){}return}
   if(b.matches('a.call,a.wa')){rememberAction(r);return}
+  if(b.matches('[data-copymenu]')){rememberAction(r);openCopyMenu(r);return}
   if(b.matches('[data-copy]')){rememberAction(r);try{await navigator.clipboard.writeText(b.dataset.copy);toast(T('copiedToast'))}catch(err){toast(T('copyFailToast'))}return}
   if(b.matches('[data-share]')){rememberAction(r);const txt=b.dataset.share;try{if(navigator.share)await navigator.share({title:r.title,text:txt});else{await navigator.clipboard.writeText(txt);toast(T('shareCopiedToast'))}}catch(err){}return}
   if(b.matches('[data-error]')){rememberAction(r);openErrorEditor(r)}
@@ -730,7 +770,7 @@ async function showQuickList(kind,title){
  showModal(`<div class="modal-content quicklist-modal"><div class="quicklist-sticky-head"><button class="back-capsule big-action" id="quickBack">⬅️ ${esc(T('back'))}</button><h2>${esc(title)}</h2></div><div class="quicklist-body">${rows.length?rows.map(card).join(''):`<div class="card"><p>${esc(T('quickListEmpty'))}</p></div>`}</div></div>`);
  bindCards();$('#quickBack').onclick=closeModal;
 }
-function setLang(lang){if(lang!=='ru'&&lang!=='kz')return;S.lang=lang;storageSet('cart_lang',lang);$$('.lang').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));render()}
+function setLang(lang){if(lang!=='ru'&&lang!=='kz')return;S.lang=lang;storageSet('cart_lang',lang);$$('.lang').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));try{S.pwaSync&&S.pwaSync()}catch(e){}render()}
 function renderMore(){
  const host=$('#cards');
  host.innerHTML=`<div class="card more-card"><button id="aboutMoreBtn" class="pastel-small w100">${esc(T('aboutMoreBtn'))}</button><div class="share-row"><button id="qrBtn" class="pastel-small">${esc(T('qrShareBtn'))}</button><button id="shareLinkBtn" class="pastel-small">${esc(T('shareLinkBtn'))}</button></div><button id="installBtn" class="pastel-small w100">${esc(T('installBtn'))}</button><button id="refreshDataBtn" class="admin-blue w100">${esc(T('refreshDataBtn'))}</button></div><div class="card"><div class="footer-main">${esc(T('footerCopyright'))}</div></div><div class="card stats-card" id="statsCard">${statsCardHtml((()=>{try{return JSON.parse(storageGet('cart_plat_stats','null'))}catch(e){return null}})())}</div>`;
@@ -2837,11 +2877,16 @@ function setupPWA(){
   const NOW=()=>Date.now(),SNOOZE='cart_pwa_snooze',DONE='cart_pwa_done';
   const installed=()=>isStandaloneApp()||storageGet(DONE,'')==='1';
   const snoozed=()=>(Number(storageGet(SNOOZE,'0'))||0)>NOW();
-  let timer=0,shown=false;
+  let timer=0,shown=false,pending=false;
+  /* v1.0.0.7: плашка не рисуется, пока словарь languages.json не загружен (раньше вместо текста мелькали ключи installBannerText/installBannerBtn) */
+  const ready=()=>!!((L[S.lang]&&L[S.lang].installBannerText)||(L.ru&&L.ru.installBannerText));
+  const fill=()=>{const t=$('#pwaText'),g=$('#pwaGo'),x=$('#pwaX');if(t)t.textContent=T('installBannerText');if(g)g.textContent=T('installBannerBtn');if(x&&L[S.lang]&&L[S.lang].installBannerClose)x.setAttribute('aria-label',L[S.lang].installBannerClose)};
+  S.pwaSync=()=>{if(pending&&ready()){pending=false;show()}else if(shown)fill()};
   const hide=snooze=>{clearTimeout(timer);bar.classList.remove('show');setTimeout(()=>bar.classList.add('hidden'),450);shown=false;if(snooze)storageSet(SNOOZE,String(NOW()+24*3600*1000))};
   const show=()=>{
    if(shown||installed()||snoozed())return;
-   shown=true;$('#pwaText').textContent=T('installBannerText');$('#pwaGo').textContent=T('installBannerBtn');
+   if(!ready()){pending=true;return}
+   shown=true;fill();
    bar.classList.remove('hidden');requestAnimationFrame(()=>requestAnimationFrame(()=>bar.classList.add('show')));
    timer=setTimeout(()=>hide(true),25000);
   };

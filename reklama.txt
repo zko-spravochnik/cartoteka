@@ -1,2 +1,1 @@
 # village_code | row_id | expiry_date
-darinsk | 25 | 27.09.2026
