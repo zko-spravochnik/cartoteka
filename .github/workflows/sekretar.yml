@@ -1,0 +1,29 @@
+# КАРТОТЕКА v1.1.0.0: робот-секретарь. Не хранит секретов в файле: GOOGLE_WEBHOOK, ADMIN_CODE, MASTER_CODE берутся из
+# Settings -> Secrets and variables -> Actions -> Repository secrets. Работает в БОЕВОМ репозитории (CART_ENV=prod).
+name: sekretar
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch: {}
+concurrency:
+  group: sekretar
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Секретарь вносит одобренные заявки
+        run: python sekretar.py
+        env:
+          GOOGLE_WEBHOOK: ${{ secrets.GOOGLE_WEBHOOK }}
+          ADMIN_CODE: ${{ secrets.ADMIN_CODE }}
+          MASTER_CODE: ${{ secrets.MASTER_CODE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CART_ENV: prod

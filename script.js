@@ -13,7 +13,7 @@
    нижестоящая логика (idTile/idSub, рендер плиток, buildCandidateRow)
    не требовала структурных правок — меняется только источник данных.
    Резервные слоты 7-9 на обоих уровнях 9×9 помечены hidden:true. */
-const APP_VERSION='v1.0.0.7',SCHEMA=20;
+const APP_VERSION='v1.1.0.0',SCHEMA=20;
 /* v1.0.0.6: единый «Код входа в админку» = ADMIN_CODE шлюза. В код сайта он НЕ вшивается: проверку делает локальный сервер (/__auth), на нём хранится только отпечаток. */
 /* Нормализация введённой фразы: без кавычек-ёлочек и обычных кавычек, лишние
    пробелы схлопываются, регистр не учитывается (Пойду Покурю = ПОЙДУ ПОКУРЮ). */
@@ -401,13 +401,13 @@ function card(r){
    ПОЛНОСТЬЮ опускается, если хоть одно из двух полей пустое (никогда не
    показываем битый/localhost текст). */
 function businessCardText(r,numbers){
- const lines=['КАРТОТЕКА БӘЙТЕРЕК',r.title];
+ const lines=[T('shareHeader')||'КАРТОТЕКА',r.title];
  const line3=r.folder==='ЖИТЕЛИ'?r.residentNote:r.owner;
  if(line3&&line3!=='.')lines.push(line3);
  if(r.tags&&r.tags!=='.')lines.push(r.tags);
  if(numbers&&numbers.length)lines.push(fmtPhone(numbers[0].phone));
  else{const sc=scheduleCopyText(r);if(sc)lines.push(sc)}
- const appText=clean(APP_CFG.shareAppText||''),qrUrl=clean(shareUrl());
+ const appText=clean((L[S.lang]&&L[S.lang].shareAppText)||APP_CFG.shareAppText||''),qrUrl=clean(shareUrl());
  let footer='';
  if(appText&&qrUrl)footer=`\n\n${appText}\n${qrUrl}`;
  return lines.join('\n')+footer;
@@ -477,6 +477,24 @@ function openCopyMenu(r){
  showModal(`<div class="modal-content copy-modal"><div class="form-head"><button class="back-capsule big-action" id="copyBack">⬅️ ${esc(T('back'))}</button><h2>${esc(T('copyMenuTitle'))}</h2></div><div class="sector-grid">${html}</div></div>`);
  $('#copyBack').onclick=closeModal;
  $$('.copy-opt').forEach(b=>b.onclick=async()=>{const it=items[Number(b.dataset.i)];const ok=await copyText(it.txt);closeModal();toast(ok?T('copiedToast'):T('copyFailToast'))});
+}
+/* ===== v1.1.0.0: липкая кнопка [❌ Отмена] внизу каждого окна ===== */
+function setupCancelFooter(){
+ const mk=host=>{
+  if(!host||host.querySelector(':scope > .cancel-foot'))return;
+  if(host.classList.contains('welcome-modal')||host.classList.contains('no-cancel')||host.closest('.update-overlay'))return;
+  if(Array.from(host.querySelectorAll('button')).some(b=>/^\W*(Отмена|Бас тарту)\W*$/i.test((b.textContent||'').trim())))return;
+  const f=document.createElement('div');f.className='cancel-foot';
+  f.innerHTML=`<button type="button" class="cancel-btn big-action">❌ ${esc(T('cancel'))}</button>`;
+  f.firstChild.onclick=()=>{const ov=host.closest('.master-overlay');if(ov)ov.remove();else closeModal()};
+  host.appendChild(f);
+ };
+ const scan=()=>{
+  const d=document.querySelector('#modalRoot .modal-backdrop > div');
+  if(d)mk(d.querySelector(':scope > .modal-content, :scope > .schedule-modal')||d);
+  document.querySelectorAll('.master-overlay > .master-box').forEach(mk);
+ };
+ try{new MutationObserver(scan).observe(document.body,{childList:true,subtree:true});scan()}catch(e){}
 }
 function openCallPicker(numbers){
  const html=(numbers||[]).map(n=>`<a class="sector-btn big-action" href="tel:${esc(n.phone)}" style="display:block;text-decoration:none;text-align:center">${esc(n.label)} — ${esc(fmtPhone(n.phone))}</a>`).join('');
@@ -1430,7 +1448,7 @@ async function sendPendingToIntake(){
    const last=(typeof QEDIT!=='undefined'&&QEDIT.get(item.uid))||lines[lines.length-1]||'';
    if(!item.file||last.split(' | ').length!==20){markQueueError(item.uid,'bad_row');continue}
    const kind=item.kind==='EDIT'||item.kind==='DELETE'?item.kind:'NEW';
-   const payload={action:'submit',uid:item.uid,file:item.file,kind,
+   const payload={action:'submit',env:ENV.mode,uid:item.uid,file:item.file,kind,
     row:kind==='DELETE'||isChatRow(last)?last:markerSwap(last,'$'),
     original:kind==='EDIT'&&lines.length>1?markerSwap(lines[0],'$'):'',
     reason:clean(item.reason||item.reasonCode||''),village:clean(item.village||'')};
@@ -2164,7 +2182,7 @@ async function vaultRestore(){
 /* v1.0.0.6: ДВА ЗАМКА. Код входа открывает пульт в режиме «Только чтение»; изменения (запись, отправка, облачные действия)
    требуют Мастер-пароля: сервер выдаёт временную сессию (10 минут). Пароль и сессия живут только в памяти страницы. */
 let MSESS='',MSESS_UNTIL=0,MASTER_MEM='';
-const MUT_ACTIONS=['setStatus','reid','updateRow','setTelegram','testTelegram'];
+const MUT_ACTIONS=['setStatus','reid','updateRow','setTelegram','testTelegram','tgWebhook'];
 function hasMaster(){if(MSESS&&Date.now()<MSESS_UNTIL)return true;MSESS='';MASTER_MEM='';return false}
 function srvHeaders(){const h={'Content-Type':'application/json'};if(MSESS)h['X-Cart-Session']=MSESS;return h}
 async function masterLock(){MSESS='';MSESS_UNTIL=0;MASTER_MEM='';try{await fetch('/__lock',{method:'POST',cache:'no-store'})}catch(e){}}
@@ -2775,6 +2793,7 @@ function adminOpen(pocketOpen){
      <div id="secretsResult" class="secrets-result"></div>
     </div>
     <button class="admin-yellow w100" id="pushGas" type="button">${esc(T('syncBtn'))}</button>
+    <button class="admin-yellow w100" id="tgHook" type="button">${esc(T('tgHookBtn'))}</button>
    </div>
    <div class="hint">${esc(T('hintSecret'))}</div>
   </div>
@@ -2791,6 +2810,7 @@ function adminOpen(pocketOpen){
  };
  $('#readSecrets').onclick=gated(readSecretsFile);
  $('#pushGas').onclick=gated(pushGasCode);
+ $('#tgHook').onclick=gated(tgHookConnect);
  $('#vipBtn').onclick=vipMonitor;$('#queueBtn').onclick=gated(requestQueueMonitor);$('#reportBtn').onclick=operationalReport;$('#refreshAdminBtn').onclick=refreshData;$('#quarantineBtn').onclick=gated(quarantineMonitor);$('#dupeBtn').onclick=gated(duplicateInspector);$('#backupBtn').onclick=gated(doubleGitHubBackup);
  $('#auditBtn').onclick=auditModal;$('#aliasBtn').onclick=gated(aliasToolModal);
 }
@@ -2809,6 +2829,17 @@ function tgErrText(r){return (TG_ERR[r.error]||r.error||'?')+(r.detail?` (${r.de
    через токен GitHub — сразу для всей области. После записи сайт проверяет, отвечает ли скрипт. */
 /* v5.4.0.1: «Синхронизация Google Script»: локальный сервер (cartoteka_server.py) читает
    google_apps_script_webhook.gs и кладёт текст в ячейку A1 листа «Код» Google Таблицы. */
+/* v1.1.0.0: подключение пульта очереди в Первом Telegram-боте. Шлюз сам ставит веб-хук с секретом в ссылке; замок по ID чата. */
+async function tgHookConnect(){
+ const btn=$('#tgHook');if(btn)btn.disabled=true;
+ try{
+  const url=intakeUrl();
+  const r=await adminIntake({action:'tgWebhook',url});
+  if(!(r&&r.ok)){banner(T('tgHookFail',{error:(r&&(r.detail||r.error))||'?'}),true);return}
+  const i=await adminIntake({action:'tgWebhook',info:true});
+  banner(T('tgHookOk',{pending:i&&i.ok?i.pending:'?',err:(i&&i.lastError)?i.lastError:'—'}));
+ }finally{if(btn)btn.disabled=false}
+}
 async function pushGasCode(){
  const btn=$('#pushGas');if(btn)btn.disabled=true;
  try{
@@ -3052,6 +3083,7 @@ function init(){
  try{setupHistory()}catch(e){}
  try{setupSwipes()}catch(e){}
  try{setupPWA()}catch(e){}
+ try{setupCancelFooter()}catch(e){}
  try{setupSwMessageBridge()}catch(e){}
  if('serviceWorker' in navigator){
    navigator.serviceWorker.register('./service-worker.js?env='+encodeURIComponent(ENV.mode||'prod')).then(reg=>{scheduleSwNotifyCheck();setupUpdateFlow(reg)}).catch(()=>{});

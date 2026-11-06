@@ -1,8 +1,8 @@
 {
-  "schemaVersion": "v1.0.0.7",
-  "appVersion": "v1.0.0.7",
+  "schemaVersion": "v1.1.0.0",
+  "appVersion": "v1.1.0.0",
   "qrShareUrl": "https://zko-spravochnik.github.io/test-cartoteka/",
-  "shareAppText": "Сохраните этот контакт! А чтобы скачать весь Справочник округа Бәйтерек себе на телефон и бесплатно искать мастеров, такси и магазины без интернета, переходите по ссылке:",
+  "shareAppText": "Сохраните этот контакт! А чтобы скачать весь Справочник округов себе на телефон и бесплатно искать мастеров, такси и магазины без интернета, переходите по ссылке:",
   "qrMode": "admin-configured",
   "generatedAt": "2026-10-29",
   "region": "Западно-Казахстанская область",
@@ -1957,8 +1957,8 @@
       164
     ],
     "baza_zko_baiterek_rubezhinskoe.txt": [
-      0,
-      0
+      2,
+      2
     ],
     "baza_zko_baiterek_volodarskoe.txt": [
       1,
