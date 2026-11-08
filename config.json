@@ -1953,7 +1953,7 @@
   "envNote": "БОЕВОЙ конфиг. Подхватывается на живом домене. Запись идёт строго в репозиторий zko-spravochnik/cartoteka. Тестовый двойник — test_config.json.",
   "counts": {
     "baza_zko_baiterek_daryinskoe.txt": [
-      256,
+      257,
       165
     ],
     "baza_zko_baiterek_rubezhinskoe.txt": [
