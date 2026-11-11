@@ -5,7 +5,7 @@ const ENV_QS=(()=>{try{return new URL(self.location.href).searchParams.get('env'
 const ENV_TEST=ENV_QS?ENV_QS==='test':(()=>{try{const h=String(self.location.hostname||''),p=String(self.location.pathname||'');return /^(localhost|127\.|0\.0\.0\.0|\[?::1\]?$)/.test(h)||/\.local$/.test(h)||/^10\./.test(h)||/^192\.168\./.test(h)||/^172\.(1[6-9]|2\d|3[01])\./.test(h)||!!self.location.port||/test-cartoteka/.test(h+p)}catch(e){return false}})();
 const CONFIG_FILE=ENV_TEST?'test_config.json':'config.json';
 const CACHE_PREFIX=ENV_TEST?'test-cartoteka-':'cartoteka-';
-const CACHE=CACHE_PREFIX+'v1.1.0.0';
+const CACHE=CACHE_PREFIX+'v1.2.1.4';
 const CORE=['./','./index.html','./style.css','./validator.js','./script.js','./qr.js','./'+CONFIG_FILE,'./languages.json','./kazakhstan_geo.json','./categories.json','./id_aliases.json','./name_synonyms.json','./manifest.webmanifest','./icon.png','./icon-192.png','./icon-512.png','./header_folder_bg.jpg','./reklama.txt'];
 /* v5.0.1.0: стратегия Network First применена ко ВСЕМ конфигурационным шлюзам —
    config.json, kazakhstan_geo.json и текстовым базам жителей сёл.
@@ -22,8 +22,8 @@ async function dbFilesFromConfig(){
     const r=await fetch('./'+CONFIG_FILE,{cache:'no-store'});
     if(!r.ok)return[];
     const cfg=await r.json();
-    const v=Array.isArray(cfg.villages)&&cfg.villages[0];
-    if(v&&v.path)return['./'+v.path];
+    const vl=Array.isArray(cfg.villages)?cfg.villages:[];const v=vl[0],sh=vl.find(x=>x&&x.shared&&x.path);
+    if(v&&v.path)return['./'+v.path].concat(sh?['./'+sh.path]:[]);   /* v1.2.1.0: общий файл «Межгород» маленький — кэшируется сразу */
     const list=Array.isArray(cfg.files)?cfg.files:[];
     return list.slice(0,1).map(f=>'./'+f);
   }catch(e){return[]}

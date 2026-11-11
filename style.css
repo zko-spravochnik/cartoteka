@@ -935,3 +935,78 @@ body.dark .brand-footer{color:#f4eee2}
 .master-box .cancel-foot{bottom:0;margin:12px 0 0;padding:10px 0 4px;box-shadow:none}
 .cancel-btn{width:100%;min-height:54px;font-size:17px;font-weight:900;border:2px solid #e8a3a3;background:#ffecec;color:#a13030;border-radius:18px;cursor:pointer}
 body.dark .cancel-btn,.dark .cancel-btn{background:#4a2a2a;color:#ffd0d0;border-color:#8a4a4a}
+
+/* ===== v1.2.1.0: «Межгород / Весь регион» — нежно-бирюзовая широкая плитка, переключатель в анкете ===== */
+.hue-teal{--hue-bg:#e4f7f1;--hue-bd:#b6e6d8}
+body.dark .hue-teal{--dk-bg:#5fe3d0;--dk-fg:#04302b;--dk-card:#16443f;--dk-bd:#35c9b4}
+.v401-tiles .tile-wide{grid-column:1/-1}
+.region-switch{display:flex;align-items:center;gap:10px;padding:12px 14px;border:2px solid #b6e6d8;border-radius:16px;background:#e4f7f1;color:#12433b;font-weight:900;cursor:pointer}
+.region-switch input{width:22px;height:22px;flex:0 0 auto}
+.region-note{padding:10px 14px;border-radius:14px;background:#e4f7f1;color:#12433b;font-weight:700;font-size:15px}
+body.dark .region-switch,body.dark .region-note{background:#16443f;border-color:#35c9b4;color:#e8fffb}
+.region-go{margin-top:12px}
+
+/* ===== v1.2.1.1: «Вся область» — районы обслуживания, ссылка на карточку, мелкая вёрстка ===== */
+.form-head{flex-wrap:wrap}
+.form-head .back-capsule{flex:0 0 auto;width:auto!important;height:auto!important;min-width:0;white-space:nowrap;padding:8px 16px;display:inline-flex;align-items:center;gap:6px;line-height:1.1}
+.form-head h2{flex:1 1 100%;margin:6px 0 0;min-width:0}
+.region-areas-btn{background:#e4f7f1!important;color:#12433b!important;border:2px solid #b6e6d8!important;font-weight:900;text-align:center;margin-top:10px}
+body.dark .region-areas-btn{background:#16443f!important;color:#e8fffb!important;border-color:#35c9b4!important}
+.areas-list{display:flex;flex-direction:column;gap:8px;margin:12px 0 76px}
+.area-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--line,#dbe3ec);border-radius:14px;background:var(--card,#fff);font-weight:800;cursor:pointer}
+.area-row input{position:absolute;opacity:0;pointer-events:none}
+.area-box{flex:0 0 auto;width:24px;height:24px;border:2px solid #7aa7a0;border-radius:6px;background:#fff;display:inline-flex;align-items:center;justify-content:center}
+.area-row input:checked+.area-box{background:#1f9d8a;border-color:#1f9d8a}
+.area-row input:checked+.area-box::after{content:'✓';color:#fff;font-weight:900;font-size:17px;line-height:1}
+.areas-modal .cancel-foot{position:sticky;bottom:-18px;background:inherit;padding:10px 0 4px}
+.card-desc.region-serves{font-weight:800}
+.card.deep-hit{animation:deepHit 1.2s ease-in-out 3;box-shadow:0 0 0 3px #1f9d8a}
+@keyframes deepHit{50%{box-shadow:0 0 0 6px rgba(31,157,138,.45)}}
+.deep-modal h2{margin-top:0}
+
+/* v1.2.1.2: двухэтажное окно районов/сёл */
+.area-block{border:2px solid var(--line,#dbe3ec);border-radius:14px;background:var(--card,#fff);overflow:hidden}
+.area-block .area-head{display:flex;align-items:stretch;gap:8px}
+.area-block .area-head .area-row{flex:1 1 auto;border:0;border-radius:0;background:transparent}
+.area-more{flex:0 0 auto;border:0;border-left:2px solid var(--line,#dbe3ec);background:#e4f7f1;color:#12433b;font-weight:900;font-size:14px;padding:0 12px;min-width:132px;cursor:pointer}
+body.dark .area-more{background:#16443f;color:#e8fffb}
+.area-vils{display:flex;flex-direction:column;gap:6px;padding:8px 10px 12px;border-top:2px dashed var(--line,#dbe3ec)}
+.area-vils.hidden{display:none}
+.area-vrow{border-width:1px;padding:10px 12px;font-weight:700}
+
+/* v1.2.1.2: вертикальный столбик рабочих часов + обед */
+.hours-panel{margin-top:10px}
+.hours-list{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.hour-row{display:flex;align-items:center;gap:12px;padding:9px 14px;border:2px solid var(--line,#dbe3ec);border-radius:12px;background:var(--card,#fff);font-weight:800;cursor:pointer}
+.hour-row input{position:absolute;opacity:0;pointer-events:none}
+.hour-box{flex:0 0 auto;width:28px;height:28px;border:2px solid #7aa7a0;border-radius:7px;background:#fff;display:inline-flex;align-items:center;justify-content:center}
+.hour-row input:checked+.hour-box{background:#1f9d8a;border-color:#1f9d8a}
+.hour-row input:checked+.hour-box::after{content:'✓';color:#fff;font-weight:900;font-size:19px;line-height:1}
+.hour-row input:checked~span:last-child{color:#12433b}
+.lunch-box{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.lunch-box label{display:flex;flex-direction:column;gap:4px;font-weight:800}
+
+/* v1.2.1.2: чистка вёрстки */
+.search-pocket>summary{list-style:none!important}
+.search-pocket>summary::marker{content:none!important;font-size:0}
+.search-pocket>summary::before{content:none!important}
+.rest-pocket>summary::after{content:none!important}
+.form-head{display:flex;flex-direction:column;align-items:flex-start;gap:8px;position:static}
+.form-head .back-capsule{position:static!important;margin:0;transform:none}
+.form-head h2{flex:none;width:100%;margin:0;line-height:1.25}
+
+/* v1.2.1.2: кнопка онлайн-записи и поле ссылки */
+.book-online{display:block;margin:8px 0;padding:13px 14px;border-radius:16px;background:linear-gradient(135deg,#19b8c4,#0b8f9a);color:#fff!important;font-weight:900;font-size:17px;text-align:center;text-decoration:none;box-shadow:0 3px 10px rgba(11,143,154,.3)}
+.book-online:active{filter:brightness(.92)}
+.booking-field{display:flex;flex-direction:column;gap:4px;font-weight:800;margin-top:10px}
+
+/* v1.2.1.4: лента часов и обед НАМЕРТВО скрыты; раскрываются только кнопкой «[ 🕒 Свой график ]» */
+.hours-panel{display:none!important}
+.hours-panel.open{display:block!important}
+.schedule-quick4{flex-wrap:wrap}
+
+/* v1.2.1.4: панель из 4 барабанов, плавное раскрытие */
+.hours-panel.open{display:flex!important;flex-direction:column;gap:8px;margin-top:8px;animation:drumOpen .25s ease-out}
+@keyframes drumOpen{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.drum-row{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:800}
+.drum-row select{flex:0 0 58%;min-height:44px;font-size:16px;font-weight:800}

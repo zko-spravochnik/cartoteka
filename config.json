@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "v1.1.0.0",
-  "appVersion": "v1.1.0.0",
+  "schemaVersion": "v1.2.1.4",
+  "appVersion": "v1.2.1.4",
   "qrShareUrl": "https://zko-spravochnik.github.io/cartoteka/",
   "shareAppText": "Сохраните этот контакт! А чтобы скачать весь Справочник округов себе на телефон и бесплатно искать мастеров, такси и магазины без интернета, переходите по ссылке:",
   "qrMode": "admin-configured",
@@ -1756,6 +1756,17 @@
       "district": "oral",
       "path": "bazy_zko/uralsk/baza_zko_uralsk_uralsk.txt",
       "folder": "uralsk"
+    },
+    {
+      "file": "baza_zko_obshaya.txt",
+      "name": "Межгород / Вся область",
+      "code": "obshaya",
+      "index": 166,
+      "region": "zko",
+      "district": "",
+      "folder": "",
+      "path": "bazy_zko/baza_zko_obshaya.txt",
+      "shared": true
     }
   ],
   "files": [
@@ -1945,16 +1956,16 @@
   "ignored_pairs": [],
   "updateCritical": true,
   "updateNote": "true — критическое обновление (окно без отмены, только «Обновить сейчас»); false — обычное («Обновить» / «Позже»). Меняется перед каждым выпуском.",
-  "dbEpoch": "2026-11-06-v1006-cache-reset",
-  "nameNote": "name — чистое официальное имя (витрина и Г11 базы). fullName/legacyName — старое название в скобках только для преемственности СУБД. Для Байконыса на витрине показывается «Байконыс (Трекино)» (geo: displayRu).",
+  "dbEpoch": "2026-11-11-v1214-cache-reset",
+  "nameNote": "name — чистое официальное имя (витрина и Г11 базы). fullName/legacyName — старое название в скобках только для преемственности СУБД. Для Байконыса на витрине показывается «Байконыс (Трекино)» (geo: displayRu). v1.2.1.1: запись с shared:true (baza_zko_obshaya.txt, индекс 166) — общий файл «Межгород / Вся область», это НЕ село: в выбор посёлков и в files[] не входит.",
   "dbRoot": "bazy_zko",
   "repositoryUrl": "https://github.com/zko-spravochnik/cartoteka",
   "env": "prod",
   "envNote": "БОЕВОЙ конфиг. Подхватывается на живом домене. Запись идёт строго в репозиторий zko-spravochnik/cartoteka. Тестовый двойник — test_config.json.",
   "counts": {
     "baza_zko_baiterek_daryinskoe.txt": [
-      261,
-      165
+      257,
+      164
     ],
     "baza_zko_baiterek_rubezhinskoe.txt": [
       2,
@@ -2609,6 +2620,10 @@
       0
     ],
     "baza_zko_uralsk_uralsk.txt": [
+      0,
+      0
+    ],
+    "baza_zko_obshaya.txt": [
       0,
       0
     ]

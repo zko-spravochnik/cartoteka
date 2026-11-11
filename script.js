@@ -13,7 +13,7 @@
    нижестоящая логика (idTile/idSub, рендер плиток, buildCandidateRow)
    не требовала структурных правок — меняется только источник данных.
    Резервные слоты 7-9 на обоих уровнях 9×9 помечены hidden:true. */
-const APP_VERSION='v1.1.0.0',SCHEMA=20;
+const APP_VERSION='v1.2.1.4',SCHEMA=20;
 /* v1.0.0.6: единый «Код входа в админку» = ADMIN_CODE шлюза. В код сайта он НЕ вшивается: проверку делает локальный сервер (/__auth), на нём хранится только отпечаток. */
 /* Нормализация введённой фразы: без кавычек-ёлочек и обычных кавычек, лишние
    пробелы схлопываются, регистр не учитывается (Пойду Покурю = ПОЙДУ ПОКУРЮ). */
@@ -109,7 +109,7 @@ const $=selector=>document.querySelector(selector);
 const $$=selector=>Array.from(document.querySelectorAll(selector));
 const S={
   lang:storageGet('cart_lang','ru')||'ru',
-  village:storageGet('cart_village','')||'',
+  village:storageGet('cart_village','')||'',region:false,
   view:'home',stage:'main',tile:null,sub:null,tag:null,search:'',alphabet:'',
   rows:[],chats:[],byKey:new Map(),invalid:[],quarantine:[],files:new Map(),vip:new Map(),
   favorites:new Set(),favOrder:[],
@@ -123,9 +123,10 @@ const esc=v=>String(v??'').replace(/[&<>'\"]/g,m=>({'&':'&amp;','<':'&lt;','>':'
 const KZ_FOLD=[['ә','а'],['ғ','г'],['қ','к'],['ң','н'],['ө','о'],['ұ','у'],['ү','у'],['һ','х'],['і','и']];
 const norm=v=>{let s=clean(v).toLocaleLowerCase('ru-RU').replace(/ё/g,'е');for(const[a,b]of KZ_FOLD)s=s.split(a).join(b);return s.replace(/\s+/g,' ')};
 const digits=v=>clean(v).replace(/\D/g,'');
-const villageObj=()=>CONFIG.VILLAGES.find(v=>v.name===S.village)||CONFIG.VILLAGES[0]||null;
+const villageObj=()=>(S.region&&CONFIG.COMMON)||CONFIG.VILLAGES.find(v=>v.name===S.village)||CONFIG.VILLAGES[0]||null;
 const villageFile=()=>villageObj()?.file||'';
-const xOfFile=file=>Number(CONFIG.VILLAGES.find(v=>v.file===file)?.index||0);
+const formFileOf=fd=>fd.get('region')==='1'&&CONFIG.COMMON?CONFIG.COMMON.file:(CONFIG.VILLAGES.find(v=>v.name===fd.get('geo'))?.file||'');
+const xOfFile=file=>Number(CONFIG.VILLAGES.find(v=>v.file===file)?.index||(CONFIG.COMMON&&CONFIG.COMMON.file===file?CONFIG.COMMON.index:0)||0);
 const fmtPhone=v=>{const d=digits(v);return d.length===11?`+7 ${d.slice(1,4)} ${d.slice(4,7)}-${d.slice(7,9)}-${d.slice(9)}`:clean(v)};
 function startSplash(){SPLASH_STARTED_AT=Date.now();const root=$('#launchSplash');if(!root)return;root.setAttribute('aria-hidden','false');root.classList.remove('fade-out')}
 function finishSplash(){const root=$('#launchSplash');if(!root)return;const wait=Math.max(0,3000-(Date.now()-SPLASH_STARTED_AT));setTimeout(()=>{root.classList.add('fade-out');const remove=()=>root.remove();root.addEventListener('transitionend',remove,{once:true});setTimeout(remove,900)},wait)}
@@ -186,6 +187,11 @@ const FALLBACK_VILLAGE={file:'baza_zko_baiterek_daryinskoe.txt',name:'Дарьи
 async function loadConfig(){
  let cfg={};
  try{const r=await fetch(`${ENV.configFile}?v=${Date.now()}`,{cache:'no-store'});if(r.ok)cfg=await r.json()}catch(e){cfg={}}
+ /* v1.2.1.0: запись с флагом shared:true — общий файл «Межгород / Вся область» (индекс 166). Это НЕ село: в выбор посёлков и счётчики сёл он не попадает. */
+ const sharedRaw=Array.isArray(cfg.villages)?cfg.villages.find(v=>v&&v.shared):null;
+ CONFIG.COMMON={file:String(sharedRaw?.file||'baza_zko_obshaya.txt'),name:String(sharedRaw?.name||'Межгород / Вся область'),code:'obshaya',index:Number(sharedRaw?.index)||166,path:String(sharedRaw?.path||'bazy_zko/baza_zko_obshaya.txt'),region:'zko',district:'',folder:'',shared:true};
+ if(Array.isArray(cfg.villages))cfg.villages=cfg.villages.filter(v=>!(v&&v.shared));
+ if(Array.isArray(cfg.files))cfg.files=cfg.files.filter(f=>f!==CONFIG.COMMON.file);
  let villages=[];
  if(Array.isArray(cfg.villages)){villages=cfg.villages.map(v=>{try{const index=Number(v.index);if(!v.file||!v.name||!Number.isInteger(index)||index<1)return null;return{file:String(v.file),name:String(v.name),code:String(v.code||v.file),index,region:String(v.region||cfg.regions?.[0]?.value||'zko'),district:String(v.district||cfg.districts?.[0]?.value||'beyterek'),folder:String(v.folder||''),path:String(v.path||'')}}catch(e){return null}}).filter(Boolean)}
  if(!villages.length)villages=[FALLBACK_VILLAGE];
@@ -195,7 +201,7 @@ async function loadConfig(){
  CONFIG.REGIONS=Array.isArray(cfg.regions)&&cfg.regions.length?cfg.regions.map(x=>typeof x==='string'?{value:x,label:x}:{value:String(x.value),label:String(x.label||x.value)}):[{value:'zko',label:'Западно-Казахстанская область'}];
  CONFIG.DISTRICTS=Array.isArray(cfg.districts)&&cfg.districts.length?cfg.districts.map(x=>typeof x==='string'?{region:CONFIG.REGIONS[0].value,value:x,label:x}:{region:String(x.region||CONFIG.REGIONS[0].value),value:String(x.value),label:String(x.label||x.value)}):[{region:CONFIG.REGIONS[0].value,value:'beyterek',label:'район Бәйтерек'}];
  CONFIG.VILLAGES=villages;CONFIG.FILES=files;
- CONFIG.DBROOT=String(cfg.dbRoot||'');CONFIG.PATHS=new Map(villages.filter(v=>v.path).map(v=>[v.file,v.path]));
+ CONFIG.DBROOT=String(cfg.dbRoot||'');CONFIG.PATHS=new Map(villages.filter(v=>v.path).map(v=>[v.file,v.path]));CONFIG.PATHS.set(CONFIG.COMMON.file,CONFIG.COMMON.path);
  CONFIG.ROUTE_59_ALLOWED_X=Array.isArray(cfg.routeRules?.bus59AllowedX)?cfg.routeRules.bus59AllowedX.map(Number).filter(Number.isInteger):[1,3,4];
  try{APP_CFG=Object.assign(APP_CFG,cfg)}catch(e){}
  CONFIG.REPO=String(cfg.repository||cfg.github?.repository||cfg.repositoryName||CONFIG.REPO||'');
@@ -383,12 +389,14 @@ function card(r){
  const sub=r.folder==='ЖИТЕЛИ'?r.residentNote:r.owner;
  if(sub&&sub!=='.'&&norm(sub)!==norm(r.title))h+=`<div class="card-subtitle">👤 ${esc(sub)}</div>`;
  if(r.tags&&r.tags!=='.')h+=`<div class="card-desc">${esc(r.tags)}</div>`;
- if(r.social&&r.social!=='.')h+=`<div class="card-desc">🏷️ ${esc(r.social)}</div>`;
+ if(isRegionRow(r))h+=`<div class="card-desc region-serves">${esc(regionServesText(r))}</div>`;
+ if(r.social&&r.social!=='.'&&!bookingOf(r.social))h+=`<div class="card-desc">🏷️ ${esc(r.social)}</div>`;
  if(r.address&&r.address!=='.')h+=`<div class="card-desc">📍 ${esc(r.address)}</div>`;
  h+=phoneBlockHtml(r)||noPhoneActionsHtml(r);
+ {const bu=bookingOf(r.social)||((String(r.schedule||'').match(LEGACY_BOOK_RX)||[])[1]||'');if(bu)h+=`<a class="book-online" href="${esc(bu)}" target="_blank" rel="noopener noreferrer">📅 ${esc(T('bookOnlineBtn'))}</a>`}
  h+=bizLinksHtml(r);
- if(r.schedule&&/^SHIFT\|/i.test(r.schedule))h+=shiftCalendar(r);
- h+=`<div class="schedule-line">🕒 ${esc(/^SHIFT\|/i.test(r.schedule)?shiftSummary(r.schedule):(r.schedule&&r.schedule!=='.'?r.schedule:T('scheduleMissing')))}</div><div class="id-line">${esc(r.geo)} · ${esc(T('idLinePrefix'))} ${esc(r.id)}</div></article>`;
+ const schP=schedNoBooking(r.schedule);if(schP&&/^SHIFT\|/i.test(schP))h+=shiftCalendar({...r,schedule:schP});
+ h+=`<div class="schedule-line">🕒 ${esc(/^SHIFT\|/i.test(schP)?shiftSummary(schP):(schP&&schP!=='.'?schP:T('scheduleMissing')))}</div><div class="id-line">${esc(isRegionRow(r)?T('shareRegionLine'):r.geo)} · ${esc(T('idLinePrefix'))} ${esc(r.id)}</div></article>`;
  return h;
 }
 /* v5.2.0.1: трёхэтажная WhatsApp-визитка строго по графам Конституции —
@@ -400,8 +408,33 @@ function card(r){
    (shareAppText+qrShareUrl), склеенная через пустую строку-отступ,
    ПОЛНОСТЬЮ опускается, если хоть одно из двух полей пустое (никогда не
    показываем битый/localhost текст). */
+/* v1.2.1.1: районы обслуживания «Вся область». Г11 хранит русские названия через «; » (или «Вся область»); в карточке показываются на языке интерфейса. */
+const isRegionRow=r=>!!(CONFIG.COMMON&&r&&r.file===CONFIG.COMMON.file);
+function regionAreaList(){return (GEO.districts||[]).filter(d=>d.regionSlug==='zko')}
+function regionAreaRuName(slug){return (L.ru&&L.ru.geoDistricts&&L.ru.geoDistricts[slug])||slug}
+function regionAreasParse(v){const m=new Map(),ok=new Set(regionAreaList().map(d=>d.slug));String(v||'').split(',').map(x=>x.trim()).filter(Boolean).forEach(t=>{const a=t.split(':'),sl=a[0];if(!ok.has(sl))return;const vs=(a[1]||'').split('+').filter(Boolean);m.set(sl,vs.length?new Set(vs):null)});return m}   /* null = район целиком; Set = только эти сёла */
+function regionAreasSerialize(m){return[...m.entries()].map(([sl,vs])=>vs&&vs.size?sl+':'+[...vs].join('+'):sl).join(',')}
+function regionAreasIsAll(m){return regionAreaList().every(d=>m.has(d.slug)&&m.get(d.slug)===null)}
+function regionAreasVillages(slug){return(GEO.villages||[]).filter(v=>v.districtSlug===slug)}
+function regionAreasSlugs(v){return[...regionAreasParse(v).keys()]}
+/* v1.2.1.2: Г11 = «Байтерек (Дарьинское, Озёрное); Акжаик» — район целиком или район со списком сёл */
+function regionAreasG11(v){const m=regionAreasParse(v);if(!m.size||regionAreasIsAll(m))return T('regionAllAreaName');
+ return regionAreaList().filter(d=>m.has(d.slug)).map(d=>{const vs=m.get(d.slug),base=regionAreaRuName(d.slug);if(!vs)return base;const names=regionAreasVillages(d.slug).filter(x=>vs.has(x.slug)).map(x=>String(x.nameRu).replace(/\s*\([^)]*р-н\)\s*$/,''));return names.length?`${base} (${names.join(', ')})`:base}).join('; ')}
+function regionServesText(r){
+ const g=clean(r.geo);
+ if(!g||g==='.'||/вся область|бүкіл облыс|межгород|қалааралық/i.test(g))return T('regionServesAll');
+ const names=g.split(';').map(x=>x.trim()).filter(Boolean).map(n=>{const mm=n.match(/^(.*?)\s*\((.+)\)$/),base=mm?mm[1].trim():n,d=regionAreaList().find(x=>regionAreaRuName(x.slug)===base),nm=d?districtName(d):base;return mm?`${nm} (${mm[2]})`:nm});
+ return T('regionServes',{list:names.join(names.some(x=>x.includes('('))?'; ':', ')});
+}
+function cardLink(r){
+ const base=clean(shareUrl());if(!base)return '';
+ const code=isRegionRow(r)?CONFIG.COMMON.code:(CONFIG.VILLAGES.find(v=>v.file===r.file)?.code||'');
+ return `${base}${base.includes('?')?'&':'?'}card=${encodeURIComponent(r.id)}${code?'&v='+encodeURIComponent(code):''}`;
+}
 function businessCardText(r,numbers){
- const lines=[T('shareHeader')||'КАРТОТЕКА',r.title];
+ const lines=[T('shareHeader')||'КАРТОТЕКА'];
+ if(CONFIG.COMMON&&r.file===CONFIG.COMMON.file)lines.push(T('shareRegionLine'));   /* v1.2.1.0: для общего файла — «Межгород / Вся область» на месте названия села */
+ lines.push(r.title);
  const line3=r.folder==='ЖИТЕЛИ'?r.residentNote:r.owner;
  if(line3&&line3!=='.')lines.push(line3);
  if(r.tags&&r.tags!=='.')lines.push(r.tags);
@@ -409,7 +442,7 @@ function businessCardText(r,numbers){
  else{const sc=scheduleCopyText(r);if(sc)lines.push(sc)}
  const appText=clean((L[S.lang]&&L[S.lang].shareAppText)||APP_CFG.shareAppText||''),qrUrl=clean(shareUrl());
  let footer='';
- if(appText&&qrUrl)footer=`\n\n${appText}\n${qrUrl}`;
+ if(appText&&qrUrl)footer=`\n\n${appText}\n${cardLink(r)||qrUrl}`;   /* v1.2.1.1: прямая ссылка на эту карточку (?card=ID&v=код) */
  return lines.join('\n')+footer;
 }
 function phoneBlockHtml(r){
@@ -450,8 +483,8 @@ function actionsRowHtml(r,numbers){
 }
 function noPhoneActionsHtml(r){return `<div class="phone-block phone-block-bare">${actionsRowHtml(r,[])}</div>`}
 function scheduleCopyText(r){
- const v=r.schedule;if(!v||v==='.')return'';
- if(/^SHIFT\|/i.test(v))return shiftSummary(v);
+ let v=r.schedule;if(!v||v==='.')return'';
+ v=schedNoBooking(v);if(/^SHIFT\|/i.test(v))return shiftSummary(v);
  return String(v).split(/\s*[|｜]\s*/).map(x=>x.trim()).filter(Boolean).join('\n');
 }
 /* full — всё видимое на карточке (без технической строки с ID и без кнопок); info — только сама информация (без названия, владельца и телефонов) */
@@ -459,7 +492,7 @@ function cardPlainText(r,mode){
  const lines=[],sub=r.folder==='ЖИТЕЛИ'?r.residentNote:r.owner,ok=v=>v&&v!=='.';
  if(mode==='full'){lines.push(r.title);if(ok(sub)&&norm(sub)!==norm(r.title))lines.push('👤 '+sub)}
  if(ok(r.tags))lines.push(r.tags);
- if(ok(r.social))lines.push('🏷️ '+r.social);
+ if(ok(r.social)&&!bookingOf(r.social))lines.push('🏷️ '+r.social);
  if(ok(r.address))lines.push('📍 '+r.address);
  if(mode==='full')for(const n of rowNumbers(r))lines.push('📞 '+fmtPhone(n.phone));
  const sc=scheduleCopyText(r);if(sc)lines.push('🕒 '+sc);
@@ -610,13 +643,20 @@ function renderTiles(){
   }
   grid.className='page v401-tiles';
   for(const st of SUPER_TILES){
-    if(st.hidden)continue;
+    if(st.hidden||st.id===9)continue;   /* плитка 9 («Межгород») рисуется отдельной широкой плиткой ниже */
     const count=mainTileRows(st.id).length;
     const b=document.createElement('button');
     b.className='tile pastel-tile '+hueOf(st.id);
     b.innerHTML=`<span class="tile-emoji">${st.emoji}</span><span class="tile-title">${esc(superLabel(st))}</span><small class="tile3-foot"><span class="foot-id" aria-hidden="true">📂</span><span class="foot-count">${esc(contactsLabel(count))}</span><span class="foot-go" aria-hidden="true">↗</span></small>`;
     b.onclick=()=>openSuperTile(st.id);
     grid.appendChild(b);
+  }
+  const st9=SUPER_TILES.find(x=>x.id===9&&!x.hidden);
+  if(st9&&CONFIG.COMMON){
+    const n9=villageCountsOf(CONFIG.COMMON.file)[0];
+    const w=document.createElement('button');w.type='button';w.className='tile pastel-tile tile-wide '+hueOf(9);w.id='regionTile';
+    w.innerHTML=`<span class="tile-emoji">${st9.emoji}</span><span class="tile-title">${esc(superLabel(st9))}</span><small class="tile3-foot"><span class="foot-id" aria-hidden="true">📂</span><span class="foot-count">${esc(contactsLabel(n9))}</span><span class="foot-go" aria-hidden="true">↗</span></small>`;
+    w.onclick=()=>openRegion();grid.appendChild(w);
   }
   host.appendChild(grid);
   if(q)q.innerHTML=`<button id="sosBtn" type="button" class="sos-compact">🆘 SOS</button><div class="chat-blocks"><button id="waBlock" type="button" class="chat-block wa">🟢 ${esc(T('chatWaTitle'))}</button><button id="tgBlock" type="button" class="chat-block tg">🔵 ${esc(T('chatTgTitle'))}</button></div><div class="home-smart-grid"><button class="smart-card" id="recentBtn">🕘<b>${esc(T('quickRecent'))}</b><small>${esc(T('quickRecentDesc'))}</small></button><button class="smart-card" id="popularBtn">⭐<b>${esc(T('quickPopular'))}</b><small>${esc(T('quickPopularDesc'))}</small></button></div>`;
@@ -629,7 +669,14 @@ function renderTiles(){
   $('#recentBtn')?.addEventListener('click',()=>showQuickList('recent','🕘 '+T('quickRecent')));
   $('#popularBtn')?.addEventListener('click',()=>showQuickList('popular','⭐ '+T('quickPopular')));
 }
-function openSuperTile(id){const n=Number(id);if(!Number.isInteger(n)||n<1||n>9)return;S.view='home';S.stage='sub';S.tile=n;S.sub=null;S.tag=null;render();scrollTop()}
+/* v1.2.1.0: вход в «Межгород / Вся область»: общий файл загружается лениво (один раз), далее работают обычные экраны плиток/карточек. */
+async function openRegion(file){
+ if(!CONFIG.COMMON)return false;
+ if(!S.loaded.has(CONFIG.COMMON.file)){toast(T('regionLoadingToast'));const ok=await loadVillageFile(CONFIG.COMMON.file);if(!ok){dropVillageRows(CONFIG.COMMON.file);buildRows();toast(T('regionLoadFailToast'));return false}}
+ S.region=true;S.view='home';S.stage='sub';S.tile=9;S.sub=null;S.tag=null;S.search='';S.alphabet='';render();scrollTop();return true;
+}
+function regionRows(){const c=CONFIG.COMMON;if(!c||!S.loaded.has(c.file))return[];return S.rows.filter(r=>r.file===c.file&&rowX(r)===c.index)}
+function openSuperTile(id){const n=Number(id);if(!Number.isInteger(n)||n<1||n>9)return;if(n===9&&!S.region){openRegion();return}S.view='home';S.stage='sub';S.tile=n;S.sub=null;S.tag=null;render();scrollTop()}
 function openSubTile(mainId,subId){const m=Number(mainId),s=Number(subId);if(!Number.isInteger(m)||!Number.isInteger(s))return;S.view='category';S.tile=m;S.sub=s;S.tag=null;S.alphabet='';S.search='';const inp=$('#searchInput');if(inp)inp.value='';render();scrollTop()}
 function renderFolder(){
   const host=$('#categoryFolder');const mainId=S.tile,subId=S.sub;
@@ -655,8 +702,16 @@ function renderFolder(){
    запоминается в S.pocketOpen и переживает перерисовку (например, от
    алфавитного радара по ЭТАП 2) — сбрасывается ТОЛЬКО когда реально
    меняется сама строка поиска. */
-function renderSearchPockets(host,commercial,residents){
- if(S.lastPocketSearch!==S.search){S.pocketOpen={commercial:false,residents:false};S.lastPocketSearch=S.search}
+/* v1.2.1.0: поиск по общему файлу «Межгород / Вся область»: название, владелец, теги, адрес, география, телефон. Слова запроса ищутся в любом порядке. */
+function regionSearchRows(q0){
+ const c=CONFIG.COMMON;if(!c)return[];
+ if(!S.loaded.has(c.file)){if(!S.loading.has(c.file))loadVillageFile(c.file).then(()=>{if(S.view==='search'&&S.search)renderCards()}).catch(()=>{});return[]}
+ const toks=norm(q0).split(' ').filter(Boolean),qd=phoneQueryDigits(q0);if(!toks.length)return[];
+ return vipFirst(regionRows().filter(r=>{if(qd&&rowPhoneMatch(r,qd))return true;const hay=norm([r.title,r.owner,r.tags,r.address,r.geo,r.folder].filter(x=>x&&x!=='.').join(' '));return toks.every(t=>hay.includes(t))}));
+}
+function renderSearchPockets(host,commercial,residents,region){
+ region=region||[];
+ if(S.lastPocketSearch!==S.search){S.pocketOpen={commercial:false,residents:false,region:false};S.lastPocketSearch=S.search}
  const commHtml=commercial.length?commercial.map(card).join(''):`<div class="card"><h3>${esc(T('noMatches'))}</h3></div>`;
  const resHtml=residents.length?residents.map(card).join(''):`<div class="card"><h3>${esc(T('noMatches'))}</h3></div>`;
  host.innerHTML=`
@@ -667,14 +722,22 @@ function renderSearchPockets(host,commercial,residents){
   <details class="search-pocket" id="pocketResidents" ${S.pocketOpen.residents?'open':''}>
    <summary>${esc(T('residentsPocketTitle',{count:residents.length}))}</summary>
    <div class="search-pocket-body">${resHtml}</div>
+  </details>
+  <details class="search-pocket region-pocket" id="pocketRegion" ${S.pocketOpen.region?'open':''}>
+   <summary>${esc(T('regionPocketTitle',{count:region.length}))}</summary>
+   <div class="search-pocket-body">${region.length?region.map(card).join(''):`<div class="card"><h3>${esc(T('noMatches'))}</h3></div>`}</div>
   </details>`;
  bindCards();
+ $('#pocketRegion')?.addEventListener('toggle',e=>{S.pocketOpen.region=e.target.open});
  $('#pocketCommercial')?.addEventListener('toggle',e=>{S.pocketOpen.commercial=e.target.open});
  $('#pocketResidents')?.addEventListener('toggle',e=>{S.pocketOpen.residents=e.target.open});
 }
 /* v5.4.0.0: пустая категория не прячется — по клику показывается дружелюбная заглушка. VIP-карточки всегда выше остальных. */
+const REGION_SUB_OF={'3/1':1,'3/5':2,'3/6':3,'2/1':4,'2/3':4,'1/4':5};   /* пустая категория села -> подходящая региональная подкатегория (иначе — главный экран «Межгород») */
 function renderEmptyStub(host){
- host.innerHTML=`<div class="empty-stub ${hueOf(S.tile,S.sub)}"><div class="empty-stub-emoji">🌱</div><p>${esc(T('emptyCategoryStub'))}</p></div>`;
+ const btn=(!S.region&&CONFIG.COMMON&&SUPER_TILES.some(x=>x.id===9&&!x.hidden))?`<button type="button" class="primary big-action w100 region-go" id="regionGo">🌍 ${esc(T('regionGoBtn'))}</button>`:'';
+ host.innerHTML=`<div class="empty-stub ${hueOf(S.tile,S.sub)}"><div class="empty-stub-emoji">🌱</div><p>${esc(T(S.region?'emptyRegionStub':'emptyCategoryStub'))}</p>${btn}</div>`;
+ const go=$('#regionGo');if(go){const sub=REGION_SUB_OF[`${S.tile}/${S.sub}`]||0;go.onclick=async()=>{if(!await openRegion())return;if(sub)openSubTile(9,sub)}}
 }
 /* v5.4.0.1: КАРУСЕЛЬ — VIP всегда наверху, а внутри VIP-блока порядок перемешивается заново при каждой загрузке страницы */
 const VIP_SEED=Math.floor(Math.random()*2147483647)+1;
@@ -702,13 +765,13 @@ function renderCards(){
   if(S.view==='search'&&S.search){
     const commercial=applyPinnedOnTop(rows.filter(r=>r.homeParts));
     const res=applyAlphabet(searchResidentsInVillage(S.search));
-    renderSearchPockets(host,commercial,res);return;
+    renderSearchPockets(host,commercial,res,regionSearchRows(S.search));return;
   }
   host.innerHTML=rows.length?rows.map(card).join(''):`<div class="card"><h3>${esc(T('noResultsGeneric'))}</h3></div>`;
   bindCards();
 }
 function renderFavoritesView(host){
-  let rows=currentVillageRows().filter(r=>S.favorites.has(favKey(r)));
+  let rows=currentVillageRows().concat(regionRows()).filter(r=>S.favorites.has(favKey(r)));
   const stubKeys=favStubKeys();
   if(!rows.length&&!stubKeys.length){host.innerHTML=`<div class="card"><h3>${esc(T('favEmpty'))}</h3></div>`;bindCards();return}
   const mode=S.favSettings?.mode||'category';
@@ -798,6 +861,7 @@ function renderMore(){
 /* Липкий блок «Назад»/плиток прижимается ровно под шапкой (под синей кнопкой «Добавить»): высота шапки меряется на лету. */
 function syncFolderTop(){try{const h=$('#mainHeader');if(h)document.documentElement.style.setProperty('--folder-top',Math.round(h.getBoundingClientRect().height)+'px')}catch(e){}}
 function render(){
+  if(S.region&&S.tile!==9)S.region=false;   /* v1.2.1.0: режим «Вся область» живёт только внутри плитки 9 */
   syncHeader();syncFolderTop();
   try{const bf=$('#brandFooter');if(bf)bf.textContent=T('brandFooter')}catch(e){}
   const home=$('#homeView'),list=$('#listView'),folder=$('#categoryFolder');
@@ -815,7 +879,7 @@ function render(){
   else if(S.view==='residents'){$('#listToolbar').innerHTML=`<div class="list-title">👥 ${esc(T('navResidents'))}</div>`;renderCards()}
   else if(S.view==='search'){$('#listToolbar').innerHTML=`<div class="list-title">🔎 ${esc(T('navSearch'))}</div>`;renderCards()}
   else if(S.view==='favorites'){$('#listToolbar').innerHTML=`<div class="list-title">⭐ ${esc(T('navFavorites'))}</div><button id="favSettingsBtn" class="fav-settings-btn" type="button" aria-label="${esc(T('favSettingsAria'))}">⚙️</button>`;const gb=$('#favSettingsBtn');if(gb)gb.onclick=favSettingsModal;renderCards()}
-  else{$('#listToolbar').innerHTML=`<div class="list-title">… ${esc(T('navMore'))}</div>`;renderMore()}
+  else{$('#listToolbar').innerHTML=`<div class="list-title">${esc(T('navMore'))}</div>`;renderMore()}
 }
 /* v1.0.0.6: ШТОРКА ХЕДЕРА. Язычок справа от синей плашки сворачивает всю шапку «Картотека» вверх; состояние запоминается
    навсегда (localStorage) и не сбрасывается при переходах по категориям и вкладкам, т.к. класс висит на body. */
@@ -1075,11 +1139,15 @@ function villageCityCode(villageName){
  return String((gv&&gv.atcCode)||(d&&d.phoneCode)||'').replace(/\D/g,'');
 }
 function sanitizeCityDigits(raw,code){
- let digits=String(raw||'').replace(/\D/g,'');
- if(!digits)return '.';
+ /* v1.2.1.2: знак «+» перед семёркой железно сохраняется и в городских номерах (+77113121430).
+    Короткий номер получает код АТС села и ведущую семёрку; полный — только нормализуется. */
+ let d=String(raw||'').replace(/\D/g,'');
+ if(!d)return '.';
  const c=String(code||'').replace(/\D/g,'');
- if(c&&digits.length<=7&&!digits.startsWith(c))digits=c+digits;
- return digits;
+ if(d.length===11&&d[0]==='8')d='7'+d.slice(1);
+ if(c&&d.length<=7&&!d.startsWith(c))d=c+d;
+ if(d.length===10&&d[0]==='7')d='7'+d;
+ return d.length>=10?'+'+d:d;
 }
 function sanitizeMobileE164(raw){
  let digits=String(raw||'').replace(/\D/g,'');
@@ -1090,19 +1158,21 @@ function sanitizeMobileE164(raw){
  return'+'+digits;
 }
 function buildCandidateRow(fd,mode){
- const resident=mode==='resident',village=clean(fd.get('geo')),districtSlug=clean(fd.get('geoDistrict'))||'beyterek',gv=geoVillageByName(districtSlug,village),activeVillage=CONFIG.VILLAGES.find(v=>v.name===village),file=activeVillage?.file||villageFile(),X=xOfFile(file);
- const folderMainId=Number(fd.get('superTile'))||6;
- const mainId=Number(fd.get('superTile'))||6,subId=Number(fd.get('subTile'))||6;
+ const resident=mode==='resident',regionForm=!resident&&fd.get('region')==='1'&&!!CONFIG.COMMON,village=regionForm?CONFIG.COMMON.name:clean(fd.get('geo')),districtSlug=clean(fd.get('geoDistrict'))||'beyterek',gv=regionForm?null:geoVillageByName(districtSlug,village),activeVillage=regionForm?CONFIG.COMMON:CONFIG.VILLAGES.find(v=>v.name===village),file=activeVillage?.file||villageFile(),X=xOfFile(file);
+ const folderMainId=Number(fd.get('superTile'))||(regionForm?9:6);
+ const mainId=folderMainId,subId=Number(fd.get('subTile'))||6;
  const subMeta=(SUB_TILES[mainId]||[]).find(s=>s.sub===subId);
  /* v5.2.0.3: Г2 для бизнеса склеивается через тире «Главная — Подкатегория»,
     а не одной лишь главной плиткой, как раньше. */
  const mainTileMeta=SUPER_TILES.find(x=>x.id===folderMainId);
  const folder=resident?'ЖИТЕЛИ':(mainTileMeta?`${superLabel(mainTileMeta)}${subMeta?' — '+subLabel(subMeta):''}`:'ПРОЧЕЕ');
  const title=clean(fd.get('title'))||'.',person=clean(fd.get('person'))||'.',address=clean(fd.get('address'))||'.';
- const city=sanitizeCityDigits(fd.get('city'),villageCityCode(fd.get('geo'))),m1=sanitizeMobileE164(fd.get('mobile1')),m2=sanitizeMobileE164(fd.get('mobile2'));
+ const city=regionForm?'.':sanitizeCityDigits(fd.get('city'),villageCityCode(fd.get('geo'))),m1=sanitizeMobileE164(fd.get('mobile1')),m2=sanitizeMobileE164(fd.get('mobile2'));
  const lunch=clean(fd.get('lunchValue'));
  let tags=clean(fd.get('tags'))||'.',social=resident?'.':clean(fd.get('social'))||'.',schedule=clean(fd.get('scheduleValue'))||T('scheduleNoneValue');
- if(lunch)schedule=`${schedule}${T('schedulePreviewLunch',{value:lunch})}`;
+ schedule=schedJoin(schedule,lunch);
+ const bookU=resident?'':normBookingUrl(fd.get('bookingUrl'));if(bookU===null){toast(T('bookingUrlBad'));return}
+ if(bookU){if(social!=='.')tags=tags==='.'?social:`${tags}, ${social}`;social=bookU}   /* Г13 = чистая ссылка; прежний текст метки уходит в теги Г10 */
  const shift=/^SHIFT\|/i.test(schedule);
  /* v5.3.0.4: T2 — явный выбор плитки в Анкете; если выбран «авто» — подбор по названию/тегам относительно названий плиток из categories.json. */
  function matchTileIndex(sb,typedText){const tl=tilesOf(sb);if(!tl||!typedText)return 0;const hay=norm(typedText);let best=0,bestLen=0;for(const t of tl){for(const nm of [t.ru,t.kz]){const w=norm(nm||'');if(!w)continue;for(const part of w.split(/[\/,;]+/).map(x=>x.trim()).filter(x=>x.length>2)){if(hay.includes(part)&&part.length>bestLen){best=t.t2;bestLen=part.length}}}}return best}
@@ -1124,7 +1194,7 @@ function buildCandidateRow(fd,mode){
  const id=isNewVillage?String(CONFIG.VILLAGES.length+1):nextZoneId(file,resident,mainId,subId);
  /* v5.2.0.3: Г11 — строго официальное имя села «с. {Название}», без
     служебного технического префикса «зона». */
- return [id,folder,title,resident?'.':person,resident?person:'.',city,m1,m2,address,tags,`с. ${village}`,schedule,social,'R','R','R',home,res,search,'NEW'].join(' | ');
+ return [id,folder,title,resident?'.':person,resident?person:'.',city,m1,m2,address,tags,regionForm?regionAreasG11(fd.get('areas')):`с. ${village}`,schedule,social,'R','R','R',home,res,search,'NEW'].join(' | ');
 }
 /* ===== v1.0.0.6: блоки «Группы WhatsApp» / «Каналы Telegram» и анкета «Добавить ссылку» ===== */
 /* v1.0.0.6: официальная группа WhatsApp с. Дарьинское зашита в код и выводится с первого запуска (строка в формате базы, Г4 склеивается без пробелов). */
@@ -1143,6 +1213,8 @@ async function openChats(kind){
  const file=villageFile();
  if(file&&!S.loaded.has(file)){try{await ensureFilesLoaded([file])}catch(e){}if(S.view==='chats')render()}
 }
+/* v1.2.1.2: приглашения WhatsApp открываются прямым протоколом приложения whatsapp://chat?code=… (Xiaomi не уводит в клон браузера). Копирование/«Поделиться» остаются обычными https-ссылками. */
+function chatOpenHref(c){const m=String(c&&c.link||'').match(/^https?:\/\/chat\.whatsapp\.com\/(?:invite\/)?([A-Za-z0-9_-]{10,})/i);return(c&&c.kind==='wa'&&m)?`whatsapp://chat?code=${m[1]}`:c.link}
 function renderChats(){
  const kind=S.chatKind==='tg'?'tg':'wa',file=villageFile();
  const host=$('#categoryFolder');
@@ -1151,7 +1223,7 @@ function renderChats(){
  const tb=$('#listToolbar');if(tb)tb.innerHTML=plaqueHtml((kind==='wa'?'🟢 ':'🔵 ')+T(kind==='wa'?'chatWaTitle':'chatTgTitle'),kind==='wa'?'hue-green':'hue-sky');
  const list=(S.chats||[]).filter(c=>c.file===file&&c.kind===kind).sort((a,b)=>Number(a.id)-Number(b.id));
  const cards=$('#cards');if(!cards)return;
- cards.innerHTML=list.length?list.map((c,i)=>`<div class="card chat-card card-hue ${kind==='wa'?'hue-green':'hue-sky'}"><a class="chat-main" href="${esc(c.link)}" target="_blank" rel="noopener noreferrer"><h3>${esc(c.name)}</h3>${c.desc?`<p class="card-desc chat-desc">${esc(c.desc)}</p>`:''}<span class="chat-go" aria-hidden="true">↗</span></a><div class="chat-actions"><button type="button" class="chat-act chat-copy" data-ci="${i}">${esc(T('chatCopyBtn'))}</button><button type="button" class="chat-act chat-share" data-ci="${i}">${esc(T('chatShareBtn'))}</button><button type="button" class="chat-act chat-dead" data-ci="${i}">${esc(T('chatDeadBtn'))}</button></div></div>`).join(''):`<div class="card"><p class="card-desc">${esc(T('chatEmpty'))}</p></div>`;
+ cards.innerHTML=list.length?list.map((c,i)=>`<div class="card chat-card card-hue ${kind==='wa'?'hue-green':'hue-sky'}"><a class="chat-main" href="${esc(chatOpenHref(c))}" ${/^https?:/i.test(chatOpenHref(c))?'target="_blank" ':''}rel="noopener noreferrer"><h3>${esc(c.name)}</h3>${c.desc?`<p class="card-desc chat-desc">${esc(c.desc)}</p>`:''}<span class="chat-go" aria-hidden="true">↗</span></a><div class="chat-actions"><button type="button" class="chat-act chat-copy" data-ci="${i}">${esc(T('chatCopyBtn'))}</button><button type="button" class="chat-act chat-share" data-ci="${i}">${esc(T('chatShareBtn'))}</button><button type="button" class="chat-act chat-dead" data-ci="${i}">${esc(T('chatDeadBtn'))}</button></div></div>`).join(''):`<div class="card"><p class="card-desc">${esc(T('chatEmpty'))}</p></div>`;
  const pick=b=>list[Number(b.dataset.ci)];
  cards.querySelectorAll('.chat-copy').forEach(b=>b.onclick=async()=>{const c=pick(b);if(c){await copyText(c.link);toast(T('chatCopiedToast'))}});
  cards.querySelectorAll('.chat-share').forEach(b=>b.onclick=async()=>{
@@ -1293,7 +1365,7 @@ function enforcePhonePrefix(input){
 }
 function captureFormDraft(){const f=$('#addForm');if(!f)return{};const fd=new FormData(f);const draft=Object.fromEntries(fd.entries());draft.wa1=$('[name="wa1"]')?.checked?'on':'';draft.wa2=$('[name="wa2"]')?.checked?'on':'';return draft}
 function categoryButtonHtml(draft){
- const mainId=Number(draft?.superTile)||SUPER_TILES[0].id;
+ const mainId=Number(draft?.superTile)||(SUPER_TILES.find(x=>!x.hidden&&x.id!==9)||SUPER_TILES[0]).id;
  const subs=(SUB_TILES[mainId]||[]).filter(s=>!s.hidden);
  const subId=Number(draft?.subTile)||subs[0]?.sub||1;
  const st=SUPER_TILES.find(x=>x.id===mainId);
@@ -1317,9 +1389,28 @@ function tileSelectHtml(sb,draft){
    openErrorEditor). Без этих параметров поведение Анкеты не меняется
    ни на символ. */
 function setupCategoryButton(mode,draftGetter,onClose){const btn=$('#categoryPickBtn');if(!btn)return;const getDraft=draftGetter||captureFormDraft;btn.onclick=()=>{const draft=getDraft();closeModal();openSectorModal(mode,draft,onClose)}}
+/* v1.2.1.2: ДВУХЭТАЖНОЕ окно. Этаж 1 — район (галочка «весь район» + кнопка «[ Выбрать сёла ]»), этаж 2 — выпадающий подсписок сёл района. */
+function openAreasModal(mode,draft){
+ const list=regionAreaList(),st=regionAreasParse(draft.areas);
+ const rows=list.map(d=>{const vs=st.get(d.slug),whole=st.has(d.slug)&&vs===null,vil=regionAreasVillages(d.slug),multi=vil.length>1;
+  const vrows=multi?vil.map(v=>`<label class="area-row area-vrow"><input type="checkbox" class="vil-cb" data-d="${esc(d.slug)}" value="${esc(v.slug)}" ${vs&&vs.has(v.slug)?'checked':''}><span class="area-box" aria-hidden="true"></span><span>${esc(v.nameRu)}</span></label>`).join(''):'';
+  return `<div class="area-block" data-d="${esc(d.slug)}"><div class="area-head"><label class="area-row"><input type="checkbox" class="area-cb" value="${esc(d.slug)}" ${whole?'checked':''}><span class="area-box" aria-hidden="true"></span><span>${esc(districtName(d))}</span></label>${multi?`<button type="button" class="area-more" data-more="${esc(d.slug)}" aria-expanded="${vs?'true':'false'}"></button>`:''}</div>${multi?`<div class="area-vils ${vs?'':'hidden'}" id="av_${esc(d.slug)}">${vrows}</div>`:''}</div>`}).join('');
+ showModal(`<div class="modal-content no-cancel areas-modal"><div class="form-head"><button class="back-capsule big-action" id="areasBack">⬅️ ${esc(T('back'))}</button><h2>${esc(T('regionAreasTitle'))}</h2></div><button type="button" class="primary big-action w100" id="areasAll">${esc(T('regionAreasAll'))}</button><div class="areas-list">${rows}</div><div class="cancel-foot"><button type="button" class="primary big-action w100" id="areasDone">${esc(T('regionAreasDone'))}</button></div></div>`);
+ const vcbs=slug=>[...document.querySelectorAll(`.vil-cb[data-d="${slug}"]`)];
+ const refresh=slug=>{const b=document.querySelector(`.area-more[data-more="${slug}"]`);if(!b)return;const n=vcbs(slug).filter(c=>c.checked).length,open=b.getAttribute('aria-expanded')==='true';b.textContent=(n?T('regionAreasVilCount',{n}):T('regionAreasPickVil'))+(open?' ▴':' ▾')};
+ list.forEach(d=>refresh(d.slug));
+ const back=()=>{closeModal();openAddForm(mode,draft)};
+ $('#areasBack').onclick=back;
+ document.querySelectorAll('.area-more').forEach(b=>b.onclick=()=>{const sl=b.dataset.more,box=$('#av_'+sl),open=box.classList.toggle('hidden')===false;b.setAttribute('aria-expanded',open?'true':'false');refresh(sl)});
+ document.querySelectorAll('.area-cb').forEach(c=>c.onchange=()=>{if(c.checked){vcbs(c.value).forEach(v=>v.checked=false);refresh(c.value)}});
+ document.querySelectorAll('.vil-cb').forEach(c=>c.onchange=()=>{const sl=c.dataset.d,all=vcbs(sl);const dc=document.querySelector(`.area-cb[value="${sl}"]`);if(all.every(x=>x.checked)){all.forEach(x=>x.checked=false);dc.checked=true}else if(all.some(x=>x.checked))dc.checked=false;refresh(sl)});
+ $('#areasAll').onclick=()=>{document.querySelectorAll('.area-cb').forEach(c=>c.checked=true);document.querySelectorAll('.vil-cb').forEach(c=>c.checked=false);list.forEach(d=>refresh(d.slug))};
+ $('#areasDone').onclick=()=>{const m=new Map();list.forEach(d=>{const dc=document.querySelector(`.area-cb[value="${d.slug}"]`);if(dc&&dc.checked)m.set(d.slug,null);else{const ch=vcbs(d.slug).filter(x=>x.checked).map(x=>x.value);if(ch.length)m.set(d.slug,new Set(ch))}});draft.areas=(m.size&&!regionAreasIsAll(m))?regionAreasSerialize(m):'';back()};
+}
 function openSectorModal(mode,draft,onClose){
+ if(draft&&draft.region==='1'){draft.superTile=9;openSubModal(mode,draft,onClose);return}   /* v1.2.1.0: в режиме «Вся область» сектор один — сразу 6 подкатегорий */
  const back=()=>{closeModal();if(onClose)onClose(draft);else openAddForm(mode,draft)};
- showModal(`<div class="modal-content"><div class="form-head"><button class="back-capsule big-action" id="secBack">⬅️ ${esc(T('back'))}</button><h2>${esc(T('sectorModalTitle'))}</h2></div><div class="sector-grid">${SUPER_TILES.filter(st=>!st.hidden).map(st=>`<button type="button" class="sector-btn big-action" data-sector="${st.id}">${st.emoji} ${esc(superLabel(st))}</button>`).join('')}</div></div>`);
+ showModal(`<div class="modal-content"><div class="form-head"><button class="back-capsule big-action" id="secBack">⬅️ ${esc(T('back'))}</button><h2>${esc(T('sectorModalTitle'))}</h2></div><div class="sector-grid">${SUPER_TILES.filter(st=>!st.hidden&&st.id!==9).map(st=>`<button type="button" class="sector-btn big-action" data-sector="${st.id}">${st.emoji} ${esc(superLabel(st))}</button>`).join('')}</div></div>`);
  $('#secBack').onclick=back;
  $$('[data-sector]').forEach(b=>b.onclick=()=>{draft.superTile=Number(b.dataset.sector);openSubModal(mode,draft,onClose)});
 }
@@ -1327,7 +1418,7 @@ function openSubModal(mode,draft,onClose){
  const mainId=Number(draft.superTile),st=SUPER_TILES.find(x=>x.id===mainId);
  const subs=(SUB_TILES[mainId]||[]).filter(s=>!s.hidden);
  showModal(`<div class="modal-content"><div class="form-head"><button class="back-capsule big-action" id="subBack">⬅️ ${esc(T('back'))}</button><h2>${st?.emoji||''} ${esc(st?superLabel(st):T('subModalTitleFallback'))}</h2></div><div class="sector-grid">${subs.map(s=>`<button type="button" class="sector-btn big-action" data-sub="${s.sub}">${esc(subLabel(s))}</button>`).join('')}</div></div>`);
- $('#subBack').onclick=()=>openSectorModal(mode,draft,onClose);
+ $('#subBack').onclick=()=>{if(draft.region==='1'){closeModal();if(onClose)onClose(draft);else openAddForm(mode,draft)}else openSectorModal(mode,draft,onClose)};
  $$('[data-sub]').forEach(b=>b.onclick=()=>{draft.subTile=Number(b.dataset.sub);draft.tileT2='';closeModal();if(onClose)onClose(draft);else openAddForm(mode,draft)});
 }
 function hourPairs(fromH,toH){const out=[];for(let h=fromH;h<=toH;h++){out.push(`${String(h).padStart(2,'0')}:00`,`${String(h).padStart(2,'0')}:30`)}return out}
@@ -1337,50 +1428,48 @@ const WORK_TIME_GRID_NIGHT=WORK_TIME_GRID.concat(['23:00','23:30','00:00','01:00
    (openShiftPickerModal), бок о бок с уже существующими «Без графика /
    24-7 / 4-шаговые тайм-пикеры С-До». Это чисто аддитивное добавление —
    ничего из уже работающих трёх чипов не тронуто. */
-function scheduleGridHtml(draft){
- const sv=draft?.scheduleValue||T('scheduleNoneValue'),lv=draft?.lunchValue||'';
- return `<div class="schedule-quick"><button type="button" class="sched-chip" data-sched="none">${esc(T('schedNoneBtn'))}</button><button type="button" class="sched-chip" data-sched="24_7">${esc(T('sched247Btn'))}</button><button type="button" class="sched-chip" data-sched="custom">${esc(T('schedCustomBtn'))}</button><button type="button" class="sched-chip" data-sched="shift">${esc(T('schedShiftBtn'))}</button></div><input type="hidden" id="scheduleValue" name="scheduleValue" value="${esc(sv)}"><input type="hidden" id="lunchValue" name="lunchValue" value="${esc(lv)}"><div id="schedulePreview" class="calendar-note">${esc(T('schedulePreviewPrefix',{value:sv}))}${lv?esc(T('schedulePreviewLunch',{value:lv})):''}</div>`;
+/* v1.2.1.2: «Выбрать время (4 шага)» убрана. Под кнопками «Без графика / 24/7 / Вахта» всегда лежит вертикальный столбик часов 06:00–23:00
+   (квадратные галочки) и два выбора обеда. Скрипт упаковывает отмеченные часы в диапазоны («09:00-18:00») и обед в Г12. */
+/* v1.2.1.2: НОВЫЙ МОСТ — ссылка онлайн-записи живёт хвостом Г12 «… · Запись: https://…»; на карточке из неё рождается бирюзовая кнопка «📅 Записаться онлайн». */
+const BOOK_URL_RX=/^https?:\/\/\S+$/i;
+function bookingOf(v){v=String(v||'').trim();return BOOK_URL_RX.test(v)?v:''}   /* v1.2.1.4: ссылка онлайн-записи лежит ЧИСТОЙ в Г13 */
+const LEGACY_BOOK_RX=/\s*·\s*Запись:\s*(https?:\/\/\S+)\s*$/i;
+function schedNoBooking(sch){return String(sch||'').replace(LEGACY_BOOK_RX,'')}   /* хвост v1.2.1.2 в Г12 игнорируется */
+function schedSplit(sch){const t=schedNoBooking(sch),m=t.match(/\s*(?:;|·)\s*обед:\s*(\d{2}:\d{2}-\d{2}:\d{2})\s*$/i);return m?{base:t.slice(0,m.index),lunch:m[1]}:{base:t,lunch:''}}
+function schedJoin(base,lunch){return lunch?`${base}; обед:${lunch}`:base}   /* Г12 чистая: «06:00-23:00; обед:13:00-14:00» */
+function normBookingUrl(raw){let u=String(raw||'').replace(/[\s|｜]+/g,'').trim();if(!u||u==='.')return'';if(!/^https?:\/\//i.test(u))u='https://'+u;return/^https?:\/\/[^\/\s.]+\.[^\s]+$/i.test(u)?u:null}
+const SCHED_HOURS=Array.from({length:18},(_,i)=>i+6);
+const hh=h=>String(h%24).padStart(2,'0')+':00';
+/* v1.2.1.4: вместо ленты чекбоксов — 4 барабана (select): «Работаю с / до», «Обед с / до». Живая строка предпросмотра остаётся внизу блока. */
+function schedParseWork(sv){const m=String(sv||'').match(/\d{2}:\d{2}-\d{2}:\d{2}/g);return m?{from:m[0].slice(0,5),to:m[m.length-1].slice(6)}:{from:'',to:''}}
+function scheduleGridHtml(draft,noBooking){
+ let sv=draft?.scheduleValue||T('scheduleNoneValue'),lv=draft?.lunchValue||'',bk=draft?.bookingUrl||'';
+ {const sp=schedSplit(sv);sv=sp.base;if(!lv)lv=sp.lunch}
+ const wk=/^SHIFT\|/i.test(sv)?{from:'',to:''}:schedParseWork(sv),lp=lv.split('-'),lf=lp[0]||'',lt=lp[1]||'';
+ const opts=(sel,blankKey)=>`<option value="">${esc(T(blankKey))}</option>`+SCHED_HOURS.map(h=>`<option value="${hh(h)}" ${sel===hh(h)?'selected':''}>${hh(h)}</option>`).join('');
+ const open=/^\d{2}:\d{2}-/.test(sv);
+ return `<div class="schedule-quick schedule-quick4"><button type="button" class="sched-chip" data-sched="custom">${esc(T('schedCustomBtn'))}</button><button type="button" class="sched-chip" data-sched="none">${esc(T('schedNoneBtn'))}</button><button type="button" class="sched-chip" data-sched="24_7">${esc(T('sched247Btn'))}</button><button type="button" class="sched-chip" data-sched="shift">${esc(T('schedShiftBtn'))}</button></div><div class="hours-panel${open?' open':''}" id="hoursPanel"><label class="drum-row">${esc(T('workFromLabel'))}<select id="workFrom">${opts(wk.from,'pickHourOpt')}</select></label><label class="drum-row">${esc(T('workToLabel'))}<select id="workTo">${opts(wk.to,'pickHourOpt')}</select></label><label class="drum-row">${esc(T('lunchFromLabel'))}<select id="lunchFrom">${opts(lf,'noLunchOpt')}</select></label><label class="drum-row">${esc(T('lunchToLabel'))}<select id="lunchTo">${opts(lt,'noLunchOpt')}</select></label></div>${noBooking?'':`<label class="booking-field">${esc(T('bookingUrlLabel'))}<input type="text" inputmode="url" name="bookingUrl" id="bookingUrl" autocomplete="off" placeholder="${esc(T('bookingUrlPh'))}" value="${esc(bk)}"></label>`}<input type="hidden" id="scheduleValue" name="scheduleValue" value="${esc(sv)}"><input type="hidden" id="lunchValue" name="lunchValue" value="${esc(lv)}"><div id="schedulePreview" class="calendar-note">${esc(T('schedulePreviewPrefix',{value:sv}))}${lv?esc(T('schedulePreviewLunch',{value:lv})):''}</div>`;
 }
 function updateSchedulePreview(){const sv=$('#scheduleValue')?.value||T('scheduleNoneValue');const lv=$('#lunchValue')?.value||'';const prev=$('#schedulePreview');if(prev)prev.textContent=T('schedulePreviewPrefix',{value:sv})+(lv?T('schedulePreviewLunch',{value:lv}):'')}
-/* v5.2.0.4: setupScheduleGrid/open4StepTimeModal/openShiftPickerModal тоже
-   получили необязательные draftGetter/onClose — та же логика переиспользования,
-   что и у карусели категорий выше, нужна редактору «⚠️ Ошибка». */
 function setupScheduleGrid(mode,draftGetter,onClose){
- const getDraft=draftGetter||captureFormDraft;
+ const getDraft=draftGetter||captureFormDraft,sv=()=>$('#scheduleValue'),lvEl=()=>$('#lunchValue');
+ const clearDrums=()=>{['workFrom','workTo','lunchFrom','lunchTo'].forEach(id=>{const e=$('#'+id);if(e)e.value=''});if(lvEl())lvEl().value=''};
+ const sync=()=>{const wf=$('#workFrom'),wt=$('#workTo'),lf=$('#lunchFrom'),lt=$('#lunchTo');if(!wf)return;
+  if(wf.value&&wt.value&&wt.value<=wf.value){toast(T('workBadToast'));wt.value=''}
+  if(lf.value&&lt.value&&lt.value<=lf.value){toast(T('lunchBadToast'));lt.value=''}
+  if(wf.value&&wt.value&&lf.value&&lt.value&&(lf.value<wf.value||lt.value>wt.value)){toast(T('lunchOutToast'));lf.value='';lt.value=''}
+  sv().value=(wf.value&&wt.value)?`${wf.value}-${wt.value}`:(/^\d{2}:\d{2}-/.test(sv().value)?T('scheduleNoneValue'):sv().value);
+  lvEl().value=(lf.value&&lt.value)?`${lf.value}-${lt.value}`:'';
+  updateSchedulePreview()};
+ ['workFrom','workTo','lunchFrom','lunchTo'].forEach(id=>{const e=$('#'+id);if(e)e.onchange=sync});
  $$('.sched-chip').forEach(b=>b.onclick=()=>{
-  const kind=b.dataset.sched;
-  if(kind==='none'){const el=$('#scheduleValue');if(el)el.value=T('scheduleNoneValue');updateSchedulePreview();return}
-  if(kind==='24_7'){const el=$('#scheduleValue');if(el)el.value=T('schedule247Value');updateSchedulePreview();return}
-  if(kind==='custom'){const draft=getDraft();closeModal();open4StepTimeModal(mode,draft,onClose);return}
+  const kind=b.dataset.sched,pn=$('#hoursPanel');
+  if(kind==='custom'){pn.classList.toggle('open');return}
+  if(pn)pn.classList.remove('open');
+  if(kind==='none'){clearDrums();sv().value=T('scheduleNoneValue');updateSchedulePreview();return}
+  if(kind==='24_7'){clearDrums();sv().value=T('schedule247Value');updateSchedulePreview();return}
   if(kind==='shift'){const draft=getDraft();closeModal();openShiftPickerModal(mode,draft,onClose);return}
  });
-}
-function open4StepTimeModal(mode,draft,onClose){
- let start=null,end=null,lunchStart=null;
- const back=()=>{closeModal();if(onClose)onClose(draft);else openAddForm(mode,draft)};
- const finalize=lunchEnd=>{draft.scheduleValue=`${start}-${end}`;draft.lunchValue=(lunchStart&&lunchEnd)?`${lunchStart}-${lunchEnd}`:'';closeModal();if(onClose)onClose(draft);else openAddForm(mode,draft)};
- const step4=()=>{
-  showModal(`<div class="modal-content"><div class="form-head"><button class="back-capsule big-action" id="tsBack">⬅️ ${esc(T('back'))}</button><h2>${esc(T('step4Title'))}</h2></div><div class="time-grid two-col">${WORK_TIME_GRID.map(tm=>`<button type="button" class="time-chip" data-time="${tm}">${tm}</button>`).join('')}</div></div>`);
-  $('#tsBack').onclick=back;
-  $$('[data-time]').forEach(b=>b.onclick=()=>finalize(b.dataset.time));
- };
- const step3=()=>{
-  showModal(`<div class="modal-content"><div class="form-head"><button class="back-capsule big-action" id="tsBack">⬅️ ${esc(T('back'))}</button><h2>${esc(T('step3Title'))}</h2></div><button type="button" class="sched-chip big-action w100" id="noLunchBtn" style="margin-bottom:10px">${esc(T('noLunchBtn'))}</button><div class="time-grid two-col">${WORK_TIME_GRID.map(tm=>`<button type="button" class="time-chip" data-time="${tm}">${tm}</button>`).join('')}</div></div>`);
-  $('#tsBack').onclick=back;
-  $('#noLunchBtn').onclick=()=>finalize(null);
-  $$('[data-time]').forEach(b=>b.onclick=()=>{lunchStart=b.dataset.time;step4()});
- };
- const step2=()=>{
-  showModal(`<div class="modal-content"><div class="form-head"><button class="back-capsule big-action" id="tsBack">⬅️ ${esc(T('back'))}</button><h2>${esc(T('step2Title'))}</h2></div><div class="time-grid two-col">${WORK_TIME_GRID_NIGHT.map(tm=>`<button type="button" class="time-chip" data-time="${tm}">${tm}</button>`).join('')}</div></div>`);
-  $('#tsBack').onclick=back;
-  $$('[data-time]').forEach(b=>b.onclick=()=>{end=b.dataset.time;step3()});
- };
- const step1=()=>{
-  showModal(`<div class="modal-content"><div class="form-head"><button class="back-capsule big-action" id="tsBack">⬅️ ${esc(T('back'))}</button><h2>${esc(T('step1Title'))}</h2></div><div class="time-grid two-col">${WORK_TIME_GRID.map(tm=>`<button type="button" class="time-chip" data-time="${tm}">${tm}</button>`).join('')}</div></div>`);
-  $('#tsBack').onclick=back;
-  $$('[data-time]').forEach(b=>b.onclick=()=>{start=b.dataset.time;step2()});
- };
- step1();
 }
 /* v5.2.0.4: селектор готовых кодов SHIFT|work|rest|YYYY-MM-DD|HH:MM —
    полностью нативный ввод (<select>/<input type="date">/<input type="time">),
@@ -1534,25 +1623,33 @@ function openAddForm(mode,draft,opts){
  if(!draft&&!(opts&&opts.skipGuide)){showAddGuide(()=>openAddForm(mode,draft,{skipGuide:true}),mode);return}
  const resident=mode==='resident',v0=villageObj();
  const d=draft||{};
- const villageName=d.geo||v0?.name||'Дарьинское';
+ if(!draft&&S.region&&!resident&&CONFIG.COMMON){d.region='1';d.superTile=9;d.subTile=1}   /* из экрана «Вся область» анкета открывается сразу в региональном режиме */
+ const regionOn=!resident&&d.region==='1'&&!!CONFIG.COMMON;
+ const villageName=regionOn?CONFIG.COMMON.name:(d.geo||(S.region?CONFIG.VILLAGES.find(v=>v.name===S.village)?.name:v0?.name)||'Дарьинское');
  showModal(`<div class="modal-content"><div class="form-head"><button class="back-capsule big-action" id="addBack">⬅️ ${esc(T('back'))}</button><h2>${esc(resident?T('addTitleResident'):T('addTitleBusiness'))}</h2></div><form id="addForm" class="form-grid">
-  <div class="wheel-stack geo-first"><div class="wheel-caption">📍 ${esc(T('geoChainCaption'))}</div><button type="button" class="category-pick-btn big-action" id="villagePickBtn">${esc(T('villagePickBtn',{village:villageLabel(villageName)}))}</button><div id="geoWheels" class="hidden"></div><div id="newVillageNote" class="hint quarantine-note hidden"></div></div>
+  ${resident||!CONFIG.COMMON?'':`<label class="region-switch"><input type="checkbox" id="regionSwitch" name="region" value="1" ${regionOn?'checked':''}> <span>🌍 ${esc(T('regionSwitchLabel'))}</span></label>`}
+  ${regionOn?`<div class="region-note">🌍 ${esc(T('regionFormNote'))}</div>`:''}
+  <div class="wheel-stack geo-first ${regionOn?'hidden':''}"><div class="wheel-caption">📍 ${esc(T('geoChainCaption'))}</div><button type="button" class="category-pick-btn big-action" id="villagePickBtn">${esc(T('villagePickBtn',{village:villageLabel(villageName)}))}</button><div id="geoWheels" class="hidden"></div><div id="newVillageNote" class="hint quarantine-note hidden"></div></div>
   <input type="hidden" id="geoValue" name="geo" value="${esc(villageName)}"><input type="hidden" id="geoDistrictValue" name="geoDistrict" value="beyterek">
   ${resident?'':categoryButtonHtml(d)}
+  ${regionOn?`<input type="hidden" name="areas" value="${esc(d.areas||'')}"><button type="button" class="region-areas-btn big-action w100" id="regionAreasBtn">${esc(regionAreasParse(d.areas).size&&!regionAreasIsAll(regionAreasParse(d.areas))?T('regionAreasBtnSel',{list:regionAreasG11(d.areas)}):T('regionAreasBtn'))}</button>`:''}
   <label>${esc(resident?T('titleLabelResident'):T('titleLabelBusiness'))}<input name="title" required value="${esc(d.title||'')}"></label>
   <label>${esc(resident?T('personLabelResident'):T('personLabelBusiness'))}<input name="person" value="${esc(d.person||'')}"></label>
-  <label>${esc(T('cityLabel'))}<div class="phone-split"><span class="phone-fixed">+7</span><span class="phone-code" id="cityCodeLabel">(${esc(villageCityCode(villageName)||'—')})</span><input id="cityPhoneInput" name="city" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="${esc(T('cityNumberPlaceholder'))}" value="${esc(localCityOf(d.city,villageName))}"></div></label>
+  <label class="city-field ${regionOn?'hidden':''}">${esc(T('cityLabel'))}<div class="phone-split"><span class="phone-fixed">+7</span><span class="phone-code" id="cityCodeLabel">(${esc(villageCityCode(villageName)||'—')})</span><input id="cityPhoneInput" name="city" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="${esc(T('cityNumberPlaceholder'))}" value="${esc(localCityOf(d.city,villageName))}"></div></label>
   <div class="mobile-line"><label>${esc(T('mobile1Label'))}<div class="phone-split"><span class="phone-fixed grey">+7</span><input id="mobile1Input" name="mobile1" inputmode="numeric" autocomplete="off" placeholder="705 123 45 67" value="${esc(localMobileOf(d.mobile1))}"></div></label><label class="check-line wa-check"><input type="checkbox" name="wa1" ${d.wa1==='on'?'checked':''}> ${esc(T('waHasLabel'))}</label></div>
   <div class="mobile-line"><label>${esc(T('mobile2Label'))}<div class="phone-split"><span class="phone-fixed grey">+7</span><input id="mobile2Input" name="mobile2" inputmode="numeric" autocomplete="off" placeholder="771 123 45 67" value="${esc(localMobileOf(d.mobile2))}"></div></label><label class="check-line wa-check"><input type="checkbox" name="wa2" ${d.wa2==='on'?'checked':''}> ${esc(T('waHasLabel'))}</label></div>
   <label>${esc(T('addressLabel'))}<input name="address" value="${esc(d.address||'')}"></label>
-  <label>${esc(T('tagsLabel'))}<textarea name="tags">${esc(d.tags||'')}</textarea></label>
-  <div class="shift-drum"><div class="wheel-caption">${esc(T('scheduleCaption'))}</div>${scheduleGridHtml(d)}</div>
+  <label>${esc(regionOn?T('regionTagsLabel'):T('tagsLabel'))}<textarea name="tags" ${regionOn?`placeholder="${esc(T('regionTagsHint'))}"`:''}>${esc(d.tags||'')}</textarea></label>
+  <div class="shift-drum"><div class="wheel-caption">${esc(T('scheduleCaption'))}</div>${scheduleGridHtml(d,resident)}</div>
   ${resident?'':`<label>${esc(T('socialLabel'))}<input name="social" value="${esc(d.social||'')}"></label>`}
   <div class="form-actions-row"><button class="primary big-action" type="submit">${esc(T('submitModeration'))}</button><button class="secondary big-action" type="button" id="addCancelBtn">${esc(T('cancel'))}</button></div>
  </form></div>`);
  $('#addBack').onclick=openAdd;
  if(!resident)setupCategoryButton(mode);
- $('#villagePickBtn').onclick=()=>{
+ const rsw=$('#regionSwitch');
+ const rab=$('#regionAreasBtn');if(rab)rab.onclick=()=>openAreasModal(mode,captureFormDraft());
+ if(rsw)rsw.onchange=()=>{const dr=captureFormDraft();if(rsw.checked){dr.region='1';dr.superTile=9;dr.subTile=1;dr.tileT2=''}else{dr.region='';dr.superTile='';dr.subTile='';dr.tileT2=''}closeModal();openAddForm(mode,dr)};
+ if($('#villagePickBtn'))$('#villagePickBtn').onclick=()=>{
   const curDraft=captureFormDraft();
   const restoreForm=()=>{closeModal();openAddForm(mode,curDraft)};
   openGeomodal((picked,isOther,missingStep)=>{
@@ -1566,18 +1663,19 @@ function openAddForm(mode,draft,opts){
    closeModal();openAddForm(mode,curDraft);
   },undefined,restoreForm);
  };
- renderAddGeoWheels('zko',districtOfVillage(villageName),villageName);
+ if(!regionOn)renderAddGeoWheels('zko',districtOfVillage(villageName),villageName);
  enforceLocalMobile($('#mobile1Input'));enforceLocalMobile($('#mobile2Input'));enforceLocalCity($('#cityPhoneInput'));
  setupScheduleGrid(mode);
  $('#addCancelBtn').onclick=()=>{$('#addForm')?.reset();closeModal()};
  $('#addForm').onsubmit=async e=>{
   e.preventDefault();
   const fd=new FormData(e.target);
-  try{await ensureFilesLoaded([CONFIG.VILLAGES.find(v=>v.name===fd.get('geo'))?.file])}catch(err){}
+  try{await ensureFilesLoaded([formFileOf(fd)])}catch(err){}
+  if(normBookingUrl(fd.get('bookingUrl'))===null){toast(T('bookingUrlBad'));return}
   const dup=checkDuplicateOnSubmit(fd,mode);
   if(dup==='BLOCKED')return;
   const row=buildCandidateRow(fd,mode);
-  enqueueRequest({status:'PENDING',kind:'NEW',createdAt:new Date().toISOString(),village:fd.get('geo'),file:CONFIG.VILLAGES.find(v=>v.name===fd.get('geo'))?.file||villageFile(),mode,fields:Object.fromEntries(fd.entries()),candidateRow:row,schema:SCHEMA});
+  enqueueRequest({status:'PENDING',kind:'NEW',createdAt:new Date().toISOString(),village:fd.get('region')==='1'&&CONFIG.COMMON?CONFIG.COMMON.name:fd.get('geo'),file:formFileOf(fd)||villageFile(),mode,fields:Object.fromEntries(fd.entries()),candidateRow:row,schema:SCHEMA});
   /* п.2 наряда: автономная, скрытная отправка готовой 20-графовой строки (с
      маркером $) напрямую в изолированный сейф GitHub Issues — не трогая
      файлы баз сёл и не блокируя обычный интерфейс посетителя. */
@@ -1678,7 +1776,7 @@ function setupErrorAutoPrefix(r){
 function openErrorEditor(r,draft){
  const d=draft||{};
  const isResident=clean(r.folder).toUpperCase()==='ЖИТЕЛИ';
- const val=n=>d[n]!==undefined?d[n]:(r[n]??'');
+ const val=n=>d[n]!==undefined?d[n]:(n==='social'&&bookingOf(r.social)?'':(r[n]??''));
  const wa1on=d.wa1confirm!==undefined?d.wa1confirm==='on':(r.homeParts?.[6]===1||r.resParts?.[3]==='1');
  const wa2on=d.wa2confirm!==undefined?d.wa2confirm==='on':(r.homeParts?.[7]===1||r.resParts?.[4]==='1');
  const editable=[['title',T('fieldTitle')],['owner',T('fieldOwner')],['residentNote',T('fieldResidentNote')],['city',T('fieldCity')],['mobile1',T('fieldMobile1')],['mobile2',T('fieldMobile2')],['address',T('fieldAddress')],['tags',T('fieldTags')],['geo',T('fieldGeo')],['social',T('fieldSocial')]];
@@ -1691,8 +1789,8 @@ function openErrorEditor(r,draft){
  const folderHtml=isResident
   ?`<div class="wheel-stack"><div class="wheel-caption">${esc(T('fieldFolder'))}</div><div class="category-pick-btn big-action" style="pointer-events:none;opacity:.75">${esc(T('residentsGroupLabel'))}</div></div><input type="hidden" name="folder" value="ЖИТЕЛИ">`
   :categoryButtonHtml(d.superTile!==undefined?d:{superTile:idTile(r.id)||SUPER_TILES[0]?.id||1,subTile:idSub(r.id)||1,tileT2:r.homeParts?String(r.homeParts[3]):''});
- const scheduleDraft={scheduleValue:d.scheduleValue!==undefined?d.scheduleValue:((r.schedule&&r.schedule!=='.')?r.schedule:T('scheduleNoneValue')),lunchValue:d.lunchValue||''};
- const scheduleHtml=`<div class="shift-drum"><div class="wheel-caption">${esc(T('fieldSchedule'))}</div>${scheduleGridHtml(scheduleDraft)}</div>`;
+ const scheduleDraft={scheduleValue:d.scheduleValue!==undefined?d.scheduleValue:((r.schedule&&r.schedule!=='.')?r.schedule:T('scheduleNoneValue')),lunchValue:d.lunchValue||'',bookingUrl:d.bookingUrl!==undefined?d.bookingUrl:bookingOf(r.social)};
+ const scheduleHtml=`<div class="shift-drum"><div class="wheel-caption">${esc(T('fieldSchedule'))}</div>${scheduleGridHtml(scheduleDraft,isResident)}</div>`;
  showModal(`<div class="modal-content"><div class="form-head"><button class="back-capsule" id="errBack">⬅️ ${esc(T('back'))}</button><h2>${esc(T('errorEditorTitle'))}</h2></div><div class="hint">${esc(T('errorEditorHint'))}</div><form id="errorForm" class="form-grid">${folderHtml}${rowsHtml}${scheduleHtml}<label>${esc(T('reasonLabel'))}<textarea name="reason" required placeholder="${esc(T('reasonPlaceholder'))}">${esc(d.reason||'')}</textarea></label><button class="primary big-action" type="submit">${esc(T('submitCorrectionBtn'))}</button><button class="secondary big-action" type="button" id="errDelete">${esc(T('deleteAnketaBtn'))}</button><button class="secondary big-action" type="button" id="errCancel">${esc(T('backCancelBtn'))}</button></form></div>`);
  $('#errBack').onclick=closeModal;$('#errCancel').onclick=closeModal;$('#errDelete').onclick=()=>openDeleteReasonModal(r);
  if(!isResident)setupCategoryButton('erredit',captureErrorFormDraft,nd=>openErrorEditor(r,nd));
@@ -1701,12 +1799,14 @@ function openErrorEditor(r,draft){
  $('#errorForm').onsubmit=e=>{
   e.preventDefault();
   const fd=new FormData(e.target),changes={};
-  const skip=new Set(['reason','wa1confirm','wa2confirm','superTile','subTile','scheduleValue','lunchValue','folder']);
+  const skip=new Set(['reason','wa1confirm','wa2confirm','superTile','subTile','scheduleValue','lunchValue','bookingUrl','folder']);
   for(const[k,v]of fd.entries())if(!skip.has(k))changes[k]=clean(v)||'.';
   changes.wa1confirm=fd.get('wa1confirm')?'1':'0';changes.wa2confirm=fd.get('wa2confirm')?'1':'0';
   const lunch=clean(fd.get('lunchValue'));
   let scheduleVal=clean(fd.get('scheduleValue'))||T('scheduleNoneValue');
-  if(lunch)scheduleVal=`${scheduleVal}${T('schedulePreviewLunch',{value:lunch})}`;
+  scheduleVal=schedJoin(scheduleVal,lunch);
+  const bookU2=isResident?'':normBookingUrl(fd.get('bookingUrl'));if(bookU2===null){toast(T('bookingUrlBad'));return}
+  if(!isResident){if(bookU2){if(changes.social&&changes.social!=='.'&&!bookingOf(changes.social))changes.tags=(changes.tags&&changes.tags!=='.')?`${changes.tags}, ${changes.social}`:changes.social;changes.social=bookU2}}
   changes.schedule=scheduleVal;
   if(isResident){changes.folder='ЖИТЕЛИ'}
   else{
@@ -2010,9 +2110,10 @@ function checkDuplicateOnSubmit(fd,mode){
  if(mode==='resident')return 'OK';
  const phones=[clean(fd.get('city')),clean(fd.get('mobile1')),clean(fd.get('mobile2'))].map(normalizePhoneKey).filter(Boolean);
  if(!phones.length)return 'OK';
- const mainId=Number(fd.get('superTile'))||0,subId=Number(fd.get('subTile'))||0;
+ const mainId=Number(fd.get('superTile'))||0,subId=Number(fd.get('subTile'))||0,regionForm=fd.get('region')==='1',commonFile=CONFIG.COMMON&&CONFIG.COMMON.file;
  for(const r of S.rows){
   if(r.folder==='ЖИТЕЛИ'||!r.homeParts)continue;
+  if(commonFile&&((r.file===commonFile)!==regionForm))continue;   /* v1.2.1.0: дубли номеров между селом и общим файлом РАЗРЕШЕНЫ */
   const rPhones=[r.city,r.mobile1,r.mobile2].map(normalizePhoneKey).filter(Boolean);
   if(!rPhones.some(p=>phones.includes(p)))continue;
   const rTile=idTile(r.id),rSub=idSub(r.id);
@@ -2931,8 +3032,28 @@ function setupPWA(){
   $('#pwaGo').onclick=async()=>{if(S.installPrompt){await installPWA()}else infoModal(10);hide(true)};
  }catch(e){}
 }
+/* v1.2.1.1: ссылка на карточку ?card=ID&v=код. После приветствия (или сразу, если оно уже пройдено) — окно из двух кнопок. */
+const DEEP=(()=>{try{const q=new URLSearchParams(location.search),id=String(q.get('card')||'').replace(/\D/g,'');if(!id)return null;const v=String(q.get('v')||'').replace(/[^a-z0-9_\-]/gi,'');history.replaceState(null,'',location.pathname+location.hash);return{id,v}}catch(e){return null}})();
+function showDeepLinkModal(){
+ if(!DEEP||S.deepShown)return;S.deepShown=true;
+ showModal(`<div class="modal-content no-cancel deep-modal"><h2>${esc(T('deepTitle'))}</h2><p>${esc(T('deepText'))}</p><div class="sector-grid"><button type="button" class="primary big-action w100" id="deepGo">${esc(T('deepGo'))}</button><button type="button" class="secondary big-action w100" id="deepAll">${esc(T('deepAll'))}</button></div></div>`);
+ $('#deepAll').onclick=()=>closeModal();
+ $('#deepGo').onclick=async()=>{closeModal();await goToCard(DEEP)};
+}
+async function goToCard(d){
+ let file='',vObj=null;
+ if(CONFIG.COMMON&&d.v===CONFIG.COMMON.code){if(!await openRegion())return;file=CONFIG.COMMON.file}
+ else{vObj=CONFIG.VILLAGES.find(v=>v.code===d.v)||villageObj();if(!vObj)return;S.region=false;if(vObj.name!==S.village||!S.loaded.has(vObj.file))await selectVillage(vObj);file=vObj.file}
+ const r=S.rows.find(x=>x.file===file&&String(x.id)===String(d.id));
+ if(!r){toast(T('deepNotFound'));if(S.region){S.region=false;S.tile=null;S.stage='main';S.view='home';render()}return}
+ S.search='';S.alphabet='';S.tag=null;
+ if(r.homeParts&&!r.resParts){S.view='category';S.tile=r.homeParts[1];S.sub=r.homeParts[2];S.tag=-1}
+ else{S.region=false;S.view='residents';S.tile=null;S.sub=null}
+ render();
+ setTimeout(()=>{const el=[...document.querySelectorAll('article.card')].find(a=>a.dataset.id===String(r.id)&&a.dataset.file===r.file);if(el){el.scrollIntoView({block:'center',behavior:'smooth'});el.classList.add('deep-hit');setTimeout(()=>el.classList.remove('deep-hit'),4500)}},350);
+}
 function welcomeModal(){
- if(storageGet('cart_welcome_done',''))return;
+ if(storageGet('cart_welcome_done','')){showDeepLinkModal();return}
  const lang=S.lang==='kz'?'kz':'ru';
  /* v1.0.0.6: две кнопки — [ 👍 Понятно ] закрывает окно, [ ℹ️ О кнопках и функциях ] ведёт в подробный раздел «Информация» */
  showModal(`<div class="modal-content welcome-modal"><div class="langs"><button class="lang-toggle" id="wToggle" data-lang-toggle="1">${lang==='kz'?'KZ':'RU'}</button></div><h2>${esc(L[lang]?.welcomeTitle||T('welcomeTitle'))}</h2><p id="welcomeText" class="welcome-text">${esc(L[lang]?.welcomeText||T('welcomeText'))}</p><div class="modal-actions welcome-actions"><button class="primary" id="welcomeOk">${esc(L[lang]?.welcomeOk||T('welcomeOk'))}</button><button class="secondary" id="welcomeGuide">${esc(L[lang]?.welcomeGuide||T('welcomeGuide'))}</button></div></div>`);
@@ -2940,7 +3061,7 @@ function welcomeModal(){
  if(!toggle||!text||!ok||!guide)return;
  const refresh=()=>{toggle.textContent=S.lang==='kz'?'KZ':'RU';text.textContent=L[S.lang]?.welcomeText||T('welcomeText');ok.textContent=L[S.lang]?.welcomeOk||T('welcomeOk');guide.textContent=L[S.lang]?.welcomeGuide||T('welcomeGuide')};
  toggle.onclick=()=>{setLang(S.lang==='ru'?'kz':'ru');refresh()};
- ok.onclick=()=>{storageSet('cart_welcome_done','1');closeModal()};
+ ok.onclick=()=>{storageSet('cart_welcome_done','1');closeModal();showDeepLinkModal()};
  guide.onclick=()=>{storageSet('cart_welcome_done','1');closeModal();infoModal()};
  refresh();
 }

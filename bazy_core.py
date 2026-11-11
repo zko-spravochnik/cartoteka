@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-КАРТОТЕКА v1.1.0.0 - bazy_core.py: ОБЩАЯ ЛОГИКА ПРАВКИ БАЗ (без сети и без секретов).
+КАРТОТЕКА v1.2.1.4 - bazy_core.py: ОБЩАЯ ЛОГИКА ПРАВКИ БАЗ (без сети и без секретов).
 Одна и та же логика работает в локальном сервере (cartoteka_server.py) и у робота-секретаря GitHub Actions (sekretar.py):
 добавление строки, замена, перенос между категориями, проверка индексов, счётчики села.
 """
@@ -11,7 +11,18 @@ import re
 ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
+COMMON_FILE = 'baza_zko_obshaya.txt'     # v1.2.1.0: общий файл «Межгород / Вся область» (не село), индекс села в масках = 166
+COMMON_X = 166
+DB_FILE_RE = re.compile(r'^baza_zko_(?:([a-z0-9]+)_[a-z0-9_\-]+|obshaya)\.txt$')   # группа 1 = папка района; у общего файла её нет
 OK_MARKERS = ('$', 'wa', 'tg')
+
+
+def is_delete_request(kind, line=''):
+    """v1.2.1.0: ЗАЩИТА ОТ УДАЛЕНИЯ. Физическое удаление строк облачному секретарю не доверяется: DELETE и маркеры DELETE_* отсекаются."""
+    if str(kind or '').upper().startswith('DELETE'):
+        return True
+    p = str(line or '').split(' | ')
+    return len(p) == 20 and p[19].strip().upper().startswith('DELETE')
 LAST_MIGRATION = []   # журнал миграции категорий: «старый ID → новый ID · Г2 → Г2» (только в памяти)
 
 

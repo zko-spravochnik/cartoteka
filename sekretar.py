@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-КАРТОТЕКА v1.1.0.0 - sekretar.py: РОБОТ-СЕКРЕТАРЬ (GitHub Actions).
+КАРТОТЕКА v1.2.1.4 - sekretar.py: РОБОТ-СЕКРЕТАРЬ (GitHub Actions).
 Раз в 15 минут (и по кнопке) заходит в облачный шлюз, забирает одобренные заявки со статусом задания «К внесению»,
 вносит каждую в нужную базу села теми же правилами, что и локальный сервер (общий модуль bazy_core.py), обновляет счётчики
 села в конфиге и сообщает шлюзу результат. Шлюз сам пришлёт вам рапорт в Telegram и обновит плашку заявки.
@@ -22,7 +22,7 @@ import urllib.request
 import bazy_core
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FILE_RE = re.compile(r'^baza_zko_([a-z0-9]+)_[a-z0-9_\-]+\.txt$')
+FILE_RE = bazy_core.DB_FILE_RE     # v1.2.1.0: и общий файл baza_zko_obshaya.txt
 GH_API = os.environ.get('CART_GH_API', 'https://api.github.com')
 
 ERRORS = {
@@ -36,6 +36,7 @@ ERRORS = {
     'verify_failed': 'проверка после переноса не пройдена',
     'chat_full': 'в селе заполнены все номера чатов',
     'bad_file': 'недопустимое имя файла базы',
+    'delete_forbidden': 'удаление секретарю не доверено: делайте его вручную через локальный сервер',
     'gh_bad_token': 'GitHub не принял токен запуска',
     'gh_forbidden': 'нет права записи в репозиторий',
     'gh_not_found': 'файл базы или репозиторий не найден',
@@ -126,11 +127,13 @@ class Secretary:
         except Exception:
             pass
         m = FILE_RE.match(file_name)
-        return 'bazy_zko/%s/%s' % (m.group(1), file_name)
+        return ('bazy_zko/%s/%s' % (m.group(1), file_name)) if m.group(1) else 'bazy_zko/' + file_name
 
     # ---- одна заявка ----
     def apply(self, job):
         file_name, kind = job.get('file', ''), job.get('kind', '')
+        if bazy_core.is_delete_request(kind, job.get('row', '')):
+            raise Err('delete_forbidden')          # v1.2.1.0: удаление только вручную через локальный сервер
         if not FILE_RE.match(file_name) or kind not in ('NEW', 'EDIT'):
             raise Err('bad_file')
         path = self.village_path(file_name)
