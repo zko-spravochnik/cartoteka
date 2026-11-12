@@ -5,8 +5,8 @@ const ENV_QS=(()=>{try{return new URL(self.location.href).searchParams.get('env'
 const ENV_TEST=ENV_QS?ENV_QS==='test':(()=>{try{const h=String(self.location.hostname||''),p=String(self.location.pathname||'');return /^(localhost|127\.|0\.0\.0\.0|\[?::1\]?$)/.test(h)||/\.local$/.test(h)||/^10\./.test(h)||/^192\.168\./.test(h)||/^172\.(1[6-9]|2\d|3[01])\./.test(h)||!!self.location.port||/test-cartoteka/.test(h+p)}catch(e){return false}})();
 const CONFIG_FILE=ENV_TEST?'test_config.json':'config.json';
 const CACHE_PREFIX=ENV_TEST?'test-cartoteka-':'cartoteka-';
-const CACHE=CACHE_PREFIX+'v1.2.1.4';
-const CORE=['./','./index.html','./style.css','./validator.js','./script.js','./qr.js','./'+CONFIG_FILE,'./languages.json','./kazakhstan_geo.json','./categories.json','./id_aliases.json','./name_synonyms.json','./manifest.webmanifest','./icon.png','./icon-192.png','./icon-512.png','./header_folder_bg.jpg','./reklama.txt'];
+const CACHE=CACHE_PREFIX+'v1.2.1.6';
+const CORE=['./','./index.html','./style.css','./validator.js','./script.js','./qr.js','./'+CONFIG_FILE,'./languages.json','./novosti.txt','./kazakhstan_geo.json','./categories.json','./id_aliases.json','./name_synonyms.json','./manifest.webmanifest','./icon.png','./icon-192.png','./icon-512.png','./header_folder_bg.jpg','./reklama.txt'];
 /* v5.0.1.0: стратегия Network First применена ко ВСЕМ конфигурационным шлюзам —
    config.json, kazakhstan_geo.json и текстовым базам жителей сёл.
    v5.2.0.1: тот же режим распространён на новые суверенные файлы
@@ -133,7 +133,7 @@ self.addEventListener('fetch',event=>{
     return;
   }
   const p=u.pathname;
-  if(p.endsWith('/script.js')||p.endsWith('/validator.js')||p.endsWith('/style.css')||p.endsWith('/qr.js')||p.endsWith('/languages.json')||p.endsWith('/manifest.webmanifest')||p.endsWith('/reklama.txt')||p.endsWith('/requests.txt')||p.endsWith('/icon.png')||p.endsWith('/icon-192.png')||p.endsWith('/icon-512.png')){
+  if(p.endsWith('/script.js')||p.endsWith('/validator.js')||p.endsWith('/style.css')||p.endsWith('/qr.js')||p.endsWith('/languages.json')||p.endsWith('/manifest.webmanifest')||p.endsWith('/novosti.txt')||p.endsWith('/reklama.txt')||p.endsWith('/requests.txt')||p.endsWith('/icon.png')||p.endsWith('/icon-192.png')||p.endsWith('/icon-512.png')){
     event.respondWith((async()=>{
       try{const r=await fetch(event.request,{cache:'no-store'});await putFresh(await caches.open(CACHE),event.request,r);return r}
       catch(e){return caches.match(event.request,{ignoreSearch:true})}

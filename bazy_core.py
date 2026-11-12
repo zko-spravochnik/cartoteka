@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-КАРТОТЕКА v1.2.1.4 - bazy_core.py: ОБЩАЯ ЛОГИКА ПРАВКИ БАЗ (без сети и без секретов).
+КАРТОТЕКА v1.2.1.6 - bazy_core.py: ОБЩАЯ ЛОГИКА ПРАВКИ БАЗ (без сети и без секретов).
 Одна и та же логика работает в локальном сервере (cartoteka_server.py) и у робота-секретаря GitHub Actions (sekretar.py):
 добавление строки, замена, перенос между категориями, проверка индексов, счётчики села.
 """
@@ -75,6 +75,117 @@ def free_id_in_bucket(parts, c, sb):
     if nxt <= base + 99:
         return nxt
     return next((n for n in range(base + 1, base + 100) if n not in used), 0)
+
+
+def _row_id_marker(x):
+    """-> (число-ID, это чат?) для строки из 20 граф, иначе None (комментарии, пустые, чужой формат)."""
+    c = _clean_line(x)
+    if not c or c.startswith('#'):
+        return None
+    f = c.split(' | ')
+    if len(f) != 20 or not f[0].strip().isdigit():
+        return None
+    return int(f[0].strip()), f[19].strip() in ('wa', 'tg')
+
+
+def insert_by_id(text, line):
+    """v1.2.1.6: ЖЕЛЕЗНЫЙ ПОРЯДОК ПО ID. Новая карточка не уходит в хвост файла: она встаёт сразу после последнего
+    занятого номера СВОЕЙ серии (1120 - сразу после 1119). Серия = та же «сотня» ID (плитка x подкатегория); если в сотне
+    меньших номеров нет - после наибольшего меньшего ID того же вида (бизнес/жители/чаты), иначе перед наименьшим большим;
+    если таких строк нет совсем - в конец файла (как раньше)."""
+    nf = _clean_line(line).split(' | ')
+    mk = _row_id_marker(line)
+    if mk is None:
+        return text + ('' if text.endswith('\n') or not text else '\n') + line + '\n'
+    nid, is_chat = mk
+    parts = text.split('\n')
+    same_kind = []
+    for i, x in enumerate(parts):
+        m = _row_id_marker(x)
+        if m is not None and m[1] == is_chat:
+            same_kind.append((m[0], i))
+    def _put(pos):
+        eol = '\r' if any(x.endswith('\r') for x in parts[:50]) else ''
+        parts.insert(pos, line + eol)
+        return '\n'.join(parts)
+    if not same_kind:
+        return text + ('' if text.endswith('\n') or not text else '\n') + line + '\n'
+    if is_chat:
+        smaller = [t for t in same_kind if t[0] < nid]
+    else:
+        bucket = nid // 100
+        smaller = [t for t in same_kind if t[0] < nid and t[0] // 100 == bucket] or [t for t in same_kind if t[0] < nid]
+    if smaller:
+        best = max(smaller)            # наибольший ID, при равенстве - последняя по положению строка
+        return _put(best[1] + 1)
+    first_greater = min(same_kind)
+    return _put(first_greater[1])
+
+
+def _rows_map(text):
+    """-> ({ID: чистая_строка}, {ID: сырая_строка}, есть_ли_повторы_ID)."""
+    clean, raw, dup = {}, {}, False
+    for x in text.split('\n'):
+        m = _row_id_marker(x)
+        if m is None:
+            continue
+        k = str(m[0])
+        if k in clean:
+            dup = True
+        clean[k] = _clean_line(x)
+        raw[k] = x
+    return clean, raw, dup
+
+
+def merge3(base_text, local_text, remote_text):
+    """v1.2.1.6: СЛИЯНИЕ БАЗ ПЕРЕД ЗАЛИВКОЙ (трёхстороннее по ID). base - последняя синхронизированная копия (может быть пустой),
+    local - файл на телефоне, remote - файл на GitHub (туда могли дописать одобренные через Телеграм-бота заявки).
+    Правила по каждому ID: одинаково - оставить; на GitHub не менялось - берём телефон; на телефоне не менялось - берём GitHub;
+    менялось и там и там - побеждает GitHub (одобренная заявка), версия телефона уходит в список конфликтов.
+    Новые строки с GitHub встают по порядку ID (insert_by_id), а не в хвост. -> (текст, [конфликтующие строки телефона])."""
+    bc, _, bd = _rows_map(base_text or '')
+    lc, lraw, ld = _rows_map(local_text)
+    rc, rraw, rd = _rows_map(remote_text)
+    conflicts = []
+    if ld or rd:   # повторы ID внутри файла: слияние по ID небезопасно, делаем объединение строк
+        out = local_text
+        have = set(lc.values())
+        for k in sorted(rc, key=int):
+            if rc[k] not in have:
+                out = insert_by_id(out, rraw[k].rstrip('\r'))
+        return out, conflicts
+    if bd:
+        bc = {}
+    take = {}
+    for k in set(lc) | set(rc):
+        L, R, B = lc.get(k), rc.get(k), bc.get(k)
+        if L == R:
+            continue
+        if R == B:
+            continue                      # на GitHub без изменений - остаётся телефон (в т.ч. удаление на телефоне)
+        if L == B:
+            take[k] = R                   # на телефоне без изменений - берём GitHub (в т.ч. удаление на GitHub)
+        else:
+            take[k] = R
+            if L is not None:
+                conflicts.append(L)
+    parts, added = [], []
+    for x in local_text.split('\n'):
+        m = _row_id_marker(x)
+        if m is None:
+            parts.append(x)
+            continue
+        k = str(m[0])
+        if k in take:
+            if take[k] is None:
+                continue
+            parts.append(rraw[k])
+        else:
+            parts.append(x)
+    out = '\n'.join(parts)
+    for k in sorted((k for k in take if take[k] is not None and k not in lc), key=int):
+        out = insert_by_id(out, rraw[k].rstrip('\r'))
+    return out, conflicts
 
 
 def apply_line_op2(text, kind, line, original=''):
@@ -188,9 +299,7 @@ def apply_line_op2(text, kind, line, original=''):
             return text, 'chat_full', line
         nf[0] = '%04d' % free
         line = ' | '.join(nf)
-    if text and not text.endswith('\n'):
-        text += '\n'
-    return text + line + '\n', 'ok', line
+    return insert_by_id(text, line), 'ok', line
 
 
 def counts_of_text(text):

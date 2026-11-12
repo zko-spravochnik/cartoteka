@@ -13,7 +13,7 @@
    нижестоящая логика (idTile/idSub, рендер плиток, buildCandidateRow)
    не требовала структурных правок — меняется только источник данных.
    Резервные слоты 7-9 на обоих уровнях 9×9 помечены hidden:true. */
-const APP_VERSION='v1.2.1.4',SCHEMA=20;
+const APP_VERSION='v1.2.1.6',SCHEMA=20;
 /* v1.0.0.6: единый «Код входа в админку» = ADMIN_CODE шлюза. В код сайта он НЕ вшивается: проверку делает локальный сервер (/__auth), на нём хранится только отпечаток. */
 /* Нормализация введённой фразы: без кавычек-ёлочек и обычных кавычек, лишние
    пробелы схлопываются, регистр не учитывается (Пойду Покурю = ПОЙДУ ПОКУРЮ). */
@@ -171,7 +171,12 @@ return{ok:e.length===0,errors:e}}
 function parseRow(line,lineNo,file){const fields=line.split(' | ').map(clean);fields._barCount=(line.match(/ \| /g)||[]).length;const audit=rowValidate(fields,lineNo,file);if(!audit.ok)return{row:null,error:{line:lineNo,file,errors:audit.errors,raw:line}};const marker=fields[19];if(isQuarantineMarker(marker))return{row:null,error:null,quarantine:{line:lineNo,file,id:fields[0],marker,raw:line}};const p=fields,h=p[16],r=p[17],s=p[18];return{row:{id:p[0],folder:p[1],title:p[2],owner:p[3],residentNote:p[4],city:p[5],mobile1:p[6],mobile2:p[7],address:p[8],tags:p[9],geo:p[10],schedule:p[11],social:p[12],reserve1:p[13],reserve2:p[14],reserve3:p[15],homeMask:h,resMask:r,searchMask:s,raw:line,file,lineNo,homeParts:h==='0'?null:h.split('/').map(Number),resParts:r==='0'?null:r.split('/'),searchParts:s==='0'?null:s.split('/').map(Number)},error:null}}
 function rowX(r){return Number(r.homeParts?.[0]??r.resParts?.[0]??r.searchParts?.[0]??0)}
 function isBus59Row(r){return /пригородный автобус №59|автобус №59|маршрут 59/i.test(`${r.title} ${r.tags}`)}
-function currentVillageRows(){const v=villageObj(),x=Number(v?.index||0);return S.rows.filter(r=>r.file===v?.file&&rowX(r)===x).filter(r=>!isBus59Row(r)||CONFIG.ROUTE_59_ALLOWED_X.includes(x))}
+/* v1.2.1.6: районы городов. isCity + cityAreas живут в гео-файле (универсально для любых городов и областей). */
+function geoCityOf(name){return (GEO.villages||[]).find(v=>v.isCity&&v.nameRu===name&&((GEO.cityAreas||{})[v.slug]||[]).length)||null}
+function cityAreaKey(a){return norm(String(a||'').replace(/^(мкр\.|п\.|с\.)\s*/i,'').replace(/\s*\(.*?\)\s*/g,' ').trim())}
+function cityAreaMatch(r,area){const keys=String(area).split('/').map(cityAreaKey).filter(Boolean);if(!keys.length)return true;const t=norm((r.address||'')+' '+(r.tags||''));return keys.some(k=>t.includes(k))}
+function activeCityArea(){return S.cityArea&&S.village===S.cityAreaVillage&&geoCityOf(S.village)?S.cityArea:''}
+function currentVillageRows(){const v=villageObj(),x=Number(v?.index||0);let out=S.rows.filter(r=>r.file===v?.file&&rowX(r)===x).filter(r=>!isBus59Row(r)||CONFIG.ROUTE_59_ALLOWED_X.includes(x));const ca=activeCityArea();if(ca)out=out.filter(r=>cityAreaMatch(r,ca));return out}
 
 /* ===== Загрузка конфигурации / языка / гео / баз ===== */
 /* v5.4.0.0: базы лежат в bazy_zko/<папка-района>/. Путь берётся из config.json (поле path),
@@ -214,7 +219,7 @@ async function loadConfig(){
  storageSet('cart_village',S.village);
  try{await loadGeo()}catch(e){}
 }
-async function loadGeo(){GEO.villages=[];GEO.districts=[];GEO.regions=[];GEO.ok=false;try{const r=await fetch(`kazakhstan_geo.json?v=${Date.now()}`,{cache:'no-store'});if(!r.ok)return;const g=await r.json();GEO.villages=Array.isArray(g.villages)?g.villages.filter(v=>v&&v.nameRu&&v.districtSlug):[];GEO.districts=Array.isArray(g.districts)?g.districts.filter(d=>d&&d.slug):[];GEO.regions=Array.isArray(g.regions)?g.regions.filter(rg=>rg&&rg.slug):[];GEO.ok=GEO.villages.length>0}catch(e){}}
+async function loadGeo(){GEO.villages=[];GEO.districts=[];GEO.regions=[];GEO.cityAreas={};GEO.ok=false;try{const r=await fetch(`kazakhstan_geo.json?v=${Date.now()}`,{cache:'no-store'});if(!r.ok)return;const g=await r.json();GEO.villages=Array.isArray(g.villages)?g.villages.filter(v=>v&&v.nameRu&&v.districtSlug):[];GEO.districts=Array.isArray(g.districts)?g.districts.filter(d=>d&&d.slug):[];GEO.regions=Array.isArray(g.regions)?g.regions.filter(rg=>rg&&rg.slug):[];GEO.cityAreas=(g.cityAreas&&typeof g.cityAreas==='object'&&!Array.isArray(g.cityAreas))?Object.fromEntries(Object.entries(g.cityAreas).map(([k,v])=>[k,Array.isArray(v)?v.map(x=>String(x).trim()).filter(Boolean):[]])):{};GEO.ok=GEO.villages.length>0}catch(e){}}
 function geoRegions(){return GEO.regions.length?GEO.regions:[{slug:'zko',nameRu:'Западно-Казахстанская область'}]}
 function geoDistricts(regionSlug){return GEO.districts.filter(d=>d.regionSlug===regionSlug)}
 function geoVillagesOf(districtSlug){return GEO.villages.filter(v=>v.districtSlug===districtSlug)}
@@ -288,6 +293,7 @@ async function selectVillage(obj){
   const ok=await loadVillageFile(obj.file);
   if(!ok){dropVillageRows(obj.file);buildRows();toast(T('villageLoadFailToast',{village:villageLabel(obj.name)}));return false}
  }
+ if(S.village!==obj.name){S.cityArea='';S.cityAreaVillage=''}
  S.village=obj.name;storageSet('cart_village',obj.name);return true;
 }
 async function ensureFilesLoaded(files){await Promise.all([...new Set(files)].filter(f=>f&&!S.loaded.has(f)).map(f=>loadVillageFile(f)))}
@@ -854,9 +860,9 @@ async function showQuickList(kind,title){
 function setLang(lang){if(lang!=='ru'&&lang!=='kz')return;S.lang=lang;storageSet('cart_lang',lang);$$('.lang').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));try{S.pwaSync&&S.pwaSync()}catch(e){}render()}
 function renderMore(){
  const host=$('#cards');
- host.innerHTML=`<div class="card more-card"><button id="aboutMoreBtn" class="pastel-small w100">${esc(T('aboutMoreBtn'))}</button><div class="share-row"><button id="qrBtn" class="pastel-small">${esc(T('qrShareBtn'))}</button><button id="shareLinkBtn" class="pastel-small">${esc(T('shareLinkBtn'))}</button></div><button id="installBtn" class="pastel-small w100">${esc(T('installBtn'))}</button><button id="refreshDataBtn" class="admin-blue w100">${esc(T('refreshDataBtn'))}</button></div><div class="card"><div class="footer-main">${esc(T('footerCopyright'))}</div></div><div class="card stats-card" id="statsCard">${statsCardHtml((()=>{try{return JSON.parse(storageGet('cart_plat_stats','null'))}catch(e){return null}})())}</div>`;
+ host.innerHTML=`<div class="card more-card"><button id="aboutMoreBtn" class="pastel-small w100">${esc(T('aboutMoreBtn'))}</button><button id="whatsNewBtn" class="pastel-small w100">${esc(T('whatsNewBtn'))}</button><div class="share-row"><button id="qrBtn" class="pastel-small">${esc(T('qrShareBtn'))}</button><button id="shareLinkBtn" class="pastel-small">${esc(T('shareLinkBtn'))}</button></div><button id="installBtn" class="pastel-small w100">${esc(T('installBtn'))}</button><button id="refreshDataBtn" class="admin-blue w100">${esc(T('refreshDataBtn'))}</button></div><div class="card"><div class="footer-main">${esc(T('footerCopyright'))}</div></div><div class="card stats-card" id="statsCard">${statsCardHtml((()=>{try{return JSON.parse(storageGet('cart_plat_stats','null'))}catch(e){return null}})())}</div>`;
  fillStatsCard();
- $('#aboutMoreBtn').onclick=infoModal;$('#qrBtn').onclick=showQR;$('#shareLinkBtn').onclick=shareLink;$('#installBtn').onclick=installPWA;$('#refreshDataBtn').onclick=refreshData;
+ $('#aboutMoreBtn').onclick=infoModal;$('#whatsNewBtn').onclick=()=>whatsNewModal(0,true);$('#qrBtn').onclick=showQR;$('#shareLinkBtn').onclick=shareLink;$('#installBtn').onclick=installPWA;$('#refreshDataBtn').onclick=refreshData;
 }
 /* Липкий блок «Назад»/плиток прижимается ровно под шапкой (под синей кнопкой «Добавить»): высота шапки меряется на лету. */
 function syncFolderTop(){try{const h=$('#mainHeader');if(h)document.documentElement.style.setProperty('--folder-top',Math.round(h.getBoundingClientRect().height)+'px')}catch(e){}}
@@ -889,7 +895,7 @@ function applyHeaderCollapse(){
  const t=$('#headerToggle');if(t){t.textContent=HDR_COLLAPSED?'🔽':'🔼';t.setAttribute('aria-expanded',String(!HDR_COLLAPSED));t.setAttribute('aria-label',T(HDR_COLLAPSED?'hdrExpand':'hdrCollapse'))}
 }
 function syncHeader(){
- const vc=$('#villagePicker');if(vc)vc.textContent=T('villagePickerBtn',{village:villageLabel(S.village)});
+ const vc=$('#villagePicker');if(vc)vc.textContent=T('villagePickerBtn',{village:villageLabel(S.village)+(activeCityArea()?' · '+activeCityArea():'')});
  const lt=$('#langToggle');if(lt)lt.textContent=S.lang==='kz'?'KZ':'RU';
  const pl=$('#postalLine');if(pl)pl.textContent=T('postalPrefix',{code:postalFor(S.village)});
  const z=$('#headerAddZone');
@@ -1166,7 +1172,8 @@ function buildCandidateRow(fd,mode){
     а не одной лишь главной плиткой, как раньше. */
  const mainTileMeta=SUPER_TILES.find(x=>x.id===folderMainId);
  const folder=resident?'ЖИТЕЛИ':(mainTileMeta?`${superLabel(mainTileMeta)}${subMeta?' — '+subLabel(subMeta):''}`:'ПРОЧЕЕ');
- const title=clean(fd.get('title'))||'.',person=clean(fd.get('person'))||'.',address=clean(fd.get('address'))||'.';
+ let title=clean(fd.get('title'))||'.',person=clean(fd.get('person'))||'.',address=clean(fd.get('address'))||'.';
+ {const ca=clean(fd.get('cityArea'));if(ca&&!regionForm){const own=clean(fd.get('address'));address=own?`${ca}, ${own}`:ca}}
  const city=regionForm?'.':sanitizeCityDigits(fd.get('city'),villageCityCode(fd.get('geo'))),m1=sanitizeMobileE164(fd.get('mobile1')),m2=sanitizeMobileE164(fd.get('mobile2'));
  const lunch=clean(fd.get('lunchValue'));
  let tags=clean(fd.get('tags'))||'.',social=resident?'.':clean(fd.get('social'))||'.',schedule=clean(fd.get('scheduleValue'))||T('scheduleNoneValue');
@@ -1432,7 +1439,7 @@ const WORK_TIME_GRID_NIGHT=WORK_TIME_GRID.concat(['23:00','23:30','00:00','01:00
    (квадратные галочки) и два выбора обеда. Скрипт упаковывает отмеченные часы в диапазоны («09:00-18:00») и обед в Г12. */
 /* v1.2.1.2: НОВЫЙ МОСТ — ссылка онлайн-записи живёт хвостом Г12 «… · Запись: https://…»; на карточке из неё рождается бирюзовая кнопка «📅 Записаться онлайн». */
 const BOOK_URL_RX=/^https?:\/\/\S+$/i;
-function bookingOf(v){v=String(v||'').trim();return BOOK_URL_RX.test(v)?v:''}   /* v1.2.1.4: ссылка онлайн-записи лежит ЧИСТОЙ в Г13 */
+function bookingOf(v){v=String(v||'').trim();return BOOK_URL_RX.test(v)?v:''}   /* v1.2.1.6: ссылка онлайн-записи лежит ЧИСТОЙ в Г13 */
 const LEGACY_BOOK_RX=/\s*·\s*Запись:\s*(https?:\/\/\S+)\s*$/i;
 function schedNoBooking(sch){return String(sch||'').replace(LEGACY_BOOK_RX,'')}   /* хвост v1.2.1.2 в Г12 игнорируется */
 function schedSplit(sch){const t=schedNoBooking(sch),m=t.match(/\s*(?:;|·)\s*обед:\s*(\d{2}:\d{2}-\d{2}:\d{2})\s*$/i);return m?{base:t.slice(0,m.index),lunch:m[1]}:{base:t,lunch:''}}
@@ -1440,7 +1447,7 @@ function schedJoin(base,lunch){return lunch?`${base}; обед:${lunch}`:base}  
 function normBookingUrl(raw){let u=String(raw||'').replace(/[\s|｜]+/g,'').trim();if(!u||u==='.')return'';if(!/^https?:\/\//i.test(u))u='https://'+u;return/^https?:\/\/[^\/\s.]+\.[^\s]+$/i.test(u)?u:null}
 const SCHED_HOURS=Array.from({length:18},(_,i)=>i+6);
 const hh=h=>String(h%24).padStart(2,'0')+':00';
-/* v1.2.1.4: вместо ленты чекбоксов — 4 барабана (select): «Работаю с / до», «Обед с / до». Живая строка предпросмотра остаётся внизу блока. */
+/* v1.2.1.6: вместо ленты чекбоксов — 4 барабана (select): «Работаю с / до», «Обед с / до». Живая строка предпросмотра остаётся внизу блока. */
 function schedParseWork(sv){const m=String(sv||'').match(/\d{2}:\d{2}-\d{2}:\d{2}/g);return m?{from:m[0].slice(0,5),to:m[m.length-1].slice(6)}:{from:'',to:''}}
 function scheduleGridHtml(draft,noBooking){
  let sv=draft?.scheduleValue||T('scheduleNoneValue'),lv=draft?.lunchValue||'',bk=draft?.bookingUrl||'';
@@ -1638,6 +1645,7 @@ function openAddForm(mode,draft,opts){
   <label class="city-field ${regionOn?'hidden':''}">${esc(T('cityLabel'))}<div class="phone-split"><span class="phone-fixed">+7</span><span class="phone-code" id="cityCodeLabel">(${esc(villageCityCode(villageName)||'—')})</span><input id="cityPhoneInput" name="city" inputmode="numeric" autocomplete="off" maxlength="10" placeholder="${esc(T('cityNumberPlaceholder'))}" value="${esc(localCityOf(d.city,villageName))}"></div></label>
   <div class="mobile-line"><label>${esc(T('mobile1Label'))}<div class="phone-split"><span class="phone-fixed grey">+7</span><input id="mobile1Input" name="mobile1" inputmode="numeric" autocomplete="off" placeholder="705 123 45 67" value="${esc(localMobileOf(d.mobile1))}"></div></label><label class="check-line wa-check"><input type="checkbox" name="wa1" ${d.wa1==='on'?'checked':''}> ${esc(T('waHasLabel'))}</label></div>
   <div class="mobile-line"><label>${esc(T('mobile2Label'))}<div class="phone-split"><span class="phone-fixed grey">+7</span><input id="mobile2Input" name="mobile2" inputmode="numeric" autocomplete="off" placeholder="771 123 45 67" value="${esc(localMobileOf(d.mobile2))}"></div></label><label class="check-line wa-check"><input type="checkbox" name="wa2" ${d.wa2==='on'?'checked':''}> ${esc(T('waHasLabel'))}</label></div>
+  ${(!regionOn&&geoCityOf(villageName))?`<label>${esc(T('cityAreaLabel'))}<select name="cityArea"><option value="">${esc(T('cityWholeLabel',{city:villageLabel(villageName)}))}</option>${((GEO.cityAreas||{})[geoCityOf(villageName).slug]||[]).map(a=>`<option value="${esc(a)}" ${(d.cityArea||(S.village===villageName?S.cityArea:''))===a?'selected':''}>${esc(a)}</option>`).join('')}</select></label>`:''}
   <label>${esc(T('addressLabel'))}<input name="address" value="${esc(d.address||'')}"></label>
   <label>${esc(regionOn?T('regionTagsLabel'):T('tagsLabel'))}<textarea name="tags" ${regionOn?`placeholder="${esc(T('regionTagsHint'))}"`:''}>${esc(d.tags||'')}</textarea></label>
   <div class="shift-drum"><div class="wheel-caption">${esc(T('scheduleCaption'))}</div>${scheduleGridHtml(d,resident)}</div>
@@ -1659,7 +1667,7 @@ function openAddForm(mode,draft,opts){
     $('#wizStepOk').onclick=restoreForm;
     return;
    }
-   if(picked){curDraft.geo=picked.name;renderAddGeoWheels('zko',picked.districtSlug||'beyterek',picked.name)}
+   if(picked){curDraft.geo=picked.name;curDraft.cityArea=picked.area||'';renderAddGeoWheels('zko',picked.districtSlug||'beyterek',picked.name)}
    closeModal();openAddForm(mode,curDraft);
   },undefined,restoreForm);
  };
@@ -2018,6 +2026,14 @@ function villageHasRealFile(v){return !!(v&&v.dbFile&&CONFIG.FILES.includes(v.db
    Область, 2 = Район, 3 = Посёлок) и вызывает onPick(null,true,step),
    чтобы вызывающая сторона могла показать точное предупреждение
    «⚠️ Ошибка на Шаге N», а не обрушить общий обработчик ошибок. */
+function openCityAreasModal(city,afterPick,backFn){
+ const areas=(GEO.cityAreas||{})[city.slug]||[],name=villageLabel(city.nameRu),whole=T('cityWholeLabel',{city:name});
+ const btn=(a,label)=>`<button type="button" class="sector-btn big-action village-row city-area-btn" data-area="${esc(a)}"><span class="vname">${esc(label)}</span></button>`;
+ showModal(`<div class="modal-content city-areas-modal"><div class="form-head geo-sticky-head"><button class="back-capsule big-action" id="cityBack">⬅️ ${esc(T('back'))}</button><h2>🏙️ ${esc(name)}</h2></div>
+  <details class="search-pocket rest-pocket" id="cityAreasPocket" open><summary><span class="pk-closed">${esc(T('cityAreasOpenTitle'))}</span><span class="pk-open">${esc(T('cityAreasCloseTitle'))}</span></summary><div class="sector-grid search-pocket-body">${btn('',whole)}${areas.map(a=>btn(a,a)).join('')}</div></details></div>`);
+ $('#cityBack').onclick=()=>backFn();
+ $$('.city-area-btn').forEach(b=>b.onclick=()=>afterPick(b.dataset.area||''));
+}
 function openGeomodal(onPick,districtSlugOverride,onCancel){
  /* v5.3.0.0: защита — если окно вызвано напрямую как обработчик клика,
     первым аргументом приходит объект события, а не функция выбора. */
@@ -2033,9 +2049,10 @@ function openGeomodal(onPick,districtSlugOverride,onCancel){
  const cntOf=v=>{const o=villageHasRealFile(v)?cfgOf(v):null;return o?villageCountsOf(o.file):[0,0]};
  const withData=allVillages.filter(v=>{const c=cntOf(v);return c[0]+c[1]>0});
  const villages=withData;
+ const hasCity=allVillages.some(v=>geoCityOf(v.nameRu));
  const hiddenVillages=allVillages.filter(v=>!withData.includes(v));
  const villageBtn=v=>{const c=cntOf(v);return `<button type="button" class="sector-btn big-action village-row" data-village="${esc(v.nameRu)}"><span class="vname">${esc(villageLabel(v.nameRu))}${v.nameRu===current?' ✓':''}</span><span class="vcnt"><b class="cnt cnt-biz" title="${esc(T('cntBizTitle'))}" aria-label="${esc(T('cntBizTitle'))}">${c[0]}</b><b class="cnt cnt-res" title="${esc(T('cntResTitle'))}" aria-label="${esc(T('cntResTitle'))}">${c[1]}</b></span></button>`};
- const hiddenHtml=hiddenVillages.length?`<details class="search-pocket rest-pocket" id="geoHiddenVillages"><summary><span class="pk-closed">${esc(T('geoRestOpenTitle'))}</span><span class="pk-open">${esc(T('geoRestCloseTitle'))}</span></summary><div class="sector-grid search-pocket-body">${hiddenVillages.map(villageBtn).join('')}</div></details>`:'';
+ const hiddenHtml=hiddenVillages.length?`<details class="search-pocket rest-pocket" id="geoHiddenVillages"><summary><span class="pk-closed">${esc(T(hasCity?'geoRestOpenTitleMixed':'geoRestOpenTitle'))}</span><span class="pk-open">${esc(T(hasCity?'geoRestCloseTitleMixed':'geoRestCloseTitle'))}</span></summary><div class="sector-grid search-pocket-body">${hiddenVillages.map(villageBtn).join('')}</div></details>`:'';
  showModal(`<div class="modal-content"><div class="form-head geo-sticky-head"><button class="back-capsule big-action" id="geoBack">⬅️ ${esc(T('back'))}</button><h2>🗺️ ${esc(districtName(district)||T('villagePickerTitle').replace('🗺️ ',''))}</h2></div>
   <p class="cnt-legend">${esc(T('cntLegend'))}</p>
   <div class="sector-grid">${villages.map(villageBtn).join('')}</div>
@@ -2045,16 +2062,30 @@ function openGeomodal(onPick,districtSlugOverride,onCancel){
    <button type="button" class="secondary big-action w100" id="geoAddVillage">${esc(T('addVillageBtn'))}</button>
   </div></div>`);
  $('#geoBack').onclick=()=>{if(onCancel){onCancel();return}closeModal();if(!onPick)render()};
- $$('[data-village]').forEach(b=>b.onclick=async()=>{
-  const name=b.dataset.village;
+ const chooseVillage=async(name,direct)=>{
   const obj=CONFIG.VILLAGES.find(x=>x.name===name);
+  const city=geoCityOf(name);
+  if(city&&(obj||onPick)){
+   openCityAreasModal(city,async area=>{
+    if(onPick){closeModal();onPick({name,obj,districtSlug,area},false);return}
+    if(!await selectVillage(obj))return;
+    S.cityArea=area;S.cityAreaVillage=area?name:'';
+    if(S.view!=='category'){S.tile=null;S.sub=null;S.tag=null;S.stage='main'}
+    S.search='';S.alphabet='';const inp=$('#searchInput');if(inp)inp.value='';
+    closeModal();render();scrollTop();whatsNewModal();
+   },()=>direct?openRegionDistrictModal(onPick,onCancel):openGeomodal(onPick,districtSlugOverride,onCancel));
+   return;
+  }
   if(onPick){closeModal();onPick({name,obj,districtSlug},false);return}
   if(!obj){toast(T('noDbVillageToast',{village:name}));closeModal();openAddForm('business');return}
   if(!await selectVillage(obj))return;
   if(S.view!=='category'){S.tile=null;S.sub=null;S.tag=null;S.stage='main'}
   S.search='';S.alphabet='';const inp=$('#searchInput');if(inp)inp.value='';
-  closeModal();render();scrollTop();
- });
+  closeModal();render();scrollTop();whatsNewModal();
+ };
+ $$('[data-village]').forEach(b=>b.onclick=()=>chooseVillage(b.dataset.village,false));
+ /* v1.2.1.6: район, состоящий из одного города с районами (Уральск), открывается сразу списком районов города — без промежуточного экрана */
+ if(allVillages.length===1&&geoCityOf(allVillages[0].nameRu)&&(CONFIG.VILLAGES.find(x=>x.name===allVillages[0].nameRu)||onPick)){chooseVillage(allVillages[0].nameRu,true);return}
  $('#geoOtherDistrict').onclick=()=>openRegionDistrictModal(onPick,onCancel);
  $('#geoAddVillage').onclick=()=>{
   const ok=confirm(T('addVillageConfirm',{district:districtName(district)||districtSlug}));
@@ -2212,6 +2243,22 @@ async function appendToLocalServer(file,line){
   return j&&j.ok?(j.duplicate?'dup':true):false;
  }catch(e){return false}
 }
+/* v1.2.1.6: железный порядок по ID — новая карточка встаёт сразу после последнего занятого номера своей серии (1120 после 1119), а не в хвост файла.
+   Та же логика, что в bazy_core.insert_by_id (сервер и секретарь). */
+function dbRowMark(x){const c=String(x||'').replace(/\ufeff/g,'').trim();if(!c||c[0]==='#')return null;const f=c.split(' | ');if(f.length!==20||!/^\d+$/.test(f[0].trim()))return null;return{id:Number(f[0].trim()),chat:f[19].trim()==='wa'||f[19].trim()==='tg'}}
+function insertRowById(text,line){
+ const tail=(text===''||text.endsWith('\n'))?text:text+'\n',mk=dbRowMark(line);
+ if(!mk)return tail+line+'\n';
+ const parts=text.split('\n'),same=[];
+ parts.forEach((x,i)=>{const m=dbRowMark(x);if(m&&m.chat===mk.chat)same.push({id:m.id,i})});
+ if(!same.length)return tail+line+'\n';
+ let smaller=same.filter(t=>t.id<mk.id);
+ if(!mk.chat){const b=Math.floor(mk.id/100),inb=smaller.filter(t=>Math.floor(t.id/100)===b);if(inb.length)smaller=inb}
+ let pos;
+ if(smaller.length){let best=smaller[0];smaller.forEach(t=>{if(t.id>best.id||(t.id===best.id&&t.i>best.i))best=t});pos=best.i+1}
+ else{let f=same[0];same.forEach(t=>{if(t.id<f.id)f=t});pos=f.i}
+ parts.splice(pos,0,line);return parts.join('\n');
+}
 async function appendToGithub(file,line){
  if(!S.token)return 'notoken';
  try{
@@ -2221,7 +2268,7 @@ async function appendToGithub(file,line){
   if(rows.some(x=>x.trim()===line.trim()))return 'dup';
   const newId=String(line).split(' | ')[0];
   if(rows.some(x=>x.trim()&&x.trim()[0]!=='#'&&x.split(' | ')[0].trim()===newId))return 'idclash';
-  const next=(text.endsWith('\n')||text===''?text:text+'\n')+line+'\n';
+  const next=insertRowById(text,line);
   await githubWrite(dbPath(file),next,`Одобренная заявка: ${file}`);
   await syncCountsIndex(file,next);
   return 'ok';
@@ -3052,6 +3099,25 @@ async function goToCard(d){
  render();
  setTimeout(()=>{const el=[...document.querySelectorAll('article.card')].find(a=>a.dataset.id===String(r.id)&&a.dataset.file===r.file);if(el){el.scrollIntoView({block:'center',behavior:'smooth'});el.classList.add('deep-hit');setTimeout(()=>el.classList.remove('deep-hit'),4500)}},350);
 }
+/* v1.2.1.6: окно «Что нового?» — один раз после обновления. Текст лежит в novosti.txt (одна новость = одна строка, свежее — сверху).
+   Правило: только житейские слова, без паролей, ссылок, имён файлов и кода — загрузчик ниже ещё и отсеивает такие строки. */
+const NOVOSTI_BAD=/https?:|www\.|github|token|токен|парол|логин|пароль|\.(json|txt|js|py|gs|html|css)\b|[{}<>`]|\bG\d+\b|Г\d+/i;
+async function loadNovosti(){try{const r=await fetch(`novosti.txt?v=${encodeURIComponent(APP_VERSION)}`,{cache:'no-store'});if(!r.ok)return[];const t=await r.text();return t.split(/\r?\n/).map(x=>x.trim()).filter(x=>x&&!x.startsWith('#')&&!NOVOSTI_BAD.test(x)).map(x=>x.replace(/^[•\-*]\s*/,'')).slice(0,30)}catch(e){return[]}}
+async function whatsNewModal(tries,force){
+ /* v1.2.1.6: постоянный житель (в памяти есть любая старая версия или приветствие уже пройдено) — окно сразу при входе;
+    новичок — сразу после приветствия и выбора своего села/города (вызов из выбора села). Один раз до следующей версии.
+    force=true — кнопка «✨ Что нового в версии» в меню «Ещё»: открыть и перечитать в любой момент. */
+ const seen=storageGet('cart_whatsnew_ver','');
+ if(!force){
+  if(seen===APP_VERSION)return;
+  if(!seen&&!storageGet('cart_welcome_done',''))return;   // новичок: покажем после приветствия и выбора села
+  if(document.querySelector('.modal-content')&&(tries||0)<20){setTimeout(()=>whatsNewModal((tries||0)+1),600);return}
+ }
+ const items=await loadNovosti();
+ if(!items.length){if(!force)storageSet('cart_whatsnew_ver',APP_VERSION);else toast(T('whatsNewEmpty'));return}
+ showModal(`<div class="modal-content whatsnew-modal no-cancel"><h2>${esc(T('whatsNewTitle'))}</h2><ul class="whatsnew-list">${items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul><div class="modal-actions"><button class="primary big-action w100" id="whatsNewOk">${esc(T('whatsNewOk'))}</button></div></div>`);
+ $('#whatsNewOk').onclick=()=>{storageSet('cart_whatsnew_ver',APP_VERSION);closeModal()};
+}
 function welcomeModal(){
  if(storageGet('cart_welcome_done','')){showDeepLinkModal();return}
  const lang=S.lang==='kz'?'kz':'ru';
@@ -3252,6 +3318,7 @@ function init(){
      try{await loadAliases();const mv=applyAliasesToStorage();if(mv>0)toast(T('aliasMigratedToast',{n:mv}));render()}catch(e){}
      statsPing();
      welcomeModal();
+     whatsNewModal();
    }catch(e){
      console.error('Startup error',e);
      try{toast(T('startupFailToast'))}catch(err){}

@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "v1.2.1.4",
-  "appVersion": "v1.2.1.4",
+  "schemaVersion": "v1.2.1.6",
+  "appVersion": "v1.2.1.6",
   "qrShareUrl": "https://zko-spravochnik.github.io/cartoteka/",
   "shareAppText": "Сохраните этот контакт! А чтобы скачать весь Справочник округов себе на телефон и бесплатно искать мастеров, такси и магазины без интернета, переходите по ссылке:",
   "qrMode": "admin-configured",
@@ -1956,7 +1956,7 @@
   "ignored_pairs": [],
   "updateCritical": true,
   "updateNote": "true — критическое обновление (окно без отмены, только «Обновить сейчас»); false — обычное («Обновить» / «Позже»). Меняется перед каждым выпуском.",
-  "dbEpoch": "2026-11-11-v1214-cache-reset",
+  "dbEpoch": "2026-11-12-v1216-cache-reset",
   "nameNote": "name — чистое официальное имя (витрина и Г11 базы). fullName/legacyName — старое название в скобках только для преемственности СУБД. Для Байконыса на витрине показывается «Байконыс (Трекино)» (geo: displayRu). v1.2.1.1: запись с shared:true (baza_zko_obshaya.txt, индекс 166) — общий файл «Межгород / Вся область», это НЕ село: в выбор посёлков и в files[] не входит.",
   "dbRoot": "bazy_zko",
   "repositoryUrl": "https://github.com/zko-spravochnik/cartoteka",
@@ -1964,7 +1964,7 @@
   "envNote": "БОЕВОЙ конфиг. Подхватывается на живом домене. Запись идёт строго в репозиторий zko-spravochnik/cartoteka. Тестовый двойник — test_config.json.",
   "counts": {
     "baza_zko_baiterek_daryinskoe.txt": [
-      257,
+      258,
       164
     ],
     "baza_zko_baiterek_rubezhinskoe.txt": [

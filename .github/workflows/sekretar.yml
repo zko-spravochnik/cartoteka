@@ -1,4 +1,4 @@
-# КАРТОТЕКА v1.2.1.4: робот-секретарь. Не хранит секретов в файле: GOOGLE_WEBHOOK, ADMIN_CODE, MASTER_CODE берутся из
+# КАРТОТЕКА v1.2.1.6: робот-секретарь. Не хранит секретов в файле: GOOGLE_WEBHOOK, ADMIN_CODE, MASTER_CODE берутся из
 # Settings -> Secrets and variables -> Actions -> Repository secrets. Работает в БОЕВОМ репозитории (CART_ENV=prod).
 name: sekretar
 on:
